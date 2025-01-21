@@ -39,6 +39,11 @@ export default function Navigacio() {
                                     Bejelentés
                                 </Link>
                             </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/terkep">
+                                    Térkép
+                                </Link>
+                            </li>
                         </>
                     )}
                 </ul>
