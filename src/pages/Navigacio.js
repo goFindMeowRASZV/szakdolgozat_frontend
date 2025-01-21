@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import useAuthContext from "../../../laravel11-react-api_frontend/src/contexts/AuthContext";
+import useAuthContext from "../model/contexts/AuthContext";
 
 export default function Navigacio() {
-    const { user, kijelentkezes_fv } = useAuthContext(); 
- 
+    const { user,logout} = useAuthContext();
+
     return (
         <nav className="navbar navbar-expand-sm bg-light">
             <div className="container-fluid">
@@ -17,7 +17,7 @@ export default function Navigacio() {
                     {user ? (
                         <>
                             <li className="navbar-item">
-                                <button className="nav-link" onClick={()=>{kijelentkezes_fv()}}>
+                                <button className="btn btn-dark" onClick={() => { logout() }}>
                                     Kijelentkezés
                                 </button>
                             </li>
@@ -32,6 +32,11 @@ export default function Navigacio() {
                             <li className="navbar-item">
                                 <Link className="nav-link" to="/regisztracio">
                                     Regisztráció
+                                </Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentes">
+                                    Bejelentés
                                 </Link>
                             </li>
                         </>
