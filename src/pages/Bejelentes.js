@@ -1,8 +1,11 @@
 
 import React, { useState } from 'react';
 import { Form, Button, Col, Row, InputGroup } from 'react-bootstrap';
+import useAuthContext from '../model/contexts/AuthContext';
 
 const Bejelentes = () => {
+
+  const { createReport } = useAuthContext();
   const [formData, setFormData] = useState({
     status: '',
     address: '',
@@ -10,38 +13,47 @@ const Bejelentes = () => {
     pattern: [],
     other_identifying_marks: '',
     needs_help: false,
-    healt_status: '',
+    health_status: '',
     photo: null,
     chip_number: '',
     circumstances: '',
     number_of_individuals: 0,
-    dissappearance_date: ''
+    disappearance_date: ''
   });
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === 'checkbox') {
-      setFormData({ ...formData, [name]: checked });
+      if (name === 'color' || name === 'pattern') {
+        // Ha 'color' vagy 'pattern' mezőről van szó, kezeljük tömbként
+        setFormData((prevState) => {
+          const updatedArray = [...prevState[name]];
+          if (checked) {
+            updatedArray.push(value); // hozzáadjuk az új értéket
+          } else {
+            const index = updatedArray.indexOf(value);
+            updatedArray.splice(index, 1); // eltávolítjuk a kipipált értéket
+          }
+          return { ...prevState, [name]: updatedArray };
+        });
+      } else {
+        setFormData({ ...formData, [name]: checked || value });
+      }
     } else if (type === 'file') {
       setFormData({ ...formData, [name]: e.target.files[0] });
-    } else if (name === 'szin' || name === 'minta') {
-      const updatedArray = [...formData[name]];
-      if (updatedArray.includes(value)) {
-        const index = updatedArray.indexOf(value);
-        updatedArray.splice(index, 1);
-      } else {
-        updatedArray.push(value);
-      }
-      setFormData({ ...formData, [name]: updatedArray });
     } else {
       setFormData({ ...formData, [name]: value });
     }
+
+    //itt a needs_help "on" vagy "off" a checkbox miatt, át kell állítani booleanre,
+    // hogy true es false legyen amit berak az adatbázisba
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
-    // Form submit action here (e.g., API call)
+    console.log(formData);
+    createReport(formData, '/api/create-report'); 
+    
   };
 
   return (
@@ -52,10 +64,10 @@ const Bejelentes = () => {
             <Form.Label>Állapot</Form.Label>
             <Form.Control as="select" name="status" value={formData.status} onChange={handleChange}>
               <option value="">Válasszon állapotot</option>
-              <option value="talalt">Találtam</option>
-              <option value="keresett">Keresem</option>
-              <option value="latott">Láttam</option>
-              <option value="menhely">Menhely</option>
+              <option value="t">Találtam</option>
+              <option value="k">Keresem</option>
+              <option value="l">Láttam</option>
+              <option value="m">Menhely</option>
             </Form.Control>
           </Form.Group>
         </Col>
@@ -80,8 +92,8 @@ const Bejelentes = () => {
             <Form.Check
               type="checkbox"
               label="Fehér"
-              value="fehér"
-              checked={formData.color.includes('fehér')}
+              value="feher"
+              checked={formData.color.includes('feher')}
               onChange={handleChange}
               name="color"
             />
@@ -104,32 +116,32 @@ const Bejelentes = () => {
             <Form.Check
               type="checkbox"
               label="Vörös"
-              value="vörös"
-              checked={formData.color.includes('vörös')}
+              value="voros"
+              checked={formData.color.includes('voros')}
               onChange={handleChange}
               name="color"
             />
             <Form.Check
               type="checkbox"
               label="Bézs"
-              value="bézs"
-              checked={formData.color.includes('bézs')}
+              value="bezs"
+              checked={formData.color.includes('bezs')}
               onChange={handleChange}
               name="color"
             />
             <Form.Check
               type="checkbox"
               label="Szürke"
-              value="szürke"
-              checked={formData.color.includes('szürke')}
+              value="szurke"
+              checked={formData.color.includes('szurke')}
               onChange={handleChange}
               name="color"
             />
             <Form.Check
               type="checkbox"
               label="Egyéb"
-              value="egyéb"
-              checked={formData.color.includes('egyéb')}
+              value="egyeb"
+              checked={formData.color.includes('egyeb')}
               onChange={handleChange}
               name="color"
             />
@@ -158,16 +170,16 @@ const Bejelentes = () => {
             <Form.Check
               type="checkbox"
               label="Egyszínű"
-              value="egyszínű"
-              checked={formData.pattern.includes('egyszínű')}
+              value="egyszinu"
+              checked={formData.pattern.includes('egyszinu')}
               onChange={handleChange}
               name="pattern"
             />
             <Form.Check
               type="checkbox"
               label="Teknőctarka"
-              value="teknőctarka"
-              checked={formData.pattern.includes('teknőctarka')}
+              value="teknoctarka"
+              checked={formData.pattern.includes('teknoctarka')}
               onChange={handleChange}
               name="pattern"
             />
@@ -182,16 +194,16 @@ const Bejelentes = () => {
             <Form.Check
               type="checkbox"
               label="Fóka"
-              value="fóka"
-              checked={formData.pattern.includes('fóka')}
+              value="foka"
+              checked={formData.pattern.includes('foka')}
               onChange={handleChange}
               name="pattern"
             />
             <Form.Check
               type="checkbox"
               label="Kalikó"
-              value="kalikó"
-              checked={formData.pattern.includes('kalikó')}
+              value="kaliko"
+              checked={formData.pattern.includes('kaliko')}
               onChange={handleChange}
               name="pattern"
             />
