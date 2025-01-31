@@ -10,21 +10,25 @@ const Bejelentes = () => {
     pattern: [],
     other_identifying_marks: '',
     needs_help: false,
-    healt_status: '',
+    health_status: '',
     photo: null,
     chip_number: '',
     circumstances: '',
     number_of_individuals: 0,
-    dissappearance_date: ''
+    disappearance_date: ''  
   });
+  
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === 'checkbox') {
+  const { name, value, type, checked } = e.target;
+  
+  if (type === 'checkbox') {
+    // Ha checkbox mezőről van szó
+    if (name === 'needs_help') {
+      // A needs_help mezőnek boolean értéket kell adni
       setFormData({ ...formData, [name]: checked });
-    } else if (type === 'file') {
-      setFormData({ ...formData, [name]: e.target.files[0] });
-    } else if (name === 'szin' || name === 'minta') {
+    } else if (name === 'color' || name === 'pattern') {
+      // Ha 'color' vagy 'pattern' mezőről van szó, kezeljük tömbként
       const updatedArray = [...formData[name]];
       if (updatedArray.includes(value)) {
         const index = updatedArray.indexOf(value);
@@ -34,9 +38,15 @@ const Bejelentes = () => {
       }
       setFormData({ ...formData, [name]: updatedArray });
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData({ ...formData, [name]: checked });
     }
-  };
+  } else if (type === 'file') {
+    setFormData({ ...formData, [name]: e.target.files[0] });
+  } else {
+    setFormData({ ...formData, [name]: value });
+  }
+};
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -220,16 +230,18 @@ const Bejelentes = () => {
         />
       </Form.Group>
 
+
       <Form.Group controlId="health_status">
         <Form.Label>Egészségügyi állapot</Form.Label>
         <Form.Control
           type="text"
           placeholder="Adja meg az egészségi állapotot"
           name="health_status"
-          value={formData.health_status}
+          value={formData.health_status || ''} 
           onChange={handleChange}
         />
       </Form.Group>
+
 
       <Form.Group controlId="photo">
         <Form.Label>Kép</Form.Label>
@@ -265,9 +277,10 @@ const Bejelentes = () => {
       <Form.Group controlId="number_of_individuals">
         <Form.Label>Példányok száma</Form.Label>
         <Form.Control
-          type="range"
+          type="number"
           min="1"
           max="10"
+          placeholder="Adja meg a példányszámot"
           name="number_of_individuals"
           value={formData.number_of_individuals}
           onChange={handleChange}
@@ -280,10 +293,11 @@ const Bejelentes = () => {
         <Form.Control
           type="date"
           name="disappearance_date"
-          value={formData.disappearance_date}
+          value={formData.disappearance_date || ''}  
           onChange={handleChange}
         />
       </Form.Group>
+
 
       <Button variant="primary" type="submit">Form Beküldése</Button>
     </Form>
