@@ -54,8 +54,24 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    //store fuggveny
+    const createReport = async ({ ...adat }, vegpont) => {
+        await csrf();
+        try {
+            // A /api/reports egy példát mutat, cseréld a megfelelő endpoint-ra
+            await myAxios.post(vegpont, adat);
+            console.log("Bejelentés sikerült!");
+            // Sikeres bejelentés esetén további teendő: navigálás, üzenet, stb.
+        } catch (error) {
+            console.log(error);
+            if (error.response && error.response.status === 422) {
+                setErrors(error.response.data.errors);
+            }
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user }}>
+        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user , createReport}}>
             {children}
         </AuthContext.Provider>
     );

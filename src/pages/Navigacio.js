@@ -1,9 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import useAuthContext from "../model/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Navigacio() {
-    const { user,logout} = useAuthContext();
+    const { user, logout } = useAuthContext();
 
     return (
         <nav className="navbar navbar-expand-sm bg-light">
@@ -15,13 +15,11 @@ export default function Navigacio() {
                         </Link>
                     </li>
                     {user ? (
-                        <>
-                            <li className="navbar-item">
-                                <button className="btn btn-dark" onClick={() => { logout() }}>
-                                    Kijelentkezés
-                                </button>
-                            </li>
-                        </>
+                        <li className="navbar-item">
+                            <button className="btn btn-dark" onClick={logout}>
+                                Kijelentkezés
+                            </button>
+                        </li>
                     ) : (
                         <>
                             <li className="navbar-item">
