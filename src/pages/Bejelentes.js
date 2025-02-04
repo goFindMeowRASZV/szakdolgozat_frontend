@@ -14,12 +14,14 @@ const Bejelentes = () => {
     other_identifying_marks: '',
     needs_help: false,
     health_status: '',
+    health_status: '',
     photo: null,
     chip_number: '',
     circumstances: '',
     number_of_individuals: 0,
-    disappearance_date: ''
+    disappearance_date: ''  
   });
+  
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
@@ -248,16 +250,18 @@ const Bejelentes = () => {
         />
       </Form.Group>
 
+
       <Form.Group controlId="health_status">
         <Form.Label>Egészségügyi állapot</Form.Label>
         <Form.Control
           type="text"
           placeholder="Adja meg az egészségi állapotot"
           name="health_status"
-          value={formData.health_status}
+          value={formData.health_status || ''} 
           onChange={handleChange}
         />
       </Form.Group>
+
 
       <Form.Group controlId="photo">
         <Form.Label>Kép</Form.Label>
@@ -297,6 +301,7 @@ const Bejelentes = () => {
           type="number"
           min="1"
           max="10"
+          placeholder="Adja meg a példányszámot"
           name="number_of_individuals"
           value={formData.number_of_individuals}
           onChange={handleChange}
@@ -309,10 +314,11 @@ const Bejelentes = () => {
         <Form.Control
           type="date"
           name="disappearance_date"
-          value={formData.disappearance_date}
+          value={formData.disappearance_date || ''}  
           onChange={handleChange}
         />
       </Form.Group>
+
 
       <Button variant="primary" type="submit">Form Beküldése</Button>
     </Form>
