@@ -21,6 +21,16 @@ export default function Navigacio() {
                                     Kijelentkezés
                                 </button>
                             </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentes">
+                                    Bejelentés
+                                </Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/terkep">
+                                    Térkép
+                                </Link>
+                            </li>
                         </>
                     ) : (
                         <>
