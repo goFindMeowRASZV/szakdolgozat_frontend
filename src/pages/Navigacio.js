@@ -1,9 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import useAuthContext from "../model/contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function Navigacio() {
-    const { user,logout} = useAuthContext();
+    const { user, logout } = useAuthContext();
 
     return (
         <nav className="navbar navbar-expand-sm bg-light">
@@ -21,6 +21,16 @@ export default function Navigacio() {
                                     Kijelentkezés
                                 </button>
                             </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentes">
+                                    Bejelentés
+                                </Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/terkep">
+                                    Térkép
+                                </Link>
+                            </li>
                         </>
                     ) : (
                         <>
@@ -35,6 +45,11 @@ export default function Navigacio() {
                                 </Link>
                             </li>
                             <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentesek">
+                                    Bejelentések
+                                </Link>
+                            </li>
+                           {/*  <li className="navbar-item">
                                 <Link className="nav-link" to="/bejelentes">
                                     Bejelentés
                                 </Link>
@@ -43,7 +58,7 @@ export default function Navigacio() {
                                 <Link className="nav-link" to="/terkep">
                                     Térkép
                                 </Link>
-                            </li>
+                            </li> */}
                         </>
                     )}
                 </ul>

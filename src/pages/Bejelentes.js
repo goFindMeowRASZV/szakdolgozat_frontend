@@ -1,18 +1,18 @@
-
 import React, { useState } from 'react';
 import { Form, Button, Col, Row, InputGroup } from 'react-bootstrap';
 import useAuthContext from '../model/contexts/AuthContext';
-
+ 
 const Bejelentes = () => {
-
-  const { createReport } = useAuthContext();
+ 
+  const { createReport, user } = useAuthContext();
   const [formData, setFormData] = useState({
     status: '',
     address: '',
     color: [],
     pattern: [],
     other_identifying_marks: '',
-    needs_help: false,
+  /*   needs_help: false, */
+    health_status: '',
     health_status: '',
     photo: null,
     chip_number: '',
@@ -20,42 +20,67 @@ const Bejelentes = () => {
     number_of_individuals: 0,
     disappearance_date: ''
   });
-
+ 
+ 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
+ 
     if (type === 'checkbox') {
+      console.log("checkbox")
       if (name === 'color' || name === 'pattern') {
         // Ha 'color' vagy 'pattern' mezőről van szó, kezeljük tömbként
         setFormData((prevState) => {
           const updatedArray = [...prevState[name]];
           if (checked) {
-            updatedArray.push(value); // hozzáadjuk az új értéket
+            updatedArray.push(value); // Hozzáadjuk az új értéket
           } else {
             const index = updatedArray.indexOf(value);
-            updatedArray.splice(index, 1); // eltávolítjuk a kipipált értéket
+            if (index > -1) {
+              updatedArray.splice(index, 1); // Eltávolítjuk a kikapcsolt értéket
+            }
           }
           return { ...prevState, [name]: updatedArray };
         });
-      } else {
-        setFormData({ ...formData, [name]: checked || value });
+      }/*  else if (name === 'needs_help') {
+        // A needs_help mezőnek kifejezetten boolean értéket adunk
+ 
+        setFormData({ ...formData, [name]: checked === true });
+        console.log(typeof checked, checked === true );
+      }  */else {
+ 
+        setFormData({ ...formData, [name]: checked === true  });
+        console.log(typeof checked);
       }
-    } else if (type === 'file') {
-      setFormData({ ...formData, [name]: e.target.files[0] });
-    } else {
+    } else if (type === 'date') {
+      const date = new Date(value);
+      const formattedDate = date.toISOString().split('T')[0]; // Az első része ISO formátumnak, pl. '2025-02-04'
+      setFormData({ ...formData, [name]: formattedDate });
+      console.log(date)
+    }
+    else if (type === 'file') {
+      setFormData({ ...formData, [name]: files[0] });
+    }
+    else {
       setFormData({ ...formData, [name]: value });
     }
-
-    //itt a needs_help "on" vagy "off" a checkbox miatt, át kell állítani booleanre,
-    // hogy true es false legyen amit berak az adatbázisba
+ 
+ 
+    console.log(formData);
+ 
   };
-
+ 
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(user.id)
+    setFormData({ ...formData, 'creator_id': user.id });
     console.log(formData);
-    createReport(formData, '/api/create-report'); 
-    
+ 
+    createReport(formData, '/api/create-report');
+ 
   };
-
+ 
+ 
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
@@ -84,7 +109,7 @@ const Bejelentes = () => {
           </Form.Group>
         </Col>
       </Row>
-
+ 
       <Row>
         <Col md={6}>
           <Form.Group controlId="color">
@@ -147,7 +172,7 @@ const Bejelentes = () => {
             />
           </Form.Group>
         </Col>
-
+ 
         <Col md={6}>
           <Form.Group controlId="pattern">
             <Form.Label>Minta</Form.Label>
@@ -210,7 +235,7 @@ const Bejelentes = () => {
           </Form.Group>
         </Col>
       </Row>
-
+ 
       <Form.Group controlId="other_identifying_marks">
         <Form.Label>Egyéb ismertetőjel</Form.Label>
         <Form.Control
@@ -221,37 +246,31 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
-
-      <Form.Group controlId="needs_help">
-        <Form.Check
-          type="checkbox"
-          label="Segítségre szorul"
-          name="needs_help"
-          checked={formData.needs_help}
-          onChange={handleChange}
-        />
-      </Form.Group>
-
+ 
+      
+ 
       <Form.Group controlId="health_status">
         <Form.Label>Egészségügyi állapot</Form.Label>
         <Form.Control
           type="text"
           placeholder="Adja meg az egészségi állapotot"
           name="health_status"
-          value={formData.health_status}
+          value={formData.health_status || ''}
           onChange={handleChange}
         />
       </Form.Group>
-
+ 
+ 
       <Form.Group controlId="photo">
         <Form.Label>Kép</Form.Label>
         <Form.Control
           type="file"
           name="photo"
+          //accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
           onChange={handleChange}
         />
       </Form.Group>
-
+ 
       <Form.Group controlId="chip_number">
         <Form.Label>Chip szám</Form.Label>
         <Form.Control
@@ -262,7 +281,7 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
-
+ 
       <Form.Group controlId="circumstances">
         <Form.Label>Körülmények</Form.Label>
         <Form.Control
@@ -273,30 +292,32 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
-
+ 
       <Form.Group controlId="number_of_individuals">
         <Form.Label>Példányok száma</Form.Label>
         <Form.Control
-          type="range"
+          type="number"
           min="1"
           max="10"
+          placeholder="Adja meg a példányszámot"
           name="number_of_individuals"
           value={formData.number_of_individuals}
           onChange={handleChange}
         />
         <Form.Text>{formData.number_of_individuals}</Form.Text>
       </Form.Group>
-
+ 
       <Form.Group controlId="disappearance_date">
         <Form.Label>Eltűnés dátuma</Form.Label>
         <Form.Control
           type="date"
           name="disappearance_date"
-          value={formData.disappearance_date}
+          value={formData.disappearance_date || ''}
           onChange={handleChange}
         />
       </Form.Group>
-
+ 
+ 
       <Button variant="primary" type="submit">Form Beküldése</Button>
     </Form>
   );
