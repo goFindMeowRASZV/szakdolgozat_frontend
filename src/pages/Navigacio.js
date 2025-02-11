@@ -49,16 +49,6 @@ export default function Navigacio() {
                                     Bejelentések
                                 </Link>
                             </li>
-                           {/*  <li className="navbar-item">
-                                <Link className="nav-link" to="/bejelentes">
-                                    Bejelentés
-                                </Link>
-                            </li>
-                            <li className="navbar-item">
-                                <Link className="nav-link" to="/terkep">
-                                    Térkép
-                                </Link>
-                            </li> */}
                         </>
                     )}
                 </ul>

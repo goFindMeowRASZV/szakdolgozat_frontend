@@ -7,9 +7,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
-    const [macskaLISTA, setMacskaLista] = useState({
-        photo : " "
-    });
+    const [macskaLISTA, setMacskaLista] = useState(null);
     const [user, setUser] = useState(null);
     const [errors, setErrors] = useState({
         name: "",
@@ -79,7 +77,7 @@ export const AuthProvider = ({ children }) => {
    
 
     //macskalistaaa
-    const getMacsCard = async({...adat},vegpont) => {
+    const getMacsCard = async() => {
         const { data } = await myAxios.get("/api/get-reports");
         console.log(data)
         setMacskaLista(data);
@@ -87,7 +85,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user , createReport, macskaLISTA, setMacskaLista}}>
+        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user , createReport, macskaLISTA, getMacsCard}}>
             {children}
         </AuthContext.Provider>
     );

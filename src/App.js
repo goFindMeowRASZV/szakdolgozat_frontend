@@ -18,7 +18,7 @@ function App() {
           <Route path="regisztracio" element={<Regisztracio />} />
           <Route path="bejelentkezes" element={<Bejelentkezes />} />
           <Route path="bejelentes" element={<Bejelentes />} />
-      {/*     <Route path="bejelentesek" element={<Bejelentesek />} /> */}
+          <Route path="bejelentesek" element={<Bejelentesek />} />
           <Route path="terkep" element={<Terkep />} />
           <Route path="*" element={<NoPage />} />
         </Route>
