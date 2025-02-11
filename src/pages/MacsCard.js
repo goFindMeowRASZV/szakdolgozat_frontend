@@ -1,10 +1,10 @@
 
 function MacsCard(props) {
-  const url='http://localhost:8000';
+  //const url='http://localhost:8000';
 
   return (
-    <div className="cica">
-      <img className="card-img" src={url + props.adat.photo} alt="Card image"/>
+    <div className="cica"> 
+      <img className="card-img" src={ props.adat.photo} alt="Card image"/>
       <div className="cica-leiras">
         <h1 className="cica-cim">Cica</h1>
         <ul>

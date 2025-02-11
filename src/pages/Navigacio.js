@@ -31,6 +31,11 @@ export default function Navigacio() {
                                     Térkép
                                 </Link>
                             </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentesek">
+                                    Bejelentések
+                                </Link>
+                            </li>
                         </>
                     ) : (
                         <>
