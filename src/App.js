@@ -7,6 +7,7 @@ import Bejelentkezes from "./pages/Bejelentkezes";
 import Bejelentes from "./pages/Bejelentes";
 import Terkep from "./components/public/Terkep";
 import Kezdolap from "./pages/Kezdolap";
+import Bejelentesek from "./pages/Bejelentesek";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="regisztracio" element={<Regisztracio />} />
           <Route path="bejelentkezes" element={<Bejelentkezes />} />
           <Route path="bejelentes" element={<Bejelentes />} />
+      {/*     <Route path="bejelentesek" element={<Bejelentesek />} /> */}
           <Route path="terkep" element={<Terkep />} />
           <Route path="*" element={<NoPage />} />
         </Route>

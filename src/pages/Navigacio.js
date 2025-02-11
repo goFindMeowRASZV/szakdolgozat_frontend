@@ -15,11 +15,23 @@ export default function Navigacio() {
                         </Link>
                     </li>
                     {user ? (
-                        <li className="navbar-item">
-                            <button className="btn btn-dark" onClick={logout}>
-                                Kijelentkezés
-                            </button>
-                        </li>
+                        <>
+                            <li className="navbar-item">
+                                <button className="btn btn-dark" onClick={() => { logout() }}>
+                                    Kijelentkezés
+                                </button>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentes">
+                                    Bejelentés
+                                </Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/terkep">
+                                    Térkép
+                                </Link>
+                            </li>
+                        </>
                     ) : (
                         <>
                             <li className="navbar-item">
@@ -33,6 +45,11 @@ export default function Navigacio() {
                                 </Link>
                             </li>
                             <li className="navbar-item">
+                                <Link className="nav-link" to="/bejelentesek">
+                                    Bejelentések
+                                </Link>
+                            </li>
+                           {/*  <li className="navbar-item">
                                 <Link className="nav-link" to="/bejelentes">
                                     Bejelentés
                                 </Link>
@@ -41,7 +58,7 @@ export default function Navigacio() {
                                 <Link className="nav-link" to="/terkep">
                                     Térkép
                                 </Link>
-                            </li>
+                            </li> */}
                         </>
                     )}
                 </ul>

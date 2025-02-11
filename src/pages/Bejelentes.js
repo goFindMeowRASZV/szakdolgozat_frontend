@@ -5,7 +5,7 @@ import useAuthContext from '../model/contexts/AuthContext';
 
 const Bejelentes = () => {
 
-  const { createReport } = useAuthContext();
+  const { createReport,user } = useAuthContext();
   const [formData, setFormData] = useState({
     status: '',
     address: '',
@@ -24,40 +24,55 @@ const Bejelentes = () => {
   
 
   const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
-  
-  if (type === 'checkbox') {
-    // Ha checkbox mezőről van szó
-    if (name === 'needs_help') {
-      // A needs_help mezőnek boolean értéket kell adni
-      setFormData({ ...formData, [name]: checked });
-    } else if (name === 'color' || name === 'pattern') {
-      // Ha 'color' vagy 'pattern' mezőről van szó, kezeljük tömbként
-      const updatedArray = [...formData[name]];
-      if (updatedArray.includes(value)) {
-        const index = updatedArray.indexOf(value);
-        updatedArray.splice(index, 1);
-      } else {
-        updatedArray.push(value);
-      }
-      setFormData({ ...formData, [name]: updatedArray });
+    const { name, value, type, checked, files } = e.target;
+
+    if (type === 'checkbox') {
+        if (name === 'color' || name === 'pattern') {
+            // Ha 'color' vagy 'pattern' mezőről van szó, kezeljük tömbként
+            setFormData((prevState) => {
+                const updatedArray = [...prevState[name]];
+                if (checked) {
+                    updatedArray.push(value); // Hozzáadjuk az új értéket
+                } else {
+                    const index = updatedArray.indexOf(value);
+                    if (index > -1) {
+                        updatedArray.splice(index, 1); // Eltávolítjuk a kikapcsolt értéket
+                    }
+                }
+                return { ...prevState, [name]: updatedArray };
+            });
+        } else if (name === 'needs_help') {
+            // A needs_help mezőnek kifejezetten boolean értéket adunk
+            console.log(checked);
+            setFormData({ ...formData, [name]: checked });
+            console.log(checked);
+        } else {
+          console.log(checked);
+            setFormData({ ...formData, [name]: checked });
+          console.log(checked);
+        }
+    } else if (type === 'file') {
+        setFormData({ ...formData, [name]: files[0] });
     } else {
-      setFormData({ ...formData, [name]: checked });
+        setFormData({ ...formData, [name]: value });
     }
-  } else if (type === 'file') {
-    setFormData({ ...formData, [name]: e.target.files[0] });
-  } else {
-    setFormData({ ...formData, [name]: value });
-  }
+    
+
+    console.log(formData);
+
 };
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(user.id)
+    setFormData({ ...formData, 'creator_id': user.id });
     console.log(formData);
+    
     createReport(formData, '/api/create-report'); 
     
   };
+
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -253,6 +268,7 @@ const Bejelentes = () => {
         <Form.Control
           type="file"
           name="photo"
+          //accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
           onChange={handleChange}
         />
       </Form.Group>
