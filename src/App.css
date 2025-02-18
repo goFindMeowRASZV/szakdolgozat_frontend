@@ -7,7 +7,14 @@
 html, body,#root{
   background-color: rgb(243, 223, 227);
 }
-
+/* menü */
+.navbar-nav {
+  display: flex;
+  width: 100%;
+}
+.logOut{
+  margin-left: auto;
+}
 .galeriaCim{
   text-align: center;
   color: white;
@@ -35,6 +42,32 @@ html, body,#root{
   padding-left: 20px;
   padding-right: 0px;
   max-width: 800px;
+}
+.profilKepElem{
+  margin-top: 20px;
+  width: 100%; /* A képek rugalmasan alkalmazkodnak a szülőelemhez */
+  max-width: 220px; /* Max szélesség a képeknél */
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+}
+.profilKep{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.bejelentkezettProfilKepElem{
+  margin-top: 20px;
+  width: 100%; /* A képek rugalmasan alkalmazkodnak a szülőelemhez */
+  max-width: 220px; /* Max szélesség a képeknél */
+  height: 220px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
 }
 
 .cica {
@@ -66,7 +99,7 @@ html, body,#root{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  transition: 1.7s;
+  transition: 2s;
 }
 
 .cica:hover .cica-leiras {
@@ -91,4 +124,38 @@ html, body,#root{
   margin: auto;
   max-width: 800px; /* Maximális szélesség 800px */
   padding: 20px; /* Ha szükséges, adhatsz hozzá padding-ot */
+}
+
+/* Kommentek */
+.widget .panel-body { padding:0px; }
+.widget .list-group { margin-bottom: 0; }
+.widget .panel-title { display:inline }
+.widget .label-info { float: right; }
+.widget li.list-group-item {border-radius: 0;border: 0;border-top: 1px solid #ddd;}
+.widget li.list-group-item:hover { background-color: rgba(86,61,124,.1); }
+.widget .mic-info { color: #666666;font-size: 11px; }
+.widget .action { margin-top:5px; }
+.widget .comment-text { font-size: 12px; }
+.widget .btn-block { border-top-left-radius:0px;border-top-right-radius:0px; }
+
+.kukaGomb {
+  width: 26px;
+  height: 20px; /* A gomb magassága is 30px */
+  display: flex; /* Flexbox a tartalom középre igazításához */
+  align-items: center; /* Vertikálisan középre igazítja a képet */
+  justify-content: center; /* Horizontálisan középre igazítja a képet */
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 6px;
+  background-color: rgb(218, 12, 12);
+}
+.kukaGomb:hover {
+  background-color: rgb(175, 9, 9);
+}
+
+.kukaGombKep {
+  width: 15px;
+  height: auto;
+  margin: 0; /* Eltávolítja az esetleges margót */
 }

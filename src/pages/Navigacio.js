@@ -6,9 +6,9 @@ export default function Navigacio() {
     const { user, logout } = useAuthContext();
 
     return (
-        <nav className="navbar navbar-expand-sm bg-light">
-            <div className="container-fluid">
-                <ul className="navbar-nav">
+        <nav class="navbar navbar-expand-sm bg-light w-100">
+            <div className="container-fluid w-100">
+                <ul className="navbar-nav w-100">
                     <li className="navbar-item">
                         <Link className="nav-link" to="/">
                             Kezdőlap
@@ -16,11 +16,7 @@ export default function Navigacio() {
                     </li>
                     {user ? (
                         <>
-                            <li className="navbar-item">
-                                <button className="btn btn-dark" onClick={() => { logout() }}>
-                                    Kijelentkezés
-                                </button>
-                            </li>
+                            
                             <li className="navbar-item">
                                 <Link className="nav-link" to="/bejelentes">
                                     Bejelentés
@@ -35,6 +31,16 @@ export default function Navigacio() {
                                 <Link className="nav-link" to="/bejelentesek">
                                     Bejelentések
                                 </Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/profil">
+                                    Profilom
+                                </Link>
+                            </li>
+                            <li className="logOut navbar-item">
+                                <button className="btn btn-dark" onClick={() => { logout() }}>
+                                    Kijelentkezés
+                                </button>
                             </li>
                         </>
                     ) : (

@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [macskaLISTA, setMacskaLista] = useState(null);
     const [user, setUser] = useState(null);
+    const [aktualisMacska, setAktualisMacska] = useState(null);
     const [errors, setErrors] = useState({
         name: "",
         email: "",
@@ -35,7 +36,15 @@ export const AuthProvider = ({ children }) => {
         });
     };
 
-
+    const shelterCat = async ({ ...adat }, vegpont) =>  {
+        try {
+            const response = await myAxios.post(vegpont, adat)
+            console.log(response.data);
+            alert("A macska menhelyre került!");
+        } catch (error) {
+            console.error("Hiba történt:", error.response?.data?.error || error.message);
+        }
+    };
 
     //elküldi a bejelentkezési v. regisztrációs kérelmet
     const loginReg = async ({ ...adat }, vegpont) => {
@@ -85,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user , createReport, macskaLISTA, getMacsCard}}>
+        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user , createReport, macskaLISTA, getMacsCard, aktualisMacska, setAktualisMacska, shelterCat}}>
             {children}
         </AuthContext.Provider>
     );

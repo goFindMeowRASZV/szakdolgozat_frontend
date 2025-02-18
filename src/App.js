@@ -8,6 +8,8 @@ import Bejelentes from "./pages/Bejelentes";
 import Terkep from "./components/public/Terkep";
 import Kezdolap from "./pages/Kezdolap";
 import Bejelentesek from "./pages/Bejelentesek";
+import MacskaProfil from "./pages/MacskaProfil";
+import Profil from "./pages/Profil";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="bejelentes" element={<Bejelentes />} />
           <Route path="bejelentesek" element={<Bejelentesek />} />
           <Route path="terkep" element={<Terkep />} />
+          <Route path="MacskaProfil" element={<MacskaProfil />} />
+          <Route path="profil" element={<Profil />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

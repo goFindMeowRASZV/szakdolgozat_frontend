@@ -13,19 +13,11 @@ function Kezdolap() {
       {user ? (
         <p>
           Sikeres bejelentkezés!<br />
-          <img
-            src="images/happy.gif"
-            alt="Sikeres bejelentkezés"
-            style={{
-              height: '100%',
-              width: '100%',
-            }}
-          />
         </p>
       ) : (
         <p>
           Nincs bejelentkezett felhasználó!<br />
-          <img src="images/sad.gif" alt="User kép" /> {user ? user.name : ''}
+          {user ? user.name : ''}
         </p>
       )}
     </div>
