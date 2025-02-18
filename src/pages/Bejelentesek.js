@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import MacsCard from '../components/MacsCard.js';
 import { useNavigate } from 'react-router-dom';
 import MacsCard from './MacsCard.js';
 import useAuthContext from '../model/contexts/AuthContext.js';
@@ -22,6 +23,16 @@ function Bejelentesek() {
 
     return (
         <div className='galeriaBody'>
+        <h1 className="galeriaCim">BEJELENTÉSEK</h1>
+        <div className="kepek">
+            {macskaLISTA ? (
+                macskaLISTA.map((elem, index) => (
+                    <MacsCard adat={elem} key={index} index={index} />
+                ))
+            ) : (
+                <p>Betöltés...</p>
+            )}
+        </div>
             <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
             <div className="kepek">
                 {macskaLISTA ? (
