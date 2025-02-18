@@ -1,29 +1,33 @@
 import React, { useEffect } from 'react';
 import MacsCard from '../components/MacsCard.js';
 import useAuthContext from '../model/contexts/AuthContext.js';
+import Szures from '../components/Szures.js';
 
-function Bejelentesek() {
-    const { macskaLISTA, getMacsCard } = useAuthContext();
+function Menhely() {
+    const { menhelyLISTA, getMacsCardMenhely } = useAuthContext();
 
+
+    
     // Amikor a komponens betöltődik, lekérjük az adatokat
     useEffect(() => {
-        getMacsCard();
+        getMacsCardMenhely();
     }, []);
 
     return (
         <div className='galeriaBody'>
-        <h1 className="galeriaCim">BEJELENTÉSEK</h1>
-        <div className="kepek">
-            {macskaLISTA ? (
-                macskaLISTA.map((elem, index) => (
+            <Szures/>
+        <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
+        {/* <div className="kepek">
+            {menhelyLISTA ? (
+                menhelyLISTA.map((elem, index) => (
                     <MacsCard adat={elem} key={index} index={index} />
                 ))
             ) : (
                 <p>Betöltés...</p>
             )}
-        </div>
+        </div> */}
         </div>
     );
 }
 
-export default Bejelentesek;
+export default Menhely;

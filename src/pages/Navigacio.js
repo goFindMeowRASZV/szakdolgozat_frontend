@@ -36,6 +36,11 @@ export default function Navigacio() {
                                     Bejelentések
                                 </Link>
                             </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/menhely">
+                                    Menhely
+                                </Link>
+                            </li>
                         </>
                     ) : (
                         <>
@@ -52,6 +57,11 @@ export default function Navigacio() {
                             <li className="navbar-item">
                                 <Link className="nav-link" to="/bejelentesek">
                                     Bejelentések
+                                </Link>
+                            </li>
+                            <li className="navbar-item">
+                                <Link className="nav-link" to="/menhely">
+                                    Menhely
                                 </Link>
                             </li>
                         </>
