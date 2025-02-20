@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const [menhelyLISTA, setMenhelyLista] = useState(null);
     const [szuresLISTA, setSzuresLista] = useState(null);
     const [user, setUser] = useState(null);
+    const [aktualisMacska, setAktualisMacska] = useState(null);
     const [errors, setErrors] = useState({
         name: "",
         email: "",
@@ -76,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         setMenhelyLista(data);
     };
 
+    //szűrési jelentések
     const getReportsFilter = async (filters) => {
         const { color, pattern, date1, date2 } = filters;
     
@@ -87,156 +89,50 @@ export const AuthProvider = ({ children }) => {
     
         try {
             const { data } = await myAxios.get(endpoint);
-            console.log(data);
             setMacskaLista(data);
         } catch (error) {
             console.error("Hiba történt a lekérdezés során:", error);
         }
     };
-    
 
-    return (
-        <AuthContext.Provider
-            value={{
-                logout,
-                loginReg,
-                errors,
-                getUser,
-                user,
-                createReport,
-                macskaLISTA,
-                getMacsCard,
-                menhelyLISTA,
-                getMacsCardMenhely,
-                getReportsFilter,
-                szuresLISTA,
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
-    );
-};
-
-export default function useAuthContext() {
-    return useContext(AuthContext);
-}
-
-
-
-/* import { createContext, useState, useContext, useEffect } from "react";
-
-import { useNavigate } from "react-router-dom";
-import { myAxios } from "./MyAxios.js";
-
-const AuthContext = createContext();
-
-export const AuthProvider = ({ children }) => {
-    const navigate = useNavigate();
-    const [macskaLISTA, setMacskaLista] = useState(null);
-    const [menhelyLISTA, setMenhelyLista] = useState(null);
-    const [szuresLISTA, setSzuresLista] = useState(null);
-    const [user, setUser] = useState(null);
-    const [aktualisMacska, setAktualisMacska] = useState(null);
-    const [errors, setErrors] = useState({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation:"",
-    });
-    //lekérjük a csrf tokent a backendről
-    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
-
-    //bejelentkezett felhasználó adatainak lekérdezése
-    const getUser = async () => {
-      const { data } = await myAxios.get("/api/user");
-      console.log(data)
-      setUser(data);
-    };
-
-    //elküldi a kijelentkezési kérelmet, majd törli a felhasználói adatokat
-    const logout = async () => {
-        await csrf();
-
-        myAxios.post("/logout").then((resp) => {
-            setUser(null);
-            console.log(resp);
-        });
-    };
-
+    //macska menhelyre küldés
     const shelterCat = async ({ ...adat }, vegpont) =>  {
         try {
-            const response = await myAxios.post(vegpont, adat)
-            console.log(response.data);
+            const response = await myAxios.post(vegpont, adat);
             alert("A macska menhelyre került!");
         } catch (error) {
             console.error("Hiba történt:", error.response?.data?.error || error.message);
         }
     };
 
-    //elküldi a bejelentkezési v. regisztrációs kérelmet
-    const loginReg = async ({ ...adat }, vegpont) => {
-        //lekérem a csrf tokent
-        await csrf();
-        console.log(adat, vegpont);
-        try {
-            await myAxios.post(vegpont, adat);
-            console.log("sikerült!")
-            getUser()
-            navigate("/");
-        } catch (error) {
-            console.log(error);
-            if (error.response.status === 422) {
-                setErrors(error.response.data.errors);
-            }
-        }
-    };
-
-    //store fuggveny
-    const createReport = async ({ ...adat }, vegpont) => {
-        console.log(vegpont)
-        console.log(adat);
-        await csrf();
-        try {
-            await myAxios.post(vegpont, adat, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
-        })
-            console.log("Bejelentés sikerült!");
-        } catch (error) {
-            console.log(error);
-            if (error.response && error.response.status === 422) {
-                setErrors(error.response.data.errors);
-            }
-        }
-    }; 
-   
-
-    //macskalistaaa
-    const getMacsCard = async() => {
-        const { data } = await myAxios.get("/api/get-reports");
-        console.log(data)
-        setMacskaLista(data);
-
-    };
-    //menhelyLista
-    const getMacsCardMenhely = async() => {
-        const { data } = await myAxios.get("/api/get-sheltered-reports");
-        console.log(data)
-        setMenhelyLista(data);
-
-    };
-   
-
     return (
-        <AuthContext.Provider value={{ logout, loginReg, errors, getUser, user , createReport, macskaLISTA, getMacsCard, aktualisMacska, setAktualisMacska, shelterCat, menhelyLISTA, getMacsCardMenhely}}>
+        <AuthContext.Provider value={{
+            logout,
+            loginReg,
+            errors,
+            getUser,
+            user,
+            createReport,
+            macskaLISTA,
+            getMacsCard,
+            aktualisMacska,
+            setAktualisMacska,
+            shelterCat,
+            menhelyLISTA,
+            getMacsCardMenhely,
+            getReportsFilter,
+            szuresLISTA,
+        }}>
             {children}
         </AuthContext.Provider>
     );
 };
+
 export default function useAuthContext() {
     return useContext(AuthContext);
-} */
+};
+
+
 
 /* import { createContext, useState } from 'react';
 import { myAxios } from "./MyAxios";

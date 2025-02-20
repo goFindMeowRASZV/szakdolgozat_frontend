@@ -22,16 +22,6 @@ function Bejelentesek() {
     return (
         <div className='galeriaBody'>
         <h1 className="galeriaCim">BEJELENTÉSEK</h1>
-        <div className="kepek">
-            {macskaLISTA ? (
-                macskaLISTA.map((elem, index) => (
-                    <MacsCard adat={elem} key={index} index={index} />
-                ))
-            ) : (
-                <p>Betöltés...</p>
-            )}
-        </div>
-            <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
             <div className="kepek">
                 {macskaLISTA ? (
                     macskaLISTA.map((elem, index) => (

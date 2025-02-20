@@ -308,7 +308,7 @@ const Bejelentes = () => {
       </Form.Group>
  
       <Form.Group controlId="disappearance_date">
-        <Form.Label>Eltűnés dátuma</Form.Label>
+        <Form.Label>Esemény dátuma</Form.Label>
         <Form.Control
           type="date"
           name="disappearance_date"
@@ -318,7 +318,7 @@ const Bejelentes = () => {
       </Form.Group>
  
  
-      <Button variant="primary" type="submit">Form Beküldése</Button>
+      <Button variant="dark" type="submit">Form Beküldése</Button>
     </Form>
   );
 };
