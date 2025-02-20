@@ -6,7 +6,7 @@ export default function Navigacio() {
     const { user, logout } = useAuthContext();
 
     return (
-        <nav class="navbar navbar-expand-sm bg-light w-100">
+        <nav className="navbar navbar-expand-sm bg-light w-100">
             <div className="container-fluid w-100">
                 <ul className="navbar-nav w-100">
                     <li className="navbar-item">

@@ -25,7 +25,8 @@ function MacskaProfil() {
     medical_record:'',
     status:'',
     chip_number:'',
-    breed:''
+    breed:'',
+    photo:''
   });
  
  
@@ -36,7 +37,7 @@ function MacskaProfil() {
     }
 
  */
-  const handleSubmit = (e) => {
+/*   const handleSubmit = (e) => {
     console.log(user)
     console.log(aktualisMacska)
     console.log("Submit")
@@ -49,7 +50,22 @@ function MacskaProfil() {
     console.log(user.id)
     console.log(aktualisMacska.report_id )
     shelterCat( formData, '/api/shelter-cat')
+  }; */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    const updatedFormData = {
+      ...formData,
+      rescuer: user.id,
+      report: aktualisMacska.report_id
+    };
+  
+    setFormData(updatedFormData); // Frissítjük az állapotot
+    console.log(updatedFormData); // Ellenőrzés
+  
+    shelterCat(updatedFormData, '/api/shelter-cat');
   };
+  
 
 return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "1000px", margin: "auto" }}>
@@ -63,7 +79,7 @@ return (
           <p><strong>Minta:</strong> {aktualisMacska.pattern}</p>
         </div>
       </div>
-      <button onClick={handleSubmit}>Befogadás</button>
+      <button onClick={handleSubmit}>Befogás</button>
       <div style={{ marginTop: "20px", width: "100%" }}>
         {/* <h3>Hozzászólások</h3>
         <ul>
