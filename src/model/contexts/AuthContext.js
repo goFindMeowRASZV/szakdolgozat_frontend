@@ -89,11 +89,28 @@ export const AuthProvider = ({ children }) => {
     
         try {
             const { data } = await myAxios.get(endpoint);
-            setMacskaLista(data);
+            setSzuresLista(data);
         } catch (error) {
             console.error("Hiba történt a lekérdezés során:", error);
         }
     };
+    const getShelteredReportsFilter = async (filters) => {
+        const { color, pattern, date1, date2 } = filters;
+    
+        // Ellenőrizzük és alapértelmezett értéket adunk, ha nincs adat
+        const formattedDate1 = date1 ?? "2015-01-01";  // Ha nincs beállítva, akkor 2015-01-01
+        const formattedDate2 = date2 ?? new Date().toISOString().split("T")[0]; // Alapértelmezés: mai nap
+    
+        const endpoint = `/api/get-sheltered-report-filter/${color || ""},${pattern || ""},${formattedDate1},${formattedDate2}`;
+    
+        try {
+            const { data } = await myAxios.get(endpoint);
+            setSzuresLista(data);
+        } catch (error) {
+            console.error("Hiba történt a lekérdezés során:", error);
+        }
+    };
+
 
     //macska menhelyre küldés
     const shelterCat = async ({ ...adat }, vegpont) =>  {
@@ -121,6 +138,7 @@ export const AuthProvider = ({ children }) => {
             menhelyLISTA,
             getMacsCardMenhely,
             getReportsFilter,
+            getShelteredReportsFilter,
             szuresLISTA,
         }}>
             {children}
@@ -131,86 +149,3 @@ export const AuthProvider = ({ children }) => {
 export default function useAuthContext() {
     return useContext(AuthContext);
 };
-
-
-
-/* import { createContext, useState } from 'react';
-import { myAxios } from "./MyAxios";
-import { useNavigate } from 'react-router-dom';
-
-export const AuthContext = createContext("");
-export const AuthProvider = ({ children }) => {
-    const [user, setUser]=useState(null);
-
-    const navigacio=useNavigate()
-    const [errors, setErrors] = useState({
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-      });
-    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
-
-
-    const regisztracio_fv = async (adat) => {
-        await csrf();
-        try {
-            await myAxios.post("/register", adat);
-            console.log("siker")
-            getUser()
-            navigacio("/") //ezzel elmegyünk a kezdőlapra
-        } catch (err) {
-            console.log("Hiba történt az adat elküldésekor.", err)
-        } finally {
-        }
-    };
-
-    //lekérjük a bejelentkezett felhasználó adatait
-    const getUser = async () => {
-        await csrf();
-    try{
-        const response=await myAxios.get("/user");
-        console.log(response.data)
-        setUser(response.data)
-
-    }catch (err){
-        console.log("Hiba történt az adat elküldésekor.", err)
-    }finally{
-    }
-}; 
-//bejelentkezes
-const bejelentkezes_fv = async () => {
-    await csrf();
-    try {
-        await myAxios.post("/login");
-        console.log("sikeres bejelentkezés")
-        navigacio("/public")
-
-    } catch (err) {
-        console.log("Hiba történt a kijelentkezéskor", err)
-    } finally {
-    }
-};
-    //kijelentkezés
-    const kijelentkezes_fv = async () => {
-        await csrf();
-        try {
-            await myAxios.post("/logout");
-            console.log("sikeres kijelentkezés")
-            navigacio("/regisztracio")
-
-        } catch (err) {
-            console.log("Hiba történt a kijelentkezéskor", err)
-        } finally {
-        }
-    };
-    return (
-        <AuthContext.Provider value={{ regisztracio_fv, kijelentkezes_fv, bejelentkezes_fv, user }}>
-            {children}
-        </AuthContext.Provider>
-
-    )
-} 
-
-export default AuthContext
-*/

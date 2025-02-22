@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthContext from '../model/contexts/AuthContext.js';
-import MacsCard from '.MacsCard.js';
+import Szures from '../components/Szures.js';
+import MacsCard from '../components/MacsCard.js';
 
 function Bejelentesek() {
     const { macskaLISTA, getMacsCard } = useAuthContext();
@@ -21,6 +22,7 @@ function Bejelentesek() {
 
     return (
         <div className='galeriaBody'>
+        <Szures type="reports" />
         <h1 className="galeriaCim">BEJELENTÉSEK</h1>
             <div className="kepek">
                 {macskaLISTA ? (

@@ -1,240 +1,242 @@
-import React, { useState } from 'react';
-import { Form, Button, Col, Row, Spinner } from 'react-bootstrap';
-import useAuthContext from '../model/contexts/AuthContext';
-import MacsCard from './MacsCard';  // Importáld a MacsCard komponenst
+import React, { useState } from "react";
+import { Form, Button, Col, Row, Modal } from "react-bootstrap";
+import useAuthContext from "../model/contexts/AuthContext";
+import MacsCard from "./MacsCard";
 
+const Szures = ({ type }) => {
+  const { getReportsFilter, getShelteredReportsFilter, reportsLISTA, menhelyLISTA } = useAuthContext();
+  const [formData, setFormData] = useState({
+    color: [],
+    pattern: [],
+    startDate: "",
+    endDate: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
+  const [showModal, setShowModal] = useState(false); // Modal megjelenítésének állapota
 
-const Szures = () => {
-    const { menhelyLISTA,getReportsFilter } = useAuthContext();
-    const [formData, setFormData] = useState({
-        color: [],
-        pattern: [],
-        startDate: "",
-        endDate: ""
-    });
-    const [loading, setLoading] = useState(false);
+  //Input mező változáskezelés (szín, minta, dátum)
+  const handleChange = (e) => {
+    const { name, value, checked, type } = e.target;
+    if (type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: checked ? [...prev[name], value] : prev[name].filter((item) => item !== value),
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
 
-    const handleChange = (e) => {
-        const { name, value, checked } = e.target;
-        if (checked) {
-            setFormData({
-                ...formData,
-                [name]: [...formData[name], value]
-            });
-        } else {
-            setFormData({
-                ...formData,
-                [name]: formData[name].filter(item => item !== value)
-            });
-        }
+  // Szűrési API hívás
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    setLoading(true);
+
+    const filters = {
+      color: formData.color.length > 0 ? formData.color.join(",") : "*", 
+      pattern: formData.pattern.length > 0 ? formData.pattern.join(",") : "*", 
+      date1: formData.startDate || "2015-01-01",
+      date2: formData.endDate || new Date().toISOString().split("T")[0],
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    let data;
+    if (type === "reports") {
+      data = await getReportsFilter(filters); 
+    } else {
+      data = await getShelteredReportsFilter(filters); 
+    }
 
-        // API hívás szűrési feltételekkel
-        const filters = {
-            color: formData.color.join(','),
-            pattern: formData.pattern.join(','),
-            startDate: formData.startDate,
-            endDate: formData.endDate
-        };
+    console.log("Backend válasz:", data); // Backend válaszának naplózása
 
-        // Lekérjük a szűrt adatokat
-        /* await getMacsCard(filters);  // Használhatod itt a szűrőkkel rendelkező API hívást
-        await getMacsCardMenhely(filters);  // Ha van külön menhelyi szűrés */
-        await getReportsFilter(filters);
-        setLoading(false);
-    };
+    setResults(data);
+    setLoading(false);
+    setShowModal(false);
+  };
 
+  // Modal nyitása és zárása
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
+  return (
+    <div>
+      <Button variant="dark" onClick={handleShow}>
+        Szűrés a cicák között
+      </Button>
 
-    const filteredMenhelyLista = menhelyLISTA?.filter(report => {
-        if (formData.color.length === 0 && formData.pattern.length === 0) {
-            return false;
-        }
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{type === "reports" ? "Bejelentések szűrése" : "Menhelyi macskák szűrése"}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Row>
+              <Col md={6}>
+              <Form.Group controlId="color">
+              <Form.Label>Szín</Form.Label>
+              <Form.Check
+                type="checkbox"
+                label="Fehér"
+                value="feher"
+                checked={formData.color.includes('feher')}
+                onChange={handleChange}
+                name="color"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Fekete"
+                value="fekete"
+                checked={formData.color.includes('fekete')}
+                onChange={handleChange}
+                name="color"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Barna"
+                value="barna"
+                checked={formData.color.includes('barna')}
+                onChange={handleChange}
+                name="color"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Vörös"
+                value="voros"
+                checked={formData.color.includes('voros')}
+                onChange={handleChange}
+                name="color"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Bézs"
+                value="bezs"
+                checked={formData.color.includes('bezs')}
+                onChange={handleChange}
+                name="color"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Szürke"
+                value="szurke"
+                checked={formData.color.includes('szurke')}
+                onChange={handleChange}
+                name="color"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Egyéb"
+                value="egyeb"
+                checked={formData.color.includes('egyeb')}
+                onChange={handleChange}
+                name="color"
+              />
+            </Form.Group>
+          </Col>
 
-        const reportColor = report.color?.trim().toLowerCase();
-        const reportPattern = report.pattern?.trim().toLowerCase();
+          <Col md={6}>
+            <Form.Group controlId="pattern">
+              <Form.Label>Minta</Form.Label>
+              <Form.Check
+                type="checkbox"
+                label="Cirmos"
+                value="cirmos"
+                checked={formData.pattern.includes('cirmos')}
+                onChange={handleChange}
+                name="pattern"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Foltos"
+                value="foltos"
+                checked={formData.pattern.includes('foltos')}
+                onChange={handleChange}
+                name="pattern"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Egyszínű"
+                value="egyszinu"
+                checked={formData.pattern.includes('egyszinu')}
+                onChange={handleChange}
+                name="pattern"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Teknőctarka"
+                value="teknoctarka"
+                checked={formData.pattern.includes('teknoctarka')}
+                onChange={handleChange}
+                name="pattern"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Kopasz"
+                value="kopasz"
+                checked={formData.pattern.includes('kopasz')}
+                onChange={handleChange}
+                name="pattern"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Fóka"
+                value="foka"
+                checked={formData.pattern.includes('foka')}
+                onChange={handleChange}
+                name="pattern"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Kalikó"
+                value="kaliko"
+                checked={formData.pattern.includes('kaliko')}
+                onChange={handleChange}
+                name="pattern"
+              />
+            </Form.Group>
+          </Col>
 
-        const colorMatch = formData.color.length === 0 || formData.color.some(color => reportColor.includes(color.toLowerCase()));
-        const patternMatch = formData.pattern.length === 0 || formData.pattern.some(pattern => reportPattern.includes(pattern.toLowerCase()));
+              <Col md={6}>
+                <Form.Group controlId="startDate">
+                  <Form.Label>Mettől</Form.Label>
+                  <Form.Control type="date" name="startDate" value={formData.startDate} onChange={handleChange} />
+                </Form.Group>
+              </Col>
 
-        return colorMatch && patternMatch;
-    });
+              <Col md={6}>
+                <Form.Group controlId="endDate">
+                  <Form.Label>Meddig</Form.Label>
+                  <br></br>
+                  <Form.Control type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
+                </Form.Group>
+              </Col>
+            </Row>
 
+            <Button variant="dark" type="submit">Keresés</Button>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="dark" onClick={handleClose}>
+            Bezárás
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
-    return (
+      {loading ? (
+        <p>Betöltés...</p>
+      ) : results && results.length > 0 ? (
         <div>
-            <Form onSubmit={handleSubmit}>
-                <Row>
-                    <Col md={6}>
-                        <Form.Group controlId="color">
-                            <Form.Label>Szín</Form.Label>
-                            <Form.Check
-                                type="checkbox"
-                                label="Fehér"
-                                value="feher"
-                                checked={formData.color.includes('feher')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Fekete"
-                                value="fekete"
-                                checked={formData.color.includes('fekete')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Barna"
-                                value="barna"
-                                checked={formData.color.includes('barna')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Vörös"
-                                value="voros"
-                                checked={formData.color.includes('voros')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Bézs"
-                                value="bezs"
-                                checked={formData.color.includes('bezs')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Szürke"
-                                value="szurke"
-                                checked={formData.color.includes('szurke')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Egyéb"
-                                value="egyeb"
-                                checked={formData.color.includes('egyeb')}
-                                onChange={handleChange}
-                                name="color"
-                            />
-                        </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                        <Form.Group controlId="pattern">
-                            <Form.Label>Minta</Form.Label>
-                            <Form.Check
-                                type="checkbox"
-                                label="Cirmos"
-                                value="cirmos"
-                                checked={formData.pattern.includes('cirmos')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Foltos"
-                                value="foltos"
-                                checked={formData.pattern.includes('foltos')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Egyszínű"
-                                value="egyszinu"
-                                checked={formData.pattern.includes('egyszinu')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Teknőctarka"
-                                value="teknoctarka"
-                                checked={formData.pattern.includes('teknoctarka')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Kopasz"
-                                value="kopasz"
-                                checked={formData.pattern.includes('kopasz')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Fóka"
-                                value="foka"
-                                checked={formData.pattern.includes('foka')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                            <Form.Check
-                                type="checkbox"
-                                label="Kalikó"
-                                value="kaliko"
-                                checked={formData.pattern.includes('kaliko')}
-                                onChange={handleChange}
-                                name="pattern"
-                            />
-                        </Form.Group>
-                    </Col>
-
-                    <Col md={6}>
-                        <Form.Group controlId="startDate">
-                            <Form.Label>Keletkezési dátum</Form.Label>
-                            <Form.Control
-                                type="date"
-                                value={formData.startDate}
-                                onChange={e => setFormData({ ...formData, startDate: e.target.value })}
-                            />
-                        </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                        <Form.Group controlId="endDate">
-                            <Form.Label>Záró dátum</Form.Label>
-                            <Form.Control
-                                type="date"
-                                value={formData.endDate}
-                                onChange={e => setFormData({ ...formData, endDate: e.target.value })}
-                            />
-                        </Form.Group>
-                    </Col>
-                </Row>
-
-                <Button variant="primary" type="submit">Keresés</Button>
-            </Form>
-            {loading ? (
-                <p>Betöltés...</p>
-            ) : (
-                <div>
-                    {filteredMenhelyLista && filteredMenhelyLista.length > 0 && (
-                        <div>
-                            <h3>Keresési eredmény:</h3>
-                            <div className="card-deck">
-                                {filteredMenhelyLista.map(report => (
-                                    <MacsCard key={report.id} adat={report} />
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            )}
+          <h3>Eredmények:</h3>
+          <div className="card-deck">
+            {results.map((macska) => (
+              <MacsCard key={macska.id} adat={macska} />
+            ))}
+          </div>
         </div>
-    );
+      ) : (
+        <p style={{ color: "black" }}>Nincs találat.</p>
+      )}
+    </div>
+  );
 };
 
 export default Szures;
