@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
         const formattedDate1 = date1 ?? "2015-01-01";  // Ha nincs beállítva, akkor 2015-01-01
         const formattedDate2 = date2 ?? new Date().toISOString().split("T")[0]; // Alapértelmezés: mai nap
     
-        const endpoint = `/api/get-report-filter/${color || ""},${pattern || ""},${formattedDate1},${formattedDate2}`;
+        const endpoint = `/api/get-reports-filter/${color || ""},${pattern || ""},${formattedDate1},${formattedDate2}`;
     
         try {
             const { data } = await myAxios.get(endpoint);

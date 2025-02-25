@@ -8,8 +8,8 @@ const Bejelentes = () => {
   const [formData, setFormData] = useState({
     status: '',
     address: '',
-    color: [],
-    pattern: [],
+    color: '',
+    pattern: '',
     other_identifying_marks: '',
   /*   needs_help: false, */
     health_status: '',
@@ -18,40 +18,15 @@ const Bejelentes = () => {
     chip_number: '',
     circumstances: '',
     number_of_individuals: 0,
-    disappearance_date: ''
+    disappearance_date: '',
+    activity: 1
   });
  
  
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
  
-    if (type === 'checkbox') {
-      console.log("checkbox")
-      if (name === 'color' || name === 'pattern') {
-        // Ha 'color' vagy 'pattern' mezőről van szó, kezeljük tömbként
-        setFormData((prevState) => {
-          const updatedArray = [...prevState[name]];
-          if (checked) {
-            updatedArray.push(value); // Hozzáadjuk az új értéket
-          } else {
-            const index = updatedArray.indexOf(value);
-            if (index > -1) {
-              updatedArray.splice(index, 1); // Eltávolítjuk a kikapcsolt értéket
-            }
-          }
-          return { ...prevState, [name]: updatedArray };
-        });
-      }/*  else if (name === 'needs_help') {
-        // A needs_help mezőnek kifejezetten boolean értéket adunk
- 
-        setFormData({ ...formData, [name]: checked === true });
-        console.log(typeof checked, checked === true );
-      }  */else {
- 
-        setFormData({ ...formData, [name]: checked === true  });
-        console.log(typeof checked);
-      }
-    } else if (type === 'date') {
+    if (type === 'date') {
       const date = new Date(value);
       const formattedDate = date.toISOString().split('T')[0]; // Az első része ISO formátumnak, pl. '2025-02-04'
       setFormData({ ...formData, [name]: formattedDate });
