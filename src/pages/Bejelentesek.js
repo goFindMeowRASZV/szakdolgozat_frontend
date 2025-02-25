@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import MacsCard from '../components/MacsCard.js';
 import { useNavigate } from 'react-router-dom';
-import MacsCard from './MacsCard.js';
 import useAuthContext from '../model/contexts/AuthContext.js';
 import { Link } from "react-router-dom";
 
