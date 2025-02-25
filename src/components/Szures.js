@@ -4,50 +4,43 @@ import useAuthContext from "../model/contexts/AuthContext";
 import MacsCard from "./MacsCard";
 
 const Szures = ({ type }) => {
-  const { getReportsFilter, getShelteredReportsFilter, reportsLISTA, menhelyLISTA } = useAuthContext();
+  const { getReportsFilter, getShelteredReportsFilter } = useAuthContext();
   const [formData, setFormData] = useState({
-    color: [],
-    pattern: [],
+    color: "",
+    pattern: "",
     startDate: "",
     endDate: "",
   });
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState([]);
-  const [showModal, setShowModal] = useState(false); // Modal megjelenítésének állapota
+  const [showModal, setShowModal] = useState(false);
 
-  //Input mező változáskezelés (szín, minta, dátum)
+
   const handleChange = (e) => {
-    const { name, value, checked, type } = e.target;
-    if (type === "checkbox") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: checked ? [...prev[name], value] : prev[name].filter((item) => item !== value),
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    const { value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      color: [value],  // Csak az aktuális érték marad benne a tömbben
+    }));
   };
 
-  // Szűrési API hívás
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     setLoading(true);
 
     const filters = {
-      color: formData.color.length > 0 ? formData.color.join(",") : "*", 
-      pattern: formData.pattern.length > 0 ? formData.pattern.join(",") : "*", 
+      color: formData.color || "*",
+      pattern: formData.pattern || "*",
       date1: formData.startDate || "2015-01-01",
       date2: formData.endDate || new Date().toISOString().split("T")[0],
     };
 
     let data;
     if (type === "reports") {
-      data = await getReportsFilter(filters); 
+      data = await getReportsFilter(filters);
     } else {
-      data = await getShelteredReportsFilter(filters); 
+      data = await getShelteredReportsFilter(filters);
     }
-
-    console.log("Backend válasz:", data); // Backend válaszának naplózása
 
     setResults(data);
     setLoading(false);
@@ -72,128 +65,184 @@ const Szures = ({ type }) => {
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={6}>
-              <Form.Group controlId="color">
-              <Form.Label>Szín</Form.Label>
-              <Form.Check
-                type="checkbox"
-                label="Fehér"
-                value="feher"
-                checked={formData.color.includes('feher')}
-                onChange={handleChange}
-                name="color"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Fekete"
-                value="fekete"
-                checked={formData.color.includes('fekete')}
-                onChange={handleChange}
-                name="color"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Barna"
-                value="barna"
-                checked={formData.color.includes('barna')}
-                onChange={handleChange}
-                name="color"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Vörös"
-                value="voros"
-                checked={formData.color.includes('voros')}
-                onChange={handleChange}
-                name="color"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Bézs"
-                value="bezs"
-                checked={formData.color.includes('bezs')}
-                onChange={handleChange}
-                name="color"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Szürke"
-                value="szurke"
-                checked={formData.color.includes('szurke')}
-                onChange={handleChange}
-                name="color"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Egyéb"
-                value="egyeb"
-                checked={formData.color.includes('egyeb')}
-                onChange={handleChange}
-                name="color"
-              />
-            </Form.Group>
-          </Col>
+                <Form.Group controlId="color">
+                  <Form.Label>Szín</Form.Label>
+                  <Form.Check
+                    type="radio"
+                    label="Fehér"
+                    value="feher"
+                    checked={formData.color === "feher"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Fekete"
+                    value="fekete"
+                    checked={formData.color === "fekete"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Barna"
+                    value="barna"
+                    checked={formData.color === "barna"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Vörös"
+                    value="voros"
+                    checked={formData.color === "voros"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Bézs"
+                    value="bezs"
+                    checked={formData.color === "bezs"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Szürke"
+                    value="szurke"
+                    checked={formData.color === "szurke"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Fekete - fehér"
+                    value="feketefeher"
+                    checked={formData.color === "feketefeher"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Fekete - fehér - vörös"
+                    value="feketefehervoros"
+                    checked={formData.color === "feketefehervoros"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Fekete - vörös"
+                    value="feketevoros"
+                    checked={formData.color === "feketevoros"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Vörös - fehér"
+                    value="vorosfeher"
+                    checked={formData.color === "vorosfeher"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Szürke - fehér"
+                    value="szurkefeher"
+                    checked={formData.color === "szurkefeher"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Barna - fehér"
+                    value="barnafeher"
+                    checked={formData.color === "barnafeher"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Barna - bézs"
+                    value="barnabezs"
+                    checked={formData.color === "barnabezs"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Egyéb"
+                    value="egyeb"
+                    checked={formData.color === "egyeb"}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    name="color"
+                  />
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="pattern">
+                  <Form.Label>Minta</Form.Label>
 
-          <Col md={6}>
-            <Form.Group controlId="pattern">
-              <Form.Label>Minta</Form.Label>
-              <Form.Check
-                type="checkbox"
-                label="Cirmos"
-                value="cirmos"
-                checked={formData.pattern.includes('cirmos')}
-                onChange={handleChange}
-                name="pattern"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Foltos"
-                value="foltos"
-                checked={formData.pattern.includes('foltos')}
-                onChange={handleChange}
-                name="pattern"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Egyszínű"
-                value="egyszinu"
-                checked={formData.pattern.includes('egyszinu')}
-                onChange={handleChange}
-                name="pattern"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Teknőctarka"
-                value="teknoctarka"
-                checked={formData.pattern.includes('teknoctarka')}
-                onChange={handleChange}
-                name="pattern"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Kopasz"
-                value="kopasz"
-                checked={formData.pattern.includes('kopasz')}
-                onChange={handleChange}
-                name="pattern"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Fóka"
-                value="foka"
-                checked={formData.pattern.includes('foka')}
-                onChange={handleChange}
-                name="pattern"
-              />
-              <Form.Check
-                type="checkbox"
-                label="Kalikó"
-                value="kaliko"
-                checked={formData.pattern.includes('kaliko')}
-                onChange={handleChange}
-                name="pattern"
-              />
-            </Form.Group>
-          </Col>
+                  <Form.Check
+                    type="radio"
+                    label="Cirmos"
+                    value="cirmos"
+                    checked={formData.pattern === "cirmos"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Foltos"
+                    value="foltos"
+                    checked={formData.pattern === "foltos"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Egyszínű"
+                    value="egyszinu"
+                    checked={formData.pattern === "egyszinu"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Teknőctarka"
+                    value="teknoctarka"
+                    checked={formData.pattern === "teknoctarka"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Kopasz"
+                    value="kopasz"
+                    checked={formData.pattern === "kopasz"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Fóka"
+                    value="foka"
+                    checked={formData.pattern === "foka"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                  <Form.Check
+                    type="radio"
+                    label="Kalikó"
+                    value="kaliko"
+                    checked={formData.pattern === "kaliko"}
+                    onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+                    name="pattern"
+                  />
+                </Form.Group>
+              </Col>
 
               <Col md={6}>
                 <Form.Group controlId="startDate">
@@ -219,23 +268,25 @@ const Szures = ({ type }) => {
             Bezárás
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
 
-      {loading ? (
-        <p>Betöltés...</p>
-      ) : results && results.length > 0 ? (
-        <div>
-          <h3>Eredmények:</h3>
-          <div className="card-deck">
-            {results.map((macska) => (
-              <MacsCard key={macska.id} adat={macska} />
-            ))}
+      {
+        loading ? (
+          <p> Betöltés...</p >
+        ) : results && results.length > 0 ? (
+          <div>
+            <h3>Eredmények:</h3>
+            <div className="card-deck">
+              {results.map((macska) => (
+                <MacsCard key={macska.id} adat={macska} />
+              ))}
+            </div>
           </div>
-        </div>
-      ) : (
-        <p style={{ color: "black" }}>Nincs találat.</p>
-      )}
-    </div>
+        ) : (
+          <p style={{ color: "black" }}>Nincs találat.</p>
+        )
+      }
+    </div >
   );
 };
 
