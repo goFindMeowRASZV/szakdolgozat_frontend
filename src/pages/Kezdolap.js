@@ -4,7 +4,7 @@ import useAuthContext from '../model/contexts/AuthContext'
 
 function Kezdolap() {
   const { user } = useAuthContext()
-  console.log(user)
+  console.log("Bejelentkezett felhasználó: "+user)
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Col, Row, Spinner } from 'react-bootstrap';
 import useAuthContext from '../model/contexts/AuthContext';
-import MacsCard from './MacsCard';  // Importáld a MacsCard komponenst
+import MacsCard from './MacsCard';
 
 
 const Szures = () => {

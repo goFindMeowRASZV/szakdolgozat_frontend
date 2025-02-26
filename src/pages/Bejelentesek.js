@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthContext from '../model/contexts/AuthContext.js';
-import MacsCard from '.MacsCard.js';
+import MacsCard from '../components/MacsCard.js';
+
 
 function Bejelentesek() {
     const { macskaLISTA, getMacsCard } = useAuthContext();
@@ -21,7 +22,7 @@ function Bejelentesek() {
 
     return (
         <div className='galeriaBody'>
-        <h1 className="galeriaCim">BEJELENTÉSEK</h1>
+        <h1 className="galeriaCim" style={{ paddingTop:'60px' }}>BEJELENTÉSEK</h1>
             <div className="kepek">
                 {macskaLISTA ? (
                     macskaLISTA.map((elem, index) => (

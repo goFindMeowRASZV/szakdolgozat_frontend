@@ -5,12 +5,64 @@
 }
 
 html, body,#root{
-  background-color: rgb(243, 223, 227);
+  /* background-color: rgb(243, 223, 227); */
+  background-color: rgb(221, 217, 207);
 }
 /* menü */
-.navbar-nav {
-  display: flex;
+.navbar-img {
+  position: absolute; /* A kép a menü mögött helyezkedik el */
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%; /* A kép kitölti a teljes menüt */
+  object-fit: cover; /* A kép nem torzul, és kitölti a menü területét */
+  z-index: 0; /* A kép a menü mögött jelenik meg */
+}
+
+/* Menü elemek stílusai */
+.navbarAtlatszo{
+  padding: 0;
+  height: 39px,;
+  background: transparent; /* Átlátszó navbar */
+  position: absolute;  /* A navbar legyen a háttérkép felett */
+  top: 0; 
+  left: 0; 
+  width: 100%;
+  z-index: 10; /* A navbar legyen a háttérkép fölött */
+}
+.menu {
+  position: relative; /* A menü elemeknek kell, hogy relatív pozícióval rendelkezzenek */
+  padding: 0;
+  margin: 0;
+  z-index: 1; /* A menü legyen a kép felett */
+}
+
+
+.menu > li {
+  border: 1px solid white;
+  border-radius: 35px;
+  margin: 0px 1px 0.5px 1px;
+  padding: 2px;
+}
+
+.menu > li > a {
+  color: white;
+  font-weight: 450;
+  padding: 5px 20px 10px;
+  display: block;
+  text-align: center;
+
+}
+.menu > li > a:hover{
+  color: rgb(179, 154, 129);
+
+}
+.menu > li > a:focus{
+  color: rgb(179, 154, 129);
+
+}
+.bejelentkezes{
+  margin-top: 100px;
 }
 .logOut{
   margin-left: auto;
@@ -158,4 +210,69 @@ html, body,#root{
   width: 15px;
   height: auto;
   margin: 0; /* Eltávolítja az esetleges margót */
+}
+
+/* kezdolap */
+
+.wallpaperPhoto{
+  width: 100%;
+  height: auto;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0; /* Legyen a navbar mögött */
+  display: block; /* Ne legyen inline */
+}
+
+.kezdolapFelezett{
+  display: flex;
+  flex-direction: 1fr 1fr;
+  padding-top: 50%;
+}
+
+.wallpaperPhoto2{
+  max-width: 50%;
+  height: 50%;
+}
+
+
+.bekezdes{
+  margin: 20px 90px 40px 90px;
+  font-size: 19px;
+}
+
+.bekezdes>h2{
+  padding-bottom: 20px;
+  font-size: 40px;
+  margin-top: 10%;
+}
+
+/* bejelentkezes page*/
+.bejelentkezesHatter{
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  max-width: 40%;
+  min-width: 420px;
+  background-image: url('/public/images/blurredHatter.png');
+  border-radius: 35px;
+/*   backdrop-filter: blur(5px);*/
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  color: white;
+}
+
+.regisztracioHatter{
+  background-position: center; /* Középre helyezi */
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  max-width: 40%;
+  min-width: 420px;
+  background-image: url('/public/images/blurredHatter2.png');
+  border-radius: 35px;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  color: white;
 }

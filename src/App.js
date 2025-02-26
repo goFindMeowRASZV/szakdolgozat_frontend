@@ -1,4 +1,5 @@
 import "./App.css";
+import './Fonts.module.css';
 import Regisztracio from "./pages/Regisztracio";
 import {Route, Routes} from "react-router-dom";
 import Layout from "./pages/Layout";
@@ -7,6 +8,8 @@ import Bejelentkezes from "./pages/Bejelentkezes";
 import Bejelentes from "./pages/Bejelentes";
 
 import Kezdolap from "./pages/Kezdolap";
+import Kezdolap2 from "./pages/Kezdolap2";
+
 import Bejelentesek from "./pages/Bejelentesek";
 import MacskaProfil from "./pages/MacskaProfil";
 import Profil from "./pages/Profil";
@@ -20,6 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Kezdolap />} />
+          <Route path="kezdolap2" element={<Kezdolap2 />}/>
           <Route path="regisztracio" element={<Regisztracio />} />
           <Route path="bejelentkezes" element={<Bejelentkezes />} />
           <Route path="bejelentes" element={<Bejelentes />} />

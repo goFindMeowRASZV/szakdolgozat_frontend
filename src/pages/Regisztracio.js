@@ -28,8 +28,8 @@ export default function Regisztracio() {
   };
 
   return (
-    <div className=" m-auto" style={{ maxWidth: "400px" }}>
-      <h1 className="text-center">Regisztráció</h1>
+    <div className="regisztracioHatter">
+    <div className=" m-auto" style={{ maxWidth: "400px",  paddingTop:'15px' , paddingBottom:'30px' }}>
       <form onSubmit={handleSubmit}>
         <div className="mb-3 mt-3">
           <label htmlFor="name" className="form-label">
@@ -123,6 +123,7 @@ export default function Regisztracio() {
         </button>
       </form>
     </div>
+    </div>
   );
 }
 
@@ -176,6 +177,7 @@ function Regisztracio() {
         </div>
         <button type="submit" class="btn btn-dark">Regisztrálok</button>
         </form>
+        </div>
         </div>
     )
 }
