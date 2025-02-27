@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Form, Button, Col, Row, Modal, Spinner } from "react-bootstrap";
+import { Form, Button, Col, Row, Modal } from "react-bootstrap";
 import useAuthContext from "../model/contexts/AuthContext";
 import MacsCard from "./MacsCard";
 
 const Szures = ({ type }) => {
-  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA, setSzuresLista } =
+  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA } =
     useAuthContext();
   const [formData, setFormData] = useState({
     status: "",
@@ -13,6 +13,7 @@ const Szures = ({ type }) => {
   });
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -38,8 +39,6 @@ const Szures = ({ type }) => {
     } else {
       data = await getShelteredReportsFilter(filters);
     }
-
-    setSzuresLista(data);
     setLoading(false);
     setShowModal(false);
   };
@@ -68,30 +67,30 @@ const Szures = ({ type }) => {
                 <Form.Group controlId="status">
                   <Form.Label>Bejelentés állapota</Form.Label>
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Talált"
                     value="t"
-                    checked={formData.color === "t"}
+                    checked={formData.status === "t"}
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
                     name="status"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Keresett"
                     value="k"
-                    checked={formData.color === "k"}
+                    checked={formData.status === "k"}
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
                     name="status"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Látott"
                     value="l"
-                    checked={formData.color === "l"}
+                    checked={formData.status === "l"}
                     onChange={(e) =>
                       setFormData({ ...formData, status: e.target.value })
                     }
@@ -101,7 +100,7 @@ const Szures = ({ type }) => {
                 <Form.Group controlId="color">
                   <Form.Label>Cica színe</Form.Label>
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Fehér"
                     value="feher"
                     checked={formData.color === "feher"}
@@ -111,7 +110,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Fekete"
                     value="fekete"
                     checked={formData.color === "fekete"}
@@ -121,7 +120,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Barna"
                     value="barna"
                     checked={formData.color === "barna"}
@@ -131,7 +130,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Vörös"
                     value="voros"
                     checked={formData.color === "voros"}
@@ -141,7 +140,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Bézs"
                     value="bezs"
                     checked={formData.color === "bezs"}
@@ -151,7 +150,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Szürke"
                     value="szurke"
                     checked={formData.color === "szurke"}
@@ -161,7 +160,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Fekete - fehér"
                     value="feketefeher"
                     checked={formData.color === "feketefeher"}
@@ -171,7 +170,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Fekete - fehér - vörös"
                     value="feketefehervoros"
                     checked={formData.color === "feketefehervoros"}
@@ -181,7 +180,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Fekete - vörös"
                     value="feketevoros"
                     checked={formData.color === "feketevoros"}
@@ -191,7 +190,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Vörös - fehér"
                     value="vorosfeher"
                     checked={formData.color === "vorosfeher"}
@@ -201,7 +200,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Szürke - fehér"
                     value="szurkefeher"
                     checked={formData.color === "szurkefeher"}
@@ -211,7 +210,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Barna - fehér"
                     value="barnafeher"
                     checked={formData.color === "barnafeher"}
@@ -221,7 +220,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Barna - bézs"
                     value="barnabezs"
                     checked={formData.color === "barnabezs"}
@@ -231,7 +230,7 @@ const Szures = ({ type }) => {
                     name="color"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Egyéb"
                     value="egyeb"
                     checked={formData.color === "egyeb"}
@@ -247,7 +246,7 @@ const Szures = ({ type }) => {
                   <Form.Label>Cica mintája</Form.Label>
 
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Cirmos"
                     value="cirmos"
                     checked={formData.pattern === "cirmos"}
@@ -257,7 +256,7 @@ const Szures = ({ type }) => {
                     name="pattern"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Foltos"
                     value="foltos"
                     checked={formData.pattern === "foltos"}
@@ -267,7 +266,7 @@ const Szures = ({ type }) => {
                     name="pattern"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Egyszínű"
                     value="egyszinu"
                     checked={formData.pattern === "egyszinu"}
@@ -277,7 +276,7 @@ const Szures = ({ type }) => {
                     name="pattern"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Teknőctarka"
                     value="teknoctarka"
                     checked={formData.pattern === "teknoctarka"}
@@ -287,7 +286,7 @@ const Szures = ({ type }) => {
                     name="pattern"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Kopasz"
                     value="kopasz"
                     checked={formData.pattern === "kopasz"}
@@ -297,7 +296,7 @@ const Szures = ({ type }) => {
                     name="pattern"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Fóka"
                     value="foka"
                     checked={formData.pattern === "foka"}
@@ -307,7 +306,7 @@ const Szures = ({ type }) => {
                     name="pattern"
                   />
                   <Form.Check
-                    type="radio"
+                    type="checkbox"
                     label="Kalikó"
                     value="kaliko"
                     checked={formData.pattern === "kaliko"}
@@ -341,6 +340,7 @@ const Szures = ({ type }) => {
             {szuresLISTA.map((macska) => (
               <MacsCard key={macska.id} adat={macska} />
             ))}
+          </div>
           </div>
         ) : (
           <p style={{ color: "black" }}>Nincs találat.</p>

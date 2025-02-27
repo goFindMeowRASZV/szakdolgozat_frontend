@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [macskaLISTA, setMacskaLista] = useState(null);
     const [menhelyLISTA, setMenhelyLista] = useState(null);
-    const [szuresLISTA, setSzuresLista] = useState(null);
+    const [szuresLISTA, setSzuresLista] = useState([]);
     const [user, setUser] = useState(null);
     const [aktualisMacska, setAktualisMacska] = useState(null);
     const [errors, setErrors] = useState({
@@ -79,33 +79,21 @@ export const AuthProvider = ({ children }) => {
 
     //szűrési jelentések
     const getReportsFilter = async (filters) => {
-        const { color, pattern, date1, date2 } = filters;
-    
-        // Ellenőrizzük és alapértelmezett értéket adunk, ha nincs adat
-        const formattedDate1 = date1 ?? "2015-01-01";  // Ha nincs beállítva, akkor 2015-01-01
-        const formattedDate2 = date2 ?? new Date().toISOString().split("T")[0]; // Alapértelmezés: mai nap
-    
-        const endpoint = `/api/get-reports-filter/${color || ""},${pattern || ""},${formattedDate1},${formattedDate2}`;
-    
+        const { status,color, pattern} = filters;
+        const endpoint = `/api/get-report-filter/${status || ""},${color || ""},${pattern || ""}`;
         try {
             const { data } = await myAxios.get(endpoint);
-            setSzuresLista(data);
+            setSzuresLista(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error("Hiba történt a lekérdezés során:", error);
         }
     };
     const getShelteredReportsFilter = async (filters) => {
-        const { color, pattern, date1, date2 } = filters;
-    
-        // Ellenőrizzük és alapértelmezett értéket adunk, ha nincs adat
-        const formattedDate1 = date1 ?? "2015-01-01";  // Ha nincs beállítva, akkor 2015-01-01
-        const formattedDate2 = date2 ?? new Date().toISOString().split("T")[0]; // Alapértelmezés: mai nap
-    
-        const endpoint = `/api/get-sheltered-report-filter/${color || ""},${pattern || ""},${formattedDate1},${formattedDate2}`;
-    
+        const { status, color, pattern} = filters;
+        const endpoint = `/api/get-sheltered-report-filter/${color || ""},${pattern || ""}`;
         try {
             const { data } = await myAxios.get(endpoint);
-            setSzuresLista(data);
+            setSzuresLista(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error("Hiba történt a lekérdezés során:", error);
         }
@@ -140,6 +128,7 @@ export const AuthProvider = ({ children }) => {
             getReportsFilter,
             getShelteredReportsFilter,
             szuresLISTA,
+            setSzuresLista
         }}>
             {children}
         </AuthContext.Provider>
