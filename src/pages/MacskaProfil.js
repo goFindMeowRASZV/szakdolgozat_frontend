@@ -39,9 +39,9 @@ function MacskaProfil() {
       report: aktualisMacska.report_id, 
     };
   
-    console.log("Küldött adatok:", updatedFormData); // Ellenőrzés
+    console.log("Küldött adatok:", updatedFormData); 
   
-    // Ezt küldjük el az API-nak
+    
     shelterCat(updatedFormData, "/api/shelter-cat");
   };
   

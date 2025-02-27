@@ -112,10 +112,10 @@ export const AuthProvider = ({ children }) => {
     };
 
 
-    //macska menhelyre küldés
+    //macska menhelyre 
     const shelterCat = async ({ ...adat }, vegpont) =>  {
         try {
-            const response = await myAxios.post(vegpont, adat);
+            await myAxios.post(vegpont, adat);
             alert("A macska menhelyre került!");
         } catch (error) {
             console.error("Hiba történt:", error.response?.data?.error || error.message);
