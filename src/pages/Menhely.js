@@ -20,7 +20,8 @@ function Menhely() {
   };
 
   return (
-    <div className="galeriaBody">
+    <div className="galeriaBody" style={{ paddingTop:'60px' }}>
+      <Szures />
       <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
       <div className="kepek">
       <Szures type="sheltered" />

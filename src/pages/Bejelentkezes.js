@@ -25,8 +25,8 @@ export default function Bejelentkezes() {
   };
 
   return (
-    <div className="m-auto" style={{ maxWidth: "400px" }}>
-      <h1 className="text-center">Bejelentkezés</h1>
+    <div className="bejelentkezesHatter">
+    <div className="bejelentkezes m-auto" style={{ maxWidth: "400px", paddingTop:'60px' ,paddingBottom:'60px'}}>
       <form onSubmit={handleSubmit}>
         <div className="mb-3 mt-3">
           <label htmlFor="email" className="form-label">
@@ -75,7 +75,7 @@ export default function Bejelentkezes() {
 
         <div className=" text-center">
           <button type="submit" className="btn btn-dark w-100">
-            Login
+            Bejelentkezés
           </button>
 
           <p>
@@ -86,6 +86,7 @@ export default function Bejelentkezes() {
           </p>
         </div>
       </form>
+    </div>
     </div>
   );
 }

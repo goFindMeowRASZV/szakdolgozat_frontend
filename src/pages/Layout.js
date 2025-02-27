@@ -4,9 +4,8 @@ import Navigacio from "./Navigacio";
 
 function Layout() {
     return (
-        <div className="container">
+        <div /* className="container" */>
             <header className="App-header">
-                <h1>GoFindMeow</h1>
             </header>
                 <Navigacio />
             <article>

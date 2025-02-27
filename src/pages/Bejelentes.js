@@ -17,7 +17,8 @@ const Bejelentes = () => {
     chip_number: "",
     circumstances: "",
     number_of_individuals: 0,
-    disappearance_date: "",
+    disappearance_date: '',
+    activity: 1
   });
 
   const handleChange = (e) => {

@@ -23,7 +23,7 @@ function Bejelentesek() {
     return (
         <div className='galeriaBody'>
         <Szures type="reports" />
-        <h1 className="galeriaCim">BEJELENTÉSEK</h1>
+        <h1 className="galeriaCim" style={{ paddingTop:'60px' }}>BEJELENTÉSEK</h1>
             <div className="kepek">
                 {macskaLISTA ? (
                     macskaLISTA.map((elem, index) => (

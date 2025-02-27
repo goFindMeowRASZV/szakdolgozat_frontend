@@ -4,19 +4,27 @@ import { Link } from "react-router-dom";
 
 export default function Navigacio() {
     const { user, logout } = useAuthContext();
+    const isHomePage = Location.pathname === "/kezdolap2";
 
     return (
-        <nav className="navbar navbar-expand-sm bg-light w-100">
-            <div className="container-fluid w-100">
-                <ul className="navbar-nav w-100">
+        <nav 
+        className="navbar-expand-sm"
+        style={isHomePage ? { background: "transparent" } : {
+            backgroundImage: `url(${process.env.PUBLIC_URL}/images/NavHatter.png)`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat"
+        }}
+    >
+            <div className="container-fluid" style={{ width:'100%', padding: '0' , height:'39px',   borderBottom: '1px solid white',marginBottom:'1px', position:'relative', zIndex:'1'}}>
+                <ul className="menu navbar-nav w-100" style={{ height:'39px'}}>
                     <li className="navbar-item">
-                        <Link className="nav-link" to="/">
+                        <Link className="nav-link" to="/kezdolap2">
                             Kezdőlap
                         </Link>
                     </li>
                     {user ? (
                         <>
-                            
                             <li className="navbar-item">
                                 <Link className="nav-link" to="/bejelentes">
                                     Bejelentés
@@ -76,4 +84,4 @@ export default function Navigacio() {
             </div>
         </nav>
     );
-}
+                    }

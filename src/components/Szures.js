@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Col, Row, Modal } from "react-bootstrap";
+import { Form, Button, Col, Row, Modal, Spinner } from "react-bootstrap";
 import useAuthContext from "../model/contexts/AuthContext";
 import MacsCard from "./MacsCard";
 
@@ -332,7 +332,7 @@ const Szures = ({ type }) => {
             Bezárás
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal >
 
       {loading ? (
         <p> Betöltés...</p>
@@ -344,11 +344,11 @@ const Szures = ({ type }) => {
               <MacsCard key={macska.id} adat={macska} />
             ))}
           </div>
-        </div>
-      ) : (
-        <p style={{ color: "black" }}>Nincs találat.</p>
-      )}
-    </div>
+        ) : (
+          <p style={{ color: "black" }}>Nincs találat.</p>
+        )
+      }
+    </div >
   );
 };
 
