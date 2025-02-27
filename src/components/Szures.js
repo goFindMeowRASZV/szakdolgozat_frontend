@@ -4,7 +4,7 @@ import useAuthContext from "../model/contexts/AuthContext";
 import MacsCard from "./MacsCard";
 
 const Szures = ({ type }) => {
-  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA } =
+  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA, setSzuresLista } =
     useAuthContext();
   const [formData, setFormData] = useState({
     status: "",
@@ -12,7 +12,6 @@ const Szures = ({ type }) => {
     pattern: "",
   });
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const handleChange = (e) => {
@@ -40,7 +39,7 @@ const Szures = ({ type }) => {
       data = await getShelteredReportsFilter(filters);
     }
 
-    setResults(data);
+    setSzuresLista(data);
     setLoading(false);
     setShowModal(false);
   };
@@ -54,7 +53,6 @@ const Szures = ({ type }) => {
       <Button variant="dark" onClick={handleShow}>
         Szűrés a cicák között
       </Button>
-
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
