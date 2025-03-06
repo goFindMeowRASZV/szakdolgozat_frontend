@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import useAuthContext from "../model/contexts/AuthContext";
 
-/* const MacskaProfil = ({ macskaId }) => {
-  const [macska, setMacska] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState(""); */
-
 function MacskaProfil() {
   const { aktualisMacska, shelterCat, user } = useAuthContext();
   const [macska, setMacska] = useState(null);
@@ -38,7 +31,7 @@ function MacskaProfil() {
       rescuer: user.id, 
       report: aktualisMacska.report_id, 
     };
-  
+    
     console.log("Küldött adatok:", updatedFormData); 
   
     
@@ -82,7 +75,9 @@ function MacskaProfil() {
           </p>
         </div>
       </div>
-      <button onClick={handleSubmit}>Befogás</button>
+      {aktualisMacska.status === "m"
+              ? " "
+              :  <button onClick={handleSubmit}>Befogás</button>} 
       <div style={{ marginTop: "20px", width: "100%" }}>
         {/* <h3>Hozzászólások</h3>
         <ul>

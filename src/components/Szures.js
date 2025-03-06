@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Form, Button, Col, Row, Modal } from "react-bootstrap";
 import useAuthContext from "../model/contexts/AuthContext";
 import MacsCard from "./MacsCard";
+import { useNavigate } from "react-router-dom";
 
 const Szures = ({ type }) => {
-  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA } =
+  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA , setAktualisMacska} =
     useAuthContext();
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     status: "",
     color: "",
@@ -43,6 +45,12 @@ const Szures = ({ type }) => {
     setShowModal(false);
   };
 
+  const handleCardClick = (elem) => {
+    navigate(`/MacskaProfil`);
+    setAktualisMacska(elem);
+    console.log(elem);
+  };
+
   // Modal nyitása és zárása
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
@@ -64,39 +72,41 @@ const Szures = ({ type }) => {
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col md={6}>
-                <Form.Group controlId="status">
-                  <Form.Label>Bejelentés állapota</Form.Label>
-                  <Form.Check
-                    type="checkbox"
-                    label="Talált"
-                    value="t"
-                    checked={formData.status === "t"}
-                    onChange={(e) =>
-                      setFormData({ ...formData, status: e.target.value })
-                    }
-                    name="status"
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="Keresett"
-                    value="k"
-                    checked={formData.status === "k"}
-                    onChange={(e) =>
-                      setFormData({ ...formData, status: e.target.value })
-                    }
-                    name="status"
-                  />
-                  <Form.Check
-                    type="checkbox"
-                    label="Látott"
-                    value="l"
-                    checked={formData.status === "l"}
-                    onChange={(e) =>
-                      setFormData({ ...formData, status: e.target.value })
-                    }
-                    name="status"
-                  />
-                </Form.Group>
+              {type === "reports"
+              ? <Form.Group controlId="status">
+              <Form.Label>Bejelentés állapota</Form.Label>
+              <Form.Check
+                type="checkbox"
+                label="Talált"
+                value="t"
+                checked={formData.status === "t"}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                name="status"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Keresett"
+                value="k"
+                checked={formData.status === "k"}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                name="status"
+              />
+              <Form.Check
+                type="checkbox"
+                label="Látott"
+                value="l"
+                checked={formData.status === "l"}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                name="status"
+              />
+            </Form.Group>
+              : ""}
                 <Form.Group controlId="color">
                   <Form.Label>Cica színe</Form.Label>
                   <Form.Check
@@ -337,8 +347,14 @@ const Szures = ({ type }) => {
         <div>
           <h3>Eredmények:</h3>
           <div className="card-deck">
-            {szuresLISTA.map((macska) => (
-              <MacsCard key={macska.id} adat={macska} />
+            {szuresLISTA.map((elem, index) => (
+             <div
+             key={index}
+             onClick={() => handleCardClick(elem)}
+             style={{ cursor: "pointer" }}
+           >
+             <MacsCard adat={elem} index={elem.id} />
+           </div>
             ))}
           </div>
           </div>
