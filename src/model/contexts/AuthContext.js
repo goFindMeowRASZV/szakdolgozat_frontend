@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
     const getUser = async () => {
         const { data } = await myAxios.get("/api/user");
         setUser(data);
+        
     };
 
     //elküldi a kijelentkezési kérelmet, majd törli a felhasználói adatokat

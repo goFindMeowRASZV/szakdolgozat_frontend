@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Form, Button, Col, Row, InputGroup } from "react-bootstrap";
+import { Form, Button, Col, Row, InputGroup, ListGroup } from "react-bootstrap";
 import useAuthContext from "../model/contexts/AuthContext";
 
 const Bejelentes = () => {
   const { createReport, user } = useAuthContext();
+  const [suggestions, setSuggestions] = useState([]);
   const [formData, setFormData] = useState({
     status: "",
     address: "",
     color: "",
     pattern: "",
     other_identifying_marks: "",
-    /*   needs_help: false, */
     health_status: "",
     health_status: "",
     photo: null,
@@ -18,7 +18,9 @@ const Bejelentes = () => {
     circumstances: "",
     number_of_individuals: 0,
     disappearance_date: '',
-    activity: 1
+    activity: 1,
+    lat:1,
+    lon:1
   });
 
   const handleChange = (e) => {
@@ -36,6 +38,49 @@ const Bejelentes = () => {
     }
 
     console.log(formData);
+  };
+
+  // Cím keresése Nominatim API-val
+  const fetchAddressSuggestions = async (query) => {
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1`
+      );
+      const data = await response.json();
+      setSuggestions(data);
+  
+      // Kiírás a koordinátákról, ha vannak
+      data.forEach((item) => {
+        if (item.lat && item.lon) {
+          console.log(`Cím: ${item.display_name}`);
+          console.log(`Szélesség: ${item.lat}, Hosszúság: ${item.lon}`);
+        }
+      });
+    } catch (error) {
+      console.error("Hiba a cím keresésekor:", error);
+    }
+  };
+
+  const handleAddressChange = (e) => {
+    const value = e.target.value;
+    setFormData({ ...formData, address: value });
+    fetchAddressSuggestions(value);
+  };
+
+  const selectAddress = (address, lat, lon) => {
+    setFormData({ 
+      ...formData, 
+      address, 
+      lat,    // Beállítjuk a szélességet
+      lon     // Beállítjuk a hosszúságot
+    });
+    setSuggestions([]);
+    console.log(`Kiválasztott cím: ${address}`);
+    console.log(`Szélesség: ${lat}, Hosszúság: ${lon}`);
   };
 
   const handleSubmit = (e) => {
@@ -68,15 +113,28 @@ const Bejelentes = () => {
           </Form.Group>
         </Col>
         <Col md={6}>
-          <Form.Group controlId="address">
+        <Form.Group controlId="address">
             <Form.Label>Cím</Form.Label>
             <Form.Control
               type="text"
               placeholder="Adja meg a címet"
               name="address"
               value={formData.address}
-              onChange={handleChange}
+              onChange={handleAddressChange}
             />
+            {suggestions.length > 0 && (
+              <ListGroup>
+                {suggestions.map((item, index) => (
+                  <ListGroup.Item
+                  key={index}
+                  action
+                  onClick={() => selectAddress(item.display_name, item.lat, item.lon)}
+                >
+                  {item.display_name}
+                </ListGroup.Item>
+                ))}
+              </ListGroup>
+            )}
           </Form.Group>
         </Col>
       </Row>
