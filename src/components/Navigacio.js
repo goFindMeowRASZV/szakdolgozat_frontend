@@ -1,5 +1,5 @@
 import React from "react";
-import useAuthContext from "./AuthContext";
+import useAuthContext from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 
 export default function Navigacio() {
