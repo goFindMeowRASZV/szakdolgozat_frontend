@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import useAuthContext from "../model/contexts/AuthContext";
+import { Link } from "react-router-dom";
+import Kommenteles from "../components/Kommenteles";
 
-/* const MacskaProfil = ({ macskaId }) => {
-  const [macska, setMacska] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState(""); */
+
 
 function MacskaProfil() {
   const { aktualisMacska, shelterCat, user } = useAuthContext();
@@ -15,7 +12,11 @@ function MacskaProfil() {
   const [error, setError] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [showCommentForm, setShowCommentForm] = useState(false);
 
+  const handleToggleCommentForm = () => {
+    setShowCommentForm(!showCommentForm);
+  };
   const [formData, setFormData] = useState({
     rescuer: "",
     report: "",
@@ -28,7 +29,6 @@ function MacskaProfil() {
     breed: "",
     photo: "",
   });
-
  
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,149 +101,8 @@ function MacskaProfil() {
           />
           <button type="submit">Küldés</button>
         </form> */}
-        <div className="container">
-          <div className="row">
-            <div className="panel panel-default widget">
-              <div className="panel-heading">
-                <span className="glyphicon glyphicon-comment"></span>
-                <h3 className="panel-title">Kommentek</h3>
-                <span className="label label-info">78</span>
-              </div>
-              <div className="panel-body">
-                <ul className="list-group">
-                  <li className="list-group-item">
-                    <div className="row">
-                      <div className="col-xs-2 col-md-1">
-                        <img
-                          src="images/user.jpg"
-                          className="rounded-circle img-fluid"
-                          alt=""
-                        />
-                      </div>
-                      <div className="col-xs-10 col-md-11">
-                        <div>
-                          <div className="mic-info">
-                            By: <a href="#">User01</a> on 2 Aug 2013
-                          </div>
-                        </div>
-                        <div className="comment-text">
-                          Ismerős, mintha láttam volna már erre felé.
-                        </div>
-                        <div className="action">
-                          {/* <button type="button" className="btn btn-primary btn-xs" title="Edit">
-                                                <span className="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button type="button" className="btn btn-success btn-xs" title="Approved">
-                                                <span className="glyphicon glyphicon-ok"></span>
-                                            </button> */}
-                          <button
-                            type="button"
-                            className="kukaGomb"
-                            title="Delete"
-                          >
-                            <img
-                              src="images/bin.png"
-                              alt="Törlés"
-                              className="kukaGombKep"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="list-group-item">
-                    <div className="row">
-                      <div className="col-xs-2 col-md-1">
-                        <img
-                          src="images/user.jpg"
-                          className="rounded-circle img-fluid"
-                          alt=""
-                        />
-                      </div>
-                      <div className="col-xs-10 col-md-11">
-                        <div>
-                          <div className="mic-info">
-                            By: <a href="#">User02</a> on 11 Nov 2013
-                          </div>
-                        </div>
-                        <div className="comment-text">
-                          Nagyon szép cica, remélem megkerül!
-                        </div>
-                        <div className="action">
-                          {/* <button type="button" className="btn btn-primary btn-xs" title="Edit">
-                                                <span className="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button type="button" className="btn btn-success btn-xs" title="Approved">
-                                                <span className="glyphicon glyphicon-ok"></span>
-                                            </button> */}
-                          <button
-                            type="button"
-                            className="kukaGomb"
-                            title="Delete"
-                          >
-                            <img
-                              src="images/bin.png"
-                              alt="Törlés"
-                              className="kukaGombKep"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="list-group-item">
-                    <div className="row">
-                      <div className="col-xs-2 col-md-1">
-                        <img
-                          src="images/user.jpg"
-                          className="rounded-circle img-fluid"
-                          alt=""
-                        />
-                      </div>
-                      <div className="col-xs-10 col-md-11">
-                        <div>
-                          <div className="mic-info">
-                            By: <a href="#">User03</a> on 11 Nov 2013
-                          </div>
-                        </div>
-                        <div className="comment-text">
-                          Én is láttam őt itt a környékünkön!
-                        </div>
-                        <div className="action">
-                          {/* <button type="button" className="btn btn-primary btn-xs" title="Edit">
-                                                <span className="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button type="button" className="btn btn-success btn-xs" title="Approved">
-                                                <span className="glyphicon glyphicon-ok"></span>
-                                            </button> */}
-                          <button
-                            type="button"
-                            className="kukaGomb"
-                            title="Delete"
-                          >
-                            <img
-                              src="images/bin.png"
-                              alt="Törlés"
-                              className="kukaGombKep"
-                            />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-                <a
-                  href="#"
-                  className="btn btn-dark btn-sm btn-block"
-                  role="button"
-                >
-                  <span className="glyphicon glyphicon-refresh"></span> Komment
-                  írása
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div><Kommenteles /></div>
+        
       </div>
     </div>
   );

@@ -51,9 +51,9 @@ export default function Navigacio() {
                                 </Link>
                             </li>
                             <li className="logOut navbar-item">
-                                <button className="btn btn-dark" onClick={() => { logout() }}>
+                                <Link className="nav-link" to="/kezdolap2" onClick={() => { logout() }}>
                                     Kijelentkezés
-                                </button>
+                                </Link>
                             </li>
                         </>
                     ) : (

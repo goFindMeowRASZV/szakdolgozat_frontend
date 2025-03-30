@@ -53,12 +53,15 @@ html, body,#root{
   text-align: center;
 
 }
+.menu>li:hover{
+  background-color: rgba(255, 255, 255, 0.26);
+}
 .menu > li > a:hover{
-  color: rgb(179, 154, 129);
+  color: rgb(255, 255, 255);
 
 }
-.menu > li > a:focus{
-  color: rgb(179, 154, 129);
+.menu > li:focus{
+  background-color: rgba(255, 255, 255, 0.26);
 
 }
 .bejelentkezes{
@@ -66,6 +69,17 @@ html, body,#root{
 }
 .logOut{
   margin-left: auto;
+  position: absolute;
+  top: 0px;
+  right: 1px;
+  height:39px;
+  background-color: rgba(255, 255, 255, 0.26);
+}
+.logOut:hover{
+  background-color: rgba(51, 51, 51, 0) !important;
+}
+.logOut>a:hover{
+  color: #ffffff !important;
 }
 .galeriaCim{
   text-align: center;

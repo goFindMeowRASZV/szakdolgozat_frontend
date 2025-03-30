@@ -111,7 +111,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-
+    const createComment = async ({ ...adat }, vegpont) =>  {
+        try {
+            const response = await myAxios.post(vegpont, adat);
+            console.log("komment elküldve")
+        } catch (error) {
+            console.error("Hiba történt:", error.response?.data?.error || error.message);
+        }
+    };
     //macska menhelyre küldés
     const shelterCat = async ({ ...adat }, vegpont) =>  {
         try {
@@ -140,6 +147,7 @@ export const AuthProvider = ({ children }) => {
             getReportsFilter,
             getShelteredReportsFilter,
             szuresLISTA,
+            createComment
         }}>
             {children}
         </AuthContext.Provider>

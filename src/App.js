@@ -22,7 +22,7 @@ function App() {
     
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Kezdolap />} />
+          <Route index element={<Kezdolap2 />} />
           <Route path="kezdolap2" element={<Kezdolap2 />}/>
           <Route path="regisztracio" element={<Regisztracio />} />
           <Route path="bejelentkezes" element={<Bejelentkezes />} />
@@ -33,6 +33,7 @@ function App() {
           <Route path="terkep" element={<Terkep />} />
           <Route path="MacskaProfil" element={<MacskaProfil />} />
           <Route path="profil" element={<Profil />} />
+          
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
