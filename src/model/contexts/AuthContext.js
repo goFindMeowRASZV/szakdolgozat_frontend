@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         myAxios.post("/logout").then((resp) => {
             setUser(null);
+            navigate("/kezdolap2"); 
         });
     };
 
@@ -111,6 +112,26 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const archiveReport = async (id) => {
+        try {
+            await myAxios.patch(`/api/reports/${id}/archive`);
+            getMacsCard(); // Frissítés
+        } catch (error) {
+            console.error("Hiba az archiválásnál:", error);
+        }
+    };
+    
+    const updateReport = async (reportData) => {
+        try {
+            await myAxios.put(`/api/reports/${reportData.report_id}`, reportData);
+            getMacsCard(); // Frissítés
+        } catch (error) {
+            console.error("Hiba a módosításnál:", error);
+        }
+    };
+    
+
+
     return (
         <AuthContext.Provider value={{
             logout,
@@ -129,7 +150,9 @@ export const AuthProvider = ({ children }) => {
             getReportsFilter,
             getShelteredReportsFilter,
             szuresLISTA,
-            setSzuresLista
+            setSzuresLista,
+            archiveReport,
+             updateReport
         }}>
             {children}
         </AuthContext.Provider>

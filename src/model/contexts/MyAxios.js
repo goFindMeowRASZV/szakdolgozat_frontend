@@ -7,6 +7,7 @@ export const  myAxios=axios.create({
     
     //beállítjuk, hogy  a kérések azonosítása coockie-k segítségével történik.
     withCredentials: true,
+    
 });
 
 
