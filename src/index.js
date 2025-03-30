@@ -5,14 +5,17 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter} from "react-router-dom";
 import { AuthProvider } from './model/contexts/AuthContext';
+import { ApiProvider } from './model/contexts/ApiContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
   <React.StrictMode>
-    <AuthProvider>
-    <App/>
-    </AuthProvider>
+    <ApiProvider>
+      <AuthProvider>
+        <App/>
+      </AuthProvider>
+    </ApiProvider>
   </React.StrictMode>
   </BrowserRouter>
 );

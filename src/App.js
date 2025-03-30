@@ -5,7 +5,7 @@ import {Route, Routes} from "react-router-dom";
 import Layout from "./pages/Layout";
 import NoPage from "./pages/NoPage";
 import Bejelentkezes from "./pages/Bejelentkezes";
-import Bejelentes from "./pages/Bejelentes";
+import Bejelentes from "./pages/BejelentesForm";
 
 import Kezdolap from "./pages/Kezdolap";
 import Kezdolap2 from "./pages/Kezdolap2";
