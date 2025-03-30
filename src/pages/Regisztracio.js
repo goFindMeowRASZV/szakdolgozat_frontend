@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import useAuthContext from "../model/contexts/AuthContext";
+import useAuthContext from "../contexts/AuthContext";
 
 export default function Regisztracio() {
   const [name, setName] = useState("");

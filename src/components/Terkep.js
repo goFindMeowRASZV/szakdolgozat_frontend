@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 import { Modal, Button, Form } from "react-bootstrap";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import useAuthContext from "../model/contexts/AuthContext";
+import useAuthContext from "../contexts/AuthContext";
 
 // Az alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;

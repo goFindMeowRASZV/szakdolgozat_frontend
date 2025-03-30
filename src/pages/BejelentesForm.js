@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Col, Row, InputGroup, ListGroup } from "react-bootstrap";
-import useAuthContext from "../model/contexts/AuthContext";
+import useAuthContext from "../contexts/AuthContext";
 
 const Bejelentes = () => {
   const { createReport, user } = useAuthContext();

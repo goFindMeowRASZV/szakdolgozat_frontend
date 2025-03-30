@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import useAuthContext from '../model/contexts/AuthContext'
+import useAuthContext from '../contexts/AuthContext'
 import styles from '../Fonts.module.css';
 
 function Kezdolap() {

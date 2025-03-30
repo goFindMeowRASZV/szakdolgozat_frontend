@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, Col, Row, Modal } from "react-bootstrap";
-import useAuthContext from "../model/contexts/AuthContext";
+import useAuthContext from "../contexts/AuthContext";
 import MacsCard from "./MacsCard";
 import { useNavigate } from "react-router-dom";
 

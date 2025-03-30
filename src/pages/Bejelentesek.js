@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useAuthContext from "../model/contexts/AuthContext.js";
+import useAuthContext from "../contexts/AuthContext.js";
 import Szures from "../components/Szures.js";
 import MacsCard from "../components/MacsCard.js";
 
