@@ -38,10 +38,10 @@ function MacskaProfil() {
       rescuer: user.id, 
       report: aktualisMacska.report_id, 
     };
+    
+    console.log("Küldött adatok:", updatedFormData); 
   
-    console.log("Küldött adatok:", updatedFormData); // Ellenőrzés
-  
-    // Ezt küldjük el az API-nak
+    
     shelterCat(updatedFormData, "/api/shelter-cat");
   };
   
@@ -82,7 +82,9 @@ function MacskaProfil() {
           </p>
         </div>
       </div>
-      <button onClick={handleSubmit}>Befogás</button>
+      {aktualisMacska.status === "m"
+              ? " "
+              :  <button onClick={handleSubmit}>Befogás</button>} 
       <div style={{ marginTop: "20px", width: "100%" }}>
         {/* <h3>Hozzászólások</h3>
         <ul>

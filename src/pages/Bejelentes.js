@@ -1,68 +1,109 @@
-import React, { useState } from 'react';
-import { Form, Button, Col, Row, InputGroup } from 'react-bootstrap';
-import useAuthContext from '../model/contexts/AuthContext';
- 
+import React, { useState } from "react";
+import { Form, Button, Col, Row, InputGroup, ListGroup } from "react-bootstrap";
+import useAuthContext from "../model/contexts/AuthContext";
+
 const Bejelentes = () => {
- 
   const { createReport, user } = useAuthContext();
+  const [suggestions, setSuggestions] = useState([]);
   const [formData, setFormData] = useState({
-    status: '',
-    address: '',
-    color: '',
-    pattern: '',
-    other_identifying_marks: '',
-  /*   needs_help: false, */
-    health_status: '',
-    health_status: '',
+    status: "",
+    address: "",
+    color: "",
+    pattern: "",
+    other_identifying_marks: "",
+    health_status: "",
+    health_status: "",
     photo: null,
-    chip_number: '',
-    circumstances: '',
+    chip_number: "",
+    circumstances: "",
     number_of_individuals: 0,
     disappearance_date: '',
-    activity: 1
+    activity: 1,
+    lat:1,
+    lon:1
   });
- 
- 
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
- 
-    if (type === 'date') {
+
+    if (type === "date") {
       const date = new Date(value);
-      const formattedDate = date.toISOString().split('T')[0]; // Az első része ISO formátumnak, pl. '2025-02-04'
+      const formattedDate = date.toISOString().split("T")[0]; // Az első része ISO formátumnak, pl. '2025-02-04'
       setFormData({ ...formData, [name]: formattedDate });
-      console.log(date)
-    }
-    else if (type === 'file') {
+      console.log(date);
+    } else if (type === "file") {
       setFormData({ ...formData, [name]: files[0] });
-    }
-    else {
+    } else {
       setFormData({ ...formData, [name]: value });
     }
- 
- 
+
     console.log(formData);
- 
   };
- 
- 
+
+  // Cím keresése Nominatim API-val
+  const fetchAddressSuggestions = async (query) => {
+    if (query.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1`
+      );
+      const data = await response.json();
+      setSuggestions(data);
+  
+      // Kiírás a koordinátákról, ha vannak
+      data.forEach((item) => {
+        if (item.lat && item.lon) {
+          console.log(`Cím: ${item.display_name}`);
+          console.log(`Szélesség: ${item.lat}, Hosszúság: ${item.lon}`);
+        }
+      });
+    } catch (error) {
+      console.error("Hiba a cím keresésekor:", error);
+    }
+  };
+
+  const handleAddressChange = (e) => {
+    const value = e.target.value;
+    setFormData({ ...formData, address: value });
+    fetchAddressSuggestions(value);
+  };
+
+  const selectAddress = (address, lat, lon) => {
+    setFormData({ 
+      ...formData, 
+      address, 
+      lat,    // Beállítjuk a szélességet
+      lon     // Beállítjuk a hosszúságot
+    });
+    setSuggestions([]);
+    console.log(`Kiválasztott cím: ${address}`);
+    console.log(`Szélesség: ${lat}, Hosszúság: ${lon}`);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user.id)
-    setFormData({ ...formData, 'creator_id': user.id });
+    console.log(user.id);
+    setFormData({ ...formData, creator_id: user.id });
     console.log(formData);
- 
-    createReport(formData, '/api/create-report');
- 
+
+    createReport(formData, "/api/create-report");
   };
- 
- 
+
   return (
     <Form onSubmit={handleSubmit}>
       <Row>
         <Col md={6}>
           <Form.Group controlId="status">
             <Form.Label>Állapot</Form.Label>
-            <Form.Control as="select" name="status" value={formData.status} onChange={handleChange}>
+            <Form.Control
+              as="select"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+            >
               <option value="">Válasszon állapotot</option>
               <option value="t">Találtam</option>
               <option value="k">Keresem</option>
@@ -72,145 +113,256 @@ const Bejelentes = () => {
           </Form.Group>
         </Col>
         <Col md={6}>
-          <Form.Group controlId="address">
+        <Form.Group controlId="address">
             <Form.Label>Cím</Form.Label>
             <Form.Control
               type="text"
               placeholder="Adja meg a címet"
               name="address"
               value={formData.address}
-              onChange={handleChange}
+              onChange={handleAddressChange}
             />
+            {suggestions.length > 0 && (
+              <ListGroup>
+                {suggestions.map((item, index) => (
+                  <ListGroup.Item
+                  key={index}
+                  action
+                  onClick={() => selectAddress(item.display_name, item.lat, item.lon)}
+                >
+                  {item.display_name}
+                </ListGroup.Item>
+                ))}
+              </ListGroup>
+            )}
           </Form.Group>
         </Col>
       </Row>
- 
+
       <Row>
         <Col md={6}>
           <Form.Group controlId="color">
-            <Form.Label>Szín</Form.Label>
+            <Form.Label>Cica színe</Form.Label>
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Fehér"
               value="feher"
-              checked={formData.color.includes('feher')}
-              onChange={handleChange}
+              checked={formData.color === "feher"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Fekete"
               value="fekete"
-              checked={formData.color.includes('fekete')}
-              onChange={handleChange}
+              checked={formData.color === "fekete"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Barna"
               value="barna"
-              checked={formData.color.includes('barna')}
-              onChange={handleChange}
+              checked={formData.color === "barna"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Vörös"
               value="voros"
-              checked={formData.color.includes('voros')}
-              onChange={handleChange}
+              checked={formData.color === "voros"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Bézs"
               value="bezs"
-              checked={formData.color.includes('bezs')}
-              onChange={handleChange}
+              checked={formData.color === "bezs"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Szürke"
               value="szurke"
-              checked={formData.color.includes('szurke')}
-              onChange={handleChange}
+              checked={formData.color === "szurke"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
+              label="Fekete - fehér"
+              value="feketefeher"
+              checked={formData.color === "feketefeher"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
+              label="Fekete - fehér - vörös"
+              value="feketefehervoros"
+              checked={formData.color === "feketefehervoros"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
+              label="Fekete - vörös"
+              value="feketevoros"
+              checked={formData.color === "feketevoros"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
+              label="Vörös - fehér"
+              value="vorosfeher"
+              checked={formData.color === "vorosfeher"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
+              label="Szürke - fehér"
+              value="szurkefeher"
+              checked={formData.color === "szurkefeher"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
+              label="Barna - fehér"
+              value="barnafeher"
+              checked={formData.color === "barnafeher"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
+              label="Barna - bézs"
+              value="barnabezs"
+              checked={formData.color === "barnabezs"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
+              name="color"
+            />
+            <Form.Check
+              type="radio"
               label="Egyéb"
               value="egyeb"
-              checked={formData.color.includes('egyeb')}
-              onChange={handleChange}
+              checked={formData.color === "egyeb"}
+              onChange={(e) =>
+                setFormData({ ...formData, color: e.target.value })
+              }
               name="color"
             />
           </Form.Group>
         </Col>
- 
         <Col md={6}>
           <Form.Group controlId="pattern">
-            <Form.Label>Minta</Form.Label>
+            <Form.Label>Cica mintája</Form.Label>
+
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Cirmos"
               value="cirmos"
-              checked={formData.pattern.includes('cirmos')}
-              onChange={handleChange}
+              checked={formData.pattern === "cirmos"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Foltos"
               value="foltos"
-              checked={formData.pattern.includes('foltos')}
-              onChange={handleChange}
+              checked={formData.pattern === "foltos"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Egyszínű"
               value="egyszinu"
-              checked={formData.pattern.includes('egyszinu')}
-              onChange={handleChange}
+              checked={formData.pattern === "egyszinu"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Teknőctarka"
               value="teknoctarka"
-              checked={formData.pattern.includes('teknoctarka')}
-              onChange={handleChange}
+              checked={formData.pattern === "teknoctarka"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Kopasz"
               value="kopasz"
-              checked={formData.pattern.includes('kopasz')}
-              onChange={handleChange}
+              checked={formData.pattern === "kopasz"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Fóka"
               value="foka"
-              checked={formData.pattern.includes('foka')}
-              onChange={handleChange}
+              checked={formData.pattern === "foka"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
             <Form.Check
-              type="checkbox"
+              type="radio"
               label="Kalikó"
               value="kaliko"
-              checked={formData.pattern.includes('kaliko')}
-              onChange={handleChange}
+              checked={formData.pattern === "kaliko"}
+              onChange={(e) =>
+                setFormData({ ...formData, pattern: e.target.value })
+              }
               name="pattern"
             />
           </Form.Group>
         </Col>
       </Row>
- 
+
       <Form.Group controlId="other_identifying_marks">
         <Form.Label>Egyéb ismertetőjel</Form.Label>
         <Form.Control
@@ -221,21 +373,18 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
- 
-      
- 
+
       <Form.Group controlId="health_status">
         <Form.Label>Egészségügyi állapot</Form.Label>
         <Form.Control
           type="text"
           placeholder="Adja meg az egészségi állapotot"
           name="health_status"
-          value={formData.health_status || ''}
+          value={formData.health_status || ""}
           onChange={handleChange}
         />
       </Form.Group>
- 
- 
+
       <Form.Group controlId="photo">
         <Form.Label>Kép</Form.Label>
         <Form.Control
@@ -245,7 +394,7 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
- 
+
       <Form.Group controlId="chip_number">
         <Form.Label>Chip szám</Form.Label>
         <Form.Control
@@ -256,7 +405,7 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
- 
+
       <Form.Group controlId="circumstances">
         <Form.Label>Körülmények</Form.Label>
         <Form.Control
@@ -267,7 +416,7 @@ const Bejelentes = () => {
           onChange={handleChange}
         />
       </Form.Group>
- 
+
       <Form.Group controlId="number_of_individuals">
         <Form.Label>Példányok száma</Form.Label>
         <Form.Control
@@ -281,20 +430,21 @@ const Bejelentes = () => {
         />
         <Form.Text>{formData.number_of_individuals}</Form.Text>
       </Form.Group>
- 
+
       <Form.Group controlId="disappearance_date">
         <Form.Label>Esemény dátuma</Form.Label>
         <Form.Control
           type="date"
           name="disappearance_date"
-          value={formData.disappearance_date || ''}
+          value={formData.disappearance_date || ""}
           onChange={handleChange}
         />
       </Form.Group>
- 
- 
-      <Button variant="dark" type="submit">Form Beküldése</Button>
+
+      <Button variant="dark" type="submit">
+        Form Beküldése
+      </Button>
     </Form>
   );
 };
-export default Bejelentes
+export default Bejelentes;
