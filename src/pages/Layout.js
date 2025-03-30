@@ -1,6 +1,6 @@
 import React from "react";
 import {Outlet} from "react-router-dom";
-import Navigacio from "./Navigacio";
+import Navigacio from "../model/contexts/Navigacio";
 
 function Layout() {
     return (

@@ -53,17 +53,21 @@ html, body,#root{
   text-align: center;
 
 }
+.menu > li > a:hover {
+  color: rgb(209, 195, 189);
+
+}
 .menu>li:hover{
   background-color: rgba(255, 255, 255, 0.26);
 }
-.menu > li > a:hover{
-  color: rgb(255, 255, 255);
-
+.menu > li > a:focus{
+  color: rgb(209, 195, 189);
 }
 .menu > li:focus{
   background-color: rgba(255, 255, 255, 0.26);
-
 }
+
+
 .bejelentkezes{
   margin-top: 100px;
 }
