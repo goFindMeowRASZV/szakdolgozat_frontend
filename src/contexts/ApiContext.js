@@ -1,5 +1,7 @@
 import { createContext, useState, useContext } from "react";
 import { myAxios } from "./MyAxios.js";
+import useAuthContext from "./AuthContext.js";
+
 
 const ApiContext = createContext();
 
@@ -8,12 +10,30 @@ export const ApiProvider = ({ children }) => {
     const [menhelyLISTA, setMenhelyLista] = useState(null);
     const [szuresLISTA, setSzuresLista] = useState([]);
     const [aktualisMacska, setAktualisMacska] = useState(null);
+    const {user} = useAuthContext();
 
 
-    //macskalistaaa
+   /*  //macskalistaaa
     const getMacsCard = async () => {
+
         const { data } = await myAxios.get("/api/get-reports");
         setMacskaLista(data);
+    }; */
+
+    //admin es staff latha a nem aktiv bejelentest is
+    const getMacsCard = async (userStatus) => {
+        try {
+            let endpoint = "/api/get-reports"; 
+    
+            if (userStatus === 0 || userStatus === 1) {
+                endpoint = "/api/get-reports-a-s"; 
+            }
+    
+            const { data } = await myAxios.get(endpoint);
+            setMacskaLista(data);
+        } catch (error) {
+            console.error("Hiba történt a macskák lekérésekor:", error);
+        }
     };
 
     //menhelyLista
@@ -24,8 +44,8 @@ export const ApiProvider = ({ children }) => {
 
     //szűrési jelentések
     const getReportsFilter = async (filters) => {
-        const { status,color, pattern} = filters;
-        const endpoint = `/api/get-report-filter/${status || ""},${color || ""},${pattern || ""}`;
+        const { userStatus,color, pattern} = filters;
+        const endpoint = `/api/get-report-filter/${userStatus || ""},${color || ""},${pattern || ""}`;
         try {
             const { data } = await myAxios.get(endpoint);
             setSzuresLista(Array.isArray(data) ? data : []);
@@ -34,7 +54,7 @@ export const ApiProvider = ({ children }) => {
         }
     };
     const getShelteredReportsFilter = async (filters) => {
-        const { status, color, pattern} = filters;
+        const { userStatus, color, pattern} = filters;
         const endpoint = `/api/get-sheltered-report-filter/${color || ""},${pattern || ""}`;
         try {
             const { data } = await myAxios.get(endpoint);
@@ -67,7 +87,7 @@ export const ApiProvider = ({ children }) => {
     const archiveReport = async (id) => {
         try {
             await myAxios.patch(`/api/reports/${id}/archive`);
-            getMacsCard(); // Frissítés
+            getMacsCard(user.role); // Frissítés
         } catch (error) {
             console.error("Hiba az archiválásnál:", error);
         }
@@ -76,7 +96,7 @@ export const ApiProvider = ({ children }) => {
     const updateReport = async (reportData) => {
         try {
             await myAxios.put(`/api/reports/${reportData.report_id}`, reportData);
-            getMacsCard(); // Frissítés
+            getMacsCard(user.role); // Frissítés
         } catch (error) {
             console.error("Hiba a módosításnál:", error);
         }

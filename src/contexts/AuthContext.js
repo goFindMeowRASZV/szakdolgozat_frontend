@@ -1,4 +1,4 @@
-import { createContext, useState, useContext} from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { myAxios } from "./MyAxios.js";
 
@@ -16,6 +16,10 @@ export const AuthProvider = ({ children }) => {
 
     //lekérjük a csrf tokent a backendről
     const csrf = () => myAxios.get("/sanctum/csrf-cookie");
+
+    useEffect(() => {
+        getUser();
+    }, []);
 
     //store fuggveny
     const createReport = async ({ ...adat }, vegpont) => {
@@ -37,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     const getUser = async () => {
         const { data } = await myAxios.get("/api/user");
         setUser(data);
-        
+
     };
 
     //elküldi a kijelentkezési kérelmet, majd törli a felhasználói adatokat
@@ -45,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         myAxios.post("/logout").then((resp) => {
             setUser(null);
-            navigate("/kezdolap2"); 
+            navigate("/kezdolap2");
         });
     };
 

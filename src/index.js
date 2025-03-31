@@ -3,20 +3,20 @@ import React from 'react';
 import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter} from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
 import { ApiProvider } from './contexts/ApiContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
-  <React.StrictMode>
-    <ApiProvider>
+    <React.StrictMode>
       <AuthProvider>
-        <App/>
+        <ApiProvider>
+          <App />
+        </ApiProvider>
       </AuthProvider>
-    </ApiProvider>
-  </React.StrictMode>
+    </React.StrictMode>
   </BrowserRouter>
 );
 
