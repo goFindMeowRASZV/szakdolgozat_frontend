@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext.js";
 import useApiContext from "../contexts/ApiContext.js";
-import useApiContext from "../contexts/ApiContext.js";
 import Szures from "../components/Szures.js";
 import MacsCard from "../components/MacsCard.js";
 import { myAxios } from "../contexts/MyAxios.js";
