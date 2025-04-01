@@ -1,5 +1,6 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { myAxios } from "./MyAxios.js";
+import useAuthContext from "./AuthContext.js";
 
 const ApiContext = createContext();
 
@@ -8,19 +9,52 @@ export const ApiProvider = ({ children }) => {
     const [menhelyLISTA, setMenhelyLista] = useState(null);
     const [szuresLISTA, setSzuresLista] = useState([]);
     const [aktualisMacska, setAktualisMacska] = useState(null);
+    const { setUser } = useAuthContext();
 
+    
+    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
+    useEffect(() => {
+        const fetchData = async () => {
+          await getMacsCardMenhely(); // mindig lekérhető
+      
+          try {
+            await csrf(); // csak kell, ha még nincs
+            const { data: user } = await myAxios.get("/api/whoami");
+            setUser(user);
+            await getMacsCard(); // csak ha bejelentkezve vagyunk
+          } catch (error) {
+            console.log("Vendégként nézed az oldalt – csak a menhely adatok lesznek betöltve.");
+          }
+        };
+      
+        fetchData();
+      }, []);
+      
 
     //macskalistaaa
     const getMacsCard = async () => {
-        const { data } = await myAxios.get("/api/get-reports");
-        setMacskaLista(data);
-    };
-
+        try {
+          const { data } = await myAxios.get("/api/get-reports");
+          setMacskaLista(data);
+        } catch (error) {
+          if (error.response?.status === 401) {
+            console.log("Nincs bejelentkezve – nem töltjük be a bejelentéseket.");
+          } else {
+            console.error("Hiba a bejelentések lekérésénél:", error);
+          }
+        }
+      };
+      
     //menhelyLista
     const getMacsCardMenhely = async () => {
-        const { data } = await myAxios.get("/api/get-sheltered-reports");
-        setMenhelyLista(data);
-    };
+        try {
+          const { data } = await myAxios.get("/api/get-sheltered-reports");
+          setMenhelyLista(data);
+        } catch (error) {
+          console.error("Hiba a menhelyi lista lekérésénél:", error);
+        }
+      };
+      
 
     //szűrési jelentések
     const getReportsFilter = async (filters) => {

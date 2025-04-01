@@ -38,10 +38,19 @@ export const AuthProvider = ({ children }) => {
 
     //bejelentkezett felhasználó adatainak lekérdezése
     const getUser = async () => {
-        const { data } = await myAxios.get("/api/user");
-        setUser(data);
-        
+        try {
+            await csrf(); // csak ha még nincs meg
+            const { data } = await myAxios.get("/api/whoami");
+            setUser(data);
+        } catch (error) {
+            if (error.response?.status === 401) {
+                console.log("Nincs bejelentkezve – ez rendben van.");
+            } else {
+                console.error("Váratlan hiba a getUser-ben:", error);
+            }
+        }
     };
+    
 
     //elküldi a kijelentkezési kérelmet, majd törli a felhasználói adatokat
     const logout = async () => {
