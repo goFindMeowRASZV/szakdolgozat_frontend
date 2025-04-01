@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext.js";
 import Szures from "../components/Szures.js";
 import MacsCard from "../components/MacsCard.js";
+import useApiContext from "../contexts/ApiContext.js";
 
 function Bejelentesek() {
-  const { macskaLISTA, getMacsCard, user, archiveReport, updateReport } =
-    useAuthContext();
+  const { user } = useAuthContext();
+  const { macskaLISTA, getMacsCard, archiveReport, updateReport } = useApiContext();
   const navigate = useNavigate();
   const { setAktualisMacska } = useAuthContext();
   const [expandedRow, setExpandedRow] = useState(null); // Lenyíló állapot
@@ -76,13 +77,19 @@ function Bejelentesek() {
             {macskaLISTA && macskaLISTA.length > 0 ? (
               macskaLISTA.map((elem, index) => (
                 <React.Fragment key={index}>
-                  <tr
-                    style={{ cursor: "pointer" }}
-                  >
+                  <tr style={{ cursor: "pointer" }}>
                     <td>{elem.report_id}</td>
                     <td>{elem.creator_id}</td>
                     <td>{elem.status}</td>
-                    <td>{new Date(elem.created_at).toLocaleString("hu-HU", { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
+                    <td>
+                      {new Date(elem.created_at).toLocaleString("hu-HU", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </td>
                     <td>{elem.address}</td>
                     <td>
                       <button
@@ -103,20 +110,58 @@ function Bejelentesek() {
                     <tr>
                       <td colSpan="6">
                         <div className="expanded-row">
-                          <p><strong>Koordináták:</strong> {elem.lat}, {elem.lon}</p>
-                          <p><strong>Fénykép:</strong> <img src={elem.photo} alt="Macska" style={{ width: '50px', height: '50px' }} /></p>
-                          <p><strong>Szín:</strong> {elem.color}</p>
-                          <p><strong>Minta:</strong> {elem.pattern}</p>
-                          <p><strong>Egyéb azonosítók:</strong> {elem.other_identifying_marks}</p>
-                          <p><strong>Egészségi állapot:</strong> {elem.health_status}</p>
-                          <p><strong>Chip szám:</strong> {elem.chip_number}</p>
-                          <p><strong>Körülmények:</strong> {elem.circumstances}</p>
-                          <p><strong>Egyedek száma:</strong> {elem.number_of_individuals}</p>
-                          <p><strong>Eltűnés dátuma:</strong> {elem.disappearance_date}</p>
-                          <p><strong>Aktivitás:</strong> {elem.activity === 1 ? "Aktív" : "Inaktív"}</p>
+                          <p>
+                            <strong>Koordináták:</strong> {elem.lat}, {elem.lon}
+                          </p>
+                          <p>
+                            <strong>Fénykép:</strong>{" "}
+                            <img
+                              src={elem.photo}
+                              alt="Macska"
+                              style={{ width: "50px", height: "50px" }}
+                            />
+                          </p>
+                          <p>
+                            <strong>Szín:</strong> {elem.color}
+                          </p>
+                          <p>
+                            <strong>Minta:</strong> {elem.pattern}
+                          </p>
+                          <p>
+                            <strong>Egyéb azonosítók:</strong>{" "}
+                            {elem.other_identifying_marks}
+                          </p>
+                          <p>
+                            <strong>Egészségi állapot:</strong>{" "}
+                            {elem.health_status}
+                          </p>
+                          <p>
+                            <strong>Chip szám:</strong> {elem.chip_number}
+                          </p>
+                          <p>
+                            <strong>Körülmények:</strong> {elem.circumstances}
+                          </p>
+                          <p>
+                            <strong>Egyedek száma:</strong>{" "}
+                            {elem.number_of_individuals}
+                          </p>
+                          <p>
+                            <strong>Eltűnés dátuma:</strong>{" "}
+                            {elem.disappearance_date}
+                          </p>
+                          <p>
+                            <strong>Aktivitás:</strong>{" "}
+                            {elem.activity === 1 ? "Aktív" : "Inaktív"}
+                          </p>
                           <div>
-                            <button onClick={() => handleArchiveClick(elem.report_id)}>Archiválás</button>
-                            <button onClick={() => handleUpdateClick(elem)}>Módosítás</button>
+                            <button
+                              onClick={() => handleArchiveClick(elem.report_id)}
+                            >
+                              Archiválás
+                            </button>
+                            <button onClick={() => handleUpdateClick(elem)}>
+                              Módosítás
+                            </button>
                           </div>
                         </div>
                       </td>

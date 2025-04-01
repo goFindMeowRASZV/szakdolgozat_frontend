@@ -1,4 +1,4 @@
-import { createContext, useState, useContext} from "react";
+import { createContext, useState, useContext, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { myAxios } from "./MyAxios.js";
 
@@ -17,6 +17,9 @@ export const AuthProvider = ({ children }) => {
     //lekérjük a csrf tokent a backendről
     const csrf = () => myAxios.get("/sanctum/csrf-cookie");
 
+    useEffect(() => {
+        getUser();
+    }, []);
     //store fuggveny
     const createReport = async ({ ...adat }, vegpont) => {
         await csrf();
