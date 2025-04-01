@@ -10,7 +10,7 @@ export const ApiProvider = ({ children }) => {
     const [szuresLISTA, setSzuresLista] = useState([]);
     const [aktualisMacska, setAktualisMacska] = useState(null);
 
-    const { setUser } = useAuthContext();
+    const { user, setUser } = useAuthContext();
 
 
     

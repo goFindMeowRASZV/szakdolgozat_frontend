@@ -4,11 +4,11 @@ import useAuthContext from "../contexts/AuthContext.js";
 import useApiContext from "../contexts/ApiContext.js";
 import Szures from "../components/Szures.js";
 import MacsCard from "../components/MacsCard.js";
+import { myAxios } from "../contexts/MyAxios.js";
 
-import useApiContext from "../contexts/ApiContext.js";
 
 function Bejelentesek() {
-  const { user } = useAuthContext();
+  const { user, getUser } = useAuthContext();
   const { macskaLISTA, getMacsCard, archiveReport, updateReport } = useApiContext();
 
   const navigate = useNavigate();
