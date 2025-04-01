@@ -49,8 +49,9 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         myAxios.post("/logout").then((resp) => {
             setUser(null);
-            navigate("/kezdolap2");
+            
         });
+        navigate("/");
     };
 
     //elküldi a bejelentkezési v. regisztrációs kérelmet

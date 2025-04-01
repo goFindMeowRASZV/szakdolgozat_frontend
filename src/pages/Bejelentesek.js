@@ -7,7 +7,7 @@ import MacsCard from "../components/MacsCard.js";
 import { myAxios } from "../contexts/MyAxios.js";
 
 function Bejelentesek() {
-  const { user} =
+  const {user, getUser} =
     useAuthContext();
     const { macskaLISTA, getMacsCard, archiveReport, updateReport, setAktualisMacska } =
     useApiContext();
@@ -16,10 +16,18 @@ function Bejelentesek() {
   const [editData, setEditData] = useState(null); // Módosítási állapot
 
   useEffect(() => {
-    myAxios.get("/sanctum/csrf-cookie").then(() => {
-      getMacsCard(user.role);
-    });
-  }, []);
+    const fetchData = async () => {
+        await getUser(); // Várjuk meg, hogy a felhasználói adatok betöltődjenek
+        myAxios.get("/sanctum/csrf-cookie").then(() => {
+            if (user?.role !== undefined) {
+                getMacsCard(user.role);
+            }
+        });
+    };
+
+    fetchData();
+}, []);
+
 
   const handleCardClick = (elem) => {
     setAktualisMacska(elem);
