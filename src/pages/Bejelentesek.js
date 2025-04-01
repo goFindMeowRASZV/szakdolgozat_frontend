@@ -1,21 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext.js";
+import useApiContext from "../contexts/ApiContext.js";
 import Szures from "../components/Szures.js";
 import MacsCard from "../components/MacsCard.js";
+
 import useApiContext from "../contexts/ApiContext.js";
 
 function Bejelentesek() {
   const { user } = useAuthContext();
   const { macskaLISTA, getMacsCard, archiveReport, updateReport } = useApiContext();
+
   const navigate = useNavigate();
   const { setAktualisMacska } = useAuthContext();
   const [expandedRow, setExpandedRow] = useState(null); // Lenyíló állapot
   const [editData, setEditData] = useState(null); // Módosítási állapot
 
   useEffect(() => {
-    getMacsCard();
-  }, []);
+    const fetchData = async () => {
+        await getUser(); // Várjuk meg, hogy a felhasználói adatok betöltődjenek
+        myAxios.get("/sanctum/csrf-cookie").then(() => {
+            if (user?.role !== undefined) {
+                getMacsCard(user.role);
+            }
+        });
+    };
+
+    fetchData();
+}, []);
+
 
   const handleCardClick = (elem) => {
     setAktualisMacska(elem);

@@ -1,3 +1,4 @@
+
 import ReactDOM from "react-dom/client";
 import React from "react";
 import "./index.css";
@@ -6,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ApiProvider } from "./contexts/ApiContext";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

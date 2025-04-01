@@ -1,4 +1,6 @@
+
 import { createContext, useState, useContext, useEffect} from "react";
+
 import { useNavigate } from "react-router-dom";
 import { myAxios } from "./MyAxios.js";
 
@@ -20,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         getUser();
     }, []);
+
     //store fuggveny
     const createReport = async ({ ...adat }, vegpont) => {
         await csrf();
@@ -38,6 +41,7 @@ export const AuthProvider = ({ children }) => {
 
     //bejelentkezett felhasználó adatainak lekérdezése
     const getUser = async () => {
+
         try {
             await csrf(); // csak ha még nincs meg
             const { data } = await myAxios.get("/api/whoami");
@@ -49,6 +53,7 @@ export const AuthProvider = ({ children }) => {
                 console.error("Váratlan hiba a getUser-ben:", error);
             }
         }
+
     };
     
 
@@ -57,8 +62,9 @@ export const AuthProvider = ({ children }) => {
         await csrf();
         myAxios.post("/logout").then((resp) => {
             setUser(null);
-            navigate("/kezdolap2"); 
+            
         });
+        navigate("/");
     };
 
     //elküldi a bejelentkezési v. regisztrációs kérelmet

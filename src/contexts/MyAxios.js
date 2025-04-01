@@ -10,6 +10,7 @@ export const  myAxios=axios.create({
     
 });
 
+myAxios.defaults.withCredentials = true;
 
 myAxios.interceptors.request.use(
   (config) => {
