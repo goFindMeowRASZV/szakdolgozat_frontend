@@ -1,16 +1,16 @@
 @font-face {
     font-family: "AestheticRomance";
-    src: url("./fonts/AestheticRomanceRegular-0WRmG.ttf") format("truetype");
+    src: url("./assets/fonts/AestheticRomanceRegular-0WRmG.ttf") format("truetype");
   }
   
   @font-face {
     font-family: "ImSpiegelland";
-    src: url("./fonts/ImSpiegelland-7MoB.ttf") format("truetype");
+    src: url("./assets/fonts/ImSpiegelland-7MoB.ttf") format("truetype");
   }
   
   @font-face {
     font-family: "MahaloBrother";
-    src: url("./fonts/MahaloBrother-W79A.ttf") format("truetype");
+    src: url("./assets/fonts/MahaloBrother-W79A.ttf") format("truetype");
   }
 
   .aesthetic {

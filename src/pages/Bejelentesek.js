@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthContext from "../contexts/AuthContext.js";
+import useApiContext from "../contexts/ApiContext.js";
 import Szures from "../components/Szures.js";
 import MacsCard from "../components/MacsCard.js";
 
 function Bejelentesek() {
-  const { macskaLISTA, getMacsCard, user, archiveReport, updateReport } =
+  const { user} =
     useAuthContext();
+    const { macskaLISTA, getMacsCard, archiveReport, updateReport, setAktualisMacska } =
+    useApiContext();
   const navigate = useNavigate();
-  const { setAktualisMacska } = useAuthContext();
   const [expandedRow, setExpandedRow] = useState(null); // Lenyíló állapot
   const [editData, setEditData] = useState(null); // Módosítási állapot
 
