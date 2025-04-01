@@ -10,8 +10,13 @@ export const ApiProvider = ({ children }) => {
     const [menhelyLISTA, setMenhelyLista] = useState(null);
     const [szuresLISTA, setSzuresLista] = useState([]);
     const [aktualisMacska, setAktualisMacska] = useState(null);
+    const [comments, setComments] = useState([]); // ApiContext.js-ben
+
     const {user} = useAuthContext();
 
+    
+    //lekérjük a csrf tokent a backendről
+    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
 
    /*  //macskalistaaa
     const getMacsCard = async () => {
@@ -54,7 +59,7 @@ export const ApiProvider = ({ children }) => {
         }
     };
     const getShelteredReportsFilter = async (filters) => {
-        const { userStatus, color, pattern} = filters;
+        const {  color, pattern} = filters;
         const endpoint = `/api/get-sheltered-report-filter/${color || ""},${pattern || ""}`;
         try {
             const { data } = await myAxios.get(endpoint);
@@ -64,45 +69,88 @@ export const ApiProvider = ({ children }) => {
         }
     };
 
-    const createComment = async ({ ...adat }, vegpont) =>  {
+    //komment letrehozasa
+    const createComment = async (formData, vegpont) => {
         try {
-            const response = await myAxios.post(vegpont, adat);
-            console.log("komment elküldve")
+            await csrf();
+            const response = await myAxios.post(vegpont, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                withCredentials: true,
+            });
+            console.log("Komment elküldve:", response.data);
+            return response.data; // <<< visszatér az új kommenttel
         } catch (error) {
-            console.error("Hiba történt:", error.response?.data?.error || error.message);
+            console.error("Hiba a komment létrehozásánál:", error.response?.data || error.message);
+            throw error; // <<< hogy a komponensben is lehessen kezelni
         }
     };
-    //macska menhelyre küldés
-
-    //macska menhelyre 
-    const shelterCat = async ({ ...adat }, vegpont) =>  {
+    
+    //komment törlése
+    const deleteComment = async (commentId) => {
         try {
-            await myAxios.post(vegpont, adat);
+            await csrf();
+            const response = await myAxios.delete(`/admin/delete-comment/${commentId}`, {
+                withCredentials: true,
+            });
+            console.log("Komment törölve");
+            return response.data; // <<< visszatérés
+        } catch (error) {
+            console.error("Hiba a komment törlésekor:", error.response?.data || error.message);
+            throw error; // <<< dob hibát, ha van
+        }
+    };
+    //komment lekérése
+    const getComments = async (reportId) => {
+        try {
+            const response = await myAxios.get(`/api/comments/by-report/${reportId}`, {
+                withCredentials: true,
+            });
+            setComments(response.data);
+        } catch (error) {
+            console.error("Hiba a kommentek lekérésekor:", error.response?.data || error.message);
+        }
+    };
+    
+    
+    
+    
+    //macska menhelyre küldés 
+    const shelterCat = async (adat, vegpont) => {
+        try {
+            await csrf();
+            await myAxios.post(vegpont, adat, { withCredentials: true });
             alert("A macska menhelyre került!");
         } catch (error) {
             console.error("Hiba történt:", error.response?.data?.error || error.message);
         }
     };
+    
 
     const archiveReport = async (id) => {
         try {
-            await myAxios.patch(`/api/reports/${id}/archive`);
-            getMacsCard(user.role); // Frissítés
+            await csrf();
+            await myAxios.patch(`/api/reports/${id}/archive`, {}, { withCredentials: true });
+            getMacsCard(user.role);
         } catch (error) {
             console.error("Hiba az archiválásnál:", error);
         }
     };
     
+    
     const updateReport = async (reportData) => {
         try {
-            await myAxios.put(`/api/reports/${reportData.report_id}`, reportData);
-            getMacsCard(user.role); // Frissítés
+            await csrf();
+            await myAxios.put(`/api/reports/${reportData.report_id}`, reportData, {
+                withCredentials: true,
+            });
+            getMacsCard(user.role);
         } catch (error) {
             console.error("Hiba a módosításnál:", error);
         }
-    };
+    };    
     
-
 
     return (
         <ApiContext.Provider value={{
@@ -119,7 +167,11 @@ export const ApiProvider = ({ children }) => {
             createComment,
             setSzuresLista,
             archiveReport,
-             updateReport
+            updateReport,
+            deleteComment,
+            setComments,
+            comments,
+            getComments
         }}>
             {children}
         </ApiContext.Provider>

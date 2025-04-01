@@ -1,0 +1,3 @@
+[0401/220237.324:ERROR:registration_protocol_win.cc(108)] CreateFile: A rendszer nem találja a megadott fájlt. (0x2)
+[0401/220252.457:ERROR:registration_protocol_win.cc(108)] CreateFile: A rendszer nem találja a megadott fájlt. (0x2)
+[0401/234817.978:ERROR:registration_protocol_win.cc(108)] CreateFile: A rendszer nem találja a megadott fájlt. (0x2)

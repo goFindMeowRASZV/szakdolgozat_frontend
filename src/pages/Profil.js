@@ -5,6 +5,10 @@ import useAuthContext from "../contexts/AuthContext";
 function Profil() {
   const { user } = useAuthContext();
 
+if (!user) {
+  return <div>Betöltés...</div>; 
+}
+
 return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", maxWidth: "1000px", margin: "auto" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "20px", width: "100%" }}>

@@ -16,10 +16,12 @@ import Profil from "./pages/Profil";
 import Menhely from "./pages/Menhely";
 import Terkep from "./components/Terkep";
 import Szures from "./components/Szures";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    
+    <>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Kezdolap2 />} />
@@ -37,6 +39,8 @@ function App() {
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
+      <ToastContainer position="top-right" autoClose={3000} />
+      </>
   )
 }
 

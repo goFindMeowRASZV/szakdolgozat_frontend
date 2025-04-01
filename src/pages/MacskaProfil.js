@@ -1,23 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import useAuthContext from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
 import Kommenteles from "../components/Kommenteles";
+import useApiContext from "../contexts/ApiContext";
 
 
 
 function MacskaProfil() {
-  const { aktualisMacska, shelterCat, user } = useAuthContext();
-  const [macska, setMacska] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
-  const [showCommentForm, setShowCommentForm] = useState(false);
+  const { user } = useAuthContext();
+  const { aktualisMacska, shelterCat } = useApiContext();
 
-  const handleToggleCommentForm = () => {
-    setShowCommentForm(!showCommentForm);
-  };
-  const [formData, setFormData] = useState({
+  const [formData] = useState({
     rescuer: "",
     report: "",
     owner: "",
@@ -103,7 +95,8 @@ function MacskaProfil() {
           />
           <button type="submit">Küldés</button>
         </form> */}
-        <div><Kommenteles /></div>
+        <div><Kommenteles reportId={aktualisMacska.report_id} />
+        </div>
         
       </div>
     </div>

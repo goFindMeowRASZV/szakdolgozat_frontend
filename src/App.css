@@ -208,6 +208,14 @@ html, body,#root{
 .widget .comment-text { font-size: 12px; }
 .widget .btn-block { border-top-left-radius:0px;border-top-right-radius:0px; }
 
+.comment img {
+  transition: transform 0.2s ease-in-out;
+}
+
+.comment img:hover {
+  transform: scale(1.05);
+}
+
 .kukaGomb {
   width: 26px;
   height: 20px; /* A gomb magassága is 30px */
