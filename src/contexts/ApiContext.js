@@ -21,15 +21,15 @@ export const ApiProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
           await getMacsCardMenhely(); // mindig lekérhető
-      
           try {
-            await csrf(); // csak kell, ha még nincs
-            const { data: user } = await myAxios.get("/api/whoami");
+            await csrf();
+            const { data: user } = await myAxios.get("/api/whoami", { withCredentials: true });
             setUser(user);
-            await getMacsCard(); // csak ha bejelentkezve vagyunk
+            await getMacsCard();
           } catch (error) {
             console.log("Vendégként nézed az oldalt – csak a menhely adatok lesznek betöltve.");
           }
+          
         };
       
         fetchData();
@@ -51,7 +51,15 @@ export const ApiProvider = ({ children }) => {
         }
       };
       
-
+      const getMapReports = async () => {
+        try {
+          const { data } = await myAxios.get("/api/get-map-reports");
+          setMacskaLista(data);
+        } catch (error) {
+          console.error("Hiba a térképes bejelentések lekérésekor:", error);
+        }
+      };
+      
 
     //menhelyLista
     const getMacsCardMenhely = async () => {
@@ -188,7 +196,8 @@ export const ApiProvider = ({ children }) => {
             deleteComment,
             setComments,
             comments,
-            getComments
+            getComments,
+            getMapReports
         }}>
             {children}
         </ApiContext.Provider>

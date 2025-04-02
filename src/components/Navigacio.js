@@ -69,8 +69,8 @@ export default function Navigacio() {
                                 </Link>
                             </li>
                             <li className="navbar-item">
-                                <Link className="nav-link" to="/bejelentesek">
-                                    Bejelentések
+                                <Link className="nav-link" to="/terkep">
+                                    Térkép
                                 </Link>
                             </li>
                             <li className="navbar-item">

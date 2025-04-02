@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import { Modal, Button, Form } from "react-bootstrap";
+import useAuthContext from "../contexts/AuthContext";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import useApiContext from "../contexts/ApiContext";
-import { statusIcons } from "../assets/icons/MarkerIcons";
 
-// Alapértelmezett marker ikon beállítása
+import useApiContext from "../contexts/AuthContext";
+
+
+// Az alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
@@ -23,12 +25,12 @@ function ClickableMap({ onMarkerAdd }) {
   return null;
 }
 
-function Terkep() {
-  const position = [47.4979, 19.0402];
+function TerkepCreateReport() {
+  const position = [47.4979, 19.0402];  // Alapértelmezett középpont
   const zoom = 13;
 
-  const { macskaLISTA, getMapReports } = useApiContext();
-
+  const { macskaLISTA, getMacsCard  } = useApiContext();  // Az összes macska adatának lekérése
+  const { user } = useAuthContext();
   const [markers, setMarkers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentLatLng, setCurrentLatLng] = useState(null);
@@ -40,16 +42,10 @@ function Terkep() {
   });
 
   useEffect(() => {
-    getMapReports();
-  }, []);
-
-  useEffect(() => {
-    getMapReports();
-  }, []);
-  
-  useEffect(() => {
-    console.log("macskaLISTA:", macskaLISTA);
-  }, [macskaLISTA]);
+    if (user) {
+      getMacsCard(user.role);
+    }
+  }, [user]);
   
 
   const handleMarkerAdd = (latlng) => {
@@ -75,25 +71,24 @@ function Terkep() {
         <MapContainer center={position} zoom={zoom} style={{ height: "100%", width: "100%" }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <ClickableMap onMarkerAdd={handleMarkerAdd} />
-          {macskaLISTA &&
-            macskaLISTA.map((macska, index) =>
-              macska.lat && macska.lon ? (
-                <Marker
-                  key={index}
-                  position={[macska.lat, macska.lon]}
-                  icon={statusIcons[macska.status.toLowerCase()] || new L.Icon.Default()}
-                >
-                  <Popup>
-                    <img src={macska.photo} alt="Cica kép" style={{ width: "100%" }} />
-                    <br />
-                    <strong>Koordináták:</strong> 
-                    {macska.lat?.toFixed(5)}, {macska.lon?.toFixed(5)}
-                    <br />
-                    <strong>Cím:</strong> {macska.address}
-                  </Popup>
-                </Marker>
-              ) : null
-          )}          
+          {/* A macskaLISTA előtt egy null ellenőrzés */}
+          {macskaLISTA && macskaLISTA.map((macska, index) => (
+          <Marker key={index} position={[macska.lat, macska.lon]}>
+              <Popup>
+                <img src={`http://localhost:8000/uploads/${macska.photo}`} alt="Cica kép" style={{ width: '100%', height: 'auto' }} />
+                <br />
+                <strong>Koordináták:</strong> {macska.lat.toFixed(5)}, {macska.lon.toFixed(5)}
+                <br />
+                <strong>Cím:</strong> {macska.address}
+                <br />
+                <strong>Szín:</strong> {macska.color}
+                <br />
+                <strong>Minta:</strong> {macska.pattern}
+                <br />
+                <strong>Esemény dátuma:</strong> {macska.disappearance_date}
+              </Popup>
+            </Marker>
+          ))}
         </MapContainer>
       </div>
 
@@ -105,12 +100,7 @@ function Terkep() {
           <Form onSubmit={handleSubmit}>
             <Form.Group>
               <Form.Label>Állapot</Form.Label>
-              <Form.Control
-                as="select"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
+              <Form.Control as="select" name="status" value={formData.status} onChange={handleChange}>
                 <option value="">Válasszon állapotot</option>
                 <option value="t">Találtam</option>
                 <option value="k">Keresem</option>
@@ -150,4 +140,4 @@ function Terkep() {
   );
 }
 
-export default Terkep;
+export default TerkepCreateReport;
