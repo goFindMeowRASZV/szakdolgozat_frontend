@@ -4,6 +4,7 @@ import React from "react";
 import "./index.css";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./Bejelentes.css";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ApiProvider } from "./contexts/ApiContext";

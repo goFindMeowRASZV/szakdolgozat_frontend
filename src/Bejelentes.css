@@ -1,0 +1,60 @@
+.bejelentes-wrapper {
+  background-color: white;
+  max-width: 700px;
+  margin: 60px auto 30px auto;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.bejelentes-wrapper h1 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.bejelentes-wrapper .form-control,
+.bejelentes-wrapper .form-check-input {
+  margin-bottom: 15px;
+}
+
+.bejelentes-wrapper .form-check-label {
+  margin-left: 5px;
+}
+
+.bejelentes-wrapper button {
+  width: 100%;
+  margin-top: 20px;
+  font-weight: bold;
+}
+/* Alap dropdown stílus (select) */
+.select-dropdown select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-color: #fff !important;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    width: 100%;
+    /* A lefelé nyíló nyíl */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='70,100 30,40 110,40' fill='black'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    cursor: pointer;
+  }
+  
+  /* Megpróbáljuk felülírni az option hover stílusát – bár ezt a natív <option> elemeknél nem minden böngésző támogatja teljesen */
+  .select-dropdown select option {
+    background-color: #fff !important;
+    color: #000 !important;
+  }
+  
+  .select-dropdown select option:hover,
+  .select-dropdown select option:focus {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+  
