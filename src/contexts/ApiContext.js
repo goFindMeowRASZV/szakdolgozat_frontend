@@ -64,6 +64,7 @@ export const ApiProvider = ({ children }) => {
     //menhelyLista
     const getMacsCardMenhely = async () => {
         try {
+            await csrf();
           const { data } = await myAxios.get("/api/get-sheltered-reports");
           setMenhelyLista(data);
         } catch (error) {

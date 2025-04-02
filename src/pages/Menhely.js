@@ -1,43 +1,43 @@
-import React, { useEffect } from "react";
-import MacsCard from "../components/MacsCard.js";
-import Szures from "../components/Szures.js";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useApiContext from "../contexts/ApiContext.js";
+import useApiContext from "../contexts/ApiContext";
+import useAuthContext from "../contexts/AuthContext";
+import Szures from "../components/Szures";
+
+import MenhelyCardNezet from "../components/MenhelyCardNezet.js";
+import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
+import MenhelyNezetToggle from "../components/MenhelyNezetToggle.js";
 
 function Menhely() {
-  const { menhelyLISTA, getMacsCardMenhely, setAktualisMacska } =
-    useApiContext();
+  const { menhelyLISTA, getMacsCardMenhely, setAktualisMacska } = useApiContext();
+  const [viewMode, setViewMode] = useState("card");
   const navigate = useNavigate();
-  // Amikor a komponens betöltődik, lekérjük az adatokat
+
   useEffect(() => {
     getMacsCardMenhely();
   }, []);
 
-  const handleCardClick = (elem) => {
+  const handleItemClick = (elem) => {
     navigate(`/MacskaProfil`);
     setAktualisMacska(elem);
-    console.log(elem);
   };
 
   return (
-    <div className="galeriaBody" style={{ paddingTop:'60px' }}>
+    <div className="galeriaBody" style={{ paddingTop: "60px" }}>
       <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
-      <div className="kepek">
+
+      <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
       <Szures type="sheltered" />
-        {menhelyLISTA ? (
-          menhelyLISTA.map((elem, index) => (
-            <div
-              key={index}
-              onClick={() => handleCardClick(elem)}
-              style={{ cursor: "pointer" }}
-            >
-              <MacsCard adat={elem} index={index} />
-            </div>
-          ))
+
+      {menhelyLISTA ? (
+        viewMode === "card" ? (
+          <MenhelyCardNezet data={menhelyLISTA} onCardClick={handleItemClick} />
         ) : (
-          <p>Betöltés...</p>
-        )}
-      </div>
+          <MenhelyListaNezet data={menhelyLISTA} onRowClick={handleItemClick} />
+        )
+      ) : (
+        <p>Betöltés...</p>
+      )}
     </div>
   );
 }
