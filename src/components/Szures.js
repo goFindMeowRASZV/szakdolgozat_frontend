@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Form, Button, Col, Row, Modal } from "react-bootstrap";
-import useAuthContext from "../contexts/AuthContext";
+import useApiContext from "../contexts/ApiContext";
 import MacsCard from "./MacsCard";
 import { useNavigate } from "react-router-dom";
 
 const Szures = ({ type }) => {
   const { getReportsFilter, getShelteredReportsFilter, szuresLISTA , setAktualisMacska} =
-    useAuthContext();
+    useApiContext();
     const navigate = useNavigate();
   const [formData, setFormData] = useState({
     status: "",

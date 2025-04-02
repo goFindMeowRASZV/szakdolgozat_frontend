@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { myAxios } from "./MyAxios.js";
 import useAuthContext from "./AuthContext.js";
+import { toast } from "react-toastify";
 
 const ApiContext = createContext();
 
@@ -156,13 +157,17 @@ export const ApiProvider = ({ children }) => {
 
     const archiveReport = async (id) => {
         try {
-            await csrf();
-            await myAxios.patch(`/api/reports/${id}/archive`, {}, { withCredentials: true });
-            getMacsCard(user.role);
+          await csrf();
+          const res = await myAxios.patch(`/api/reports/${id}/archive`, {}, { withCredentials: true });
+      
+          toast.success("Sikeres archiválás!", { position: "top-right" });
+          getMacsCard(user.role);
         } catch (error) {
-            console.error("Hiba az archiválásnál:", error);
+          console.error("Hiba az archiválásnál:", error);
+          toast.error("Nem sikerült archiválni.", { position: "top-right" });
         }
-    };
+      };
+      
     
     
     const updateReport = async (reportData) => {

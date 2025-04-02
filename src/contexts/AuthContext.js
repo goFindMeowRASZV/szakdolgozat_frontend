@@ -33,10 +33,12 @@ export const AuthProvider = ({ children }) => {
                     "Content-Type": "multipart/form-data",
                 },
             });
+            toast.success("Sikeres létrehozás!", { position: "top-right" });
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 setErrors(error.response.data.errors);
             }
+            toast.error("Nem sikerült létrehozni.", { position: "top-right" });
         }
     };
 
