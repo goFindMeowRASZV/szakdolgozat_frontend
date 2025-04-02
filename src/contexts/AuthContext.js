@@ -1,6 +1,7 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { myAxios } from "./MyAxios.js";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -68,6 +69,33 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const uploadProfilePicture = async (file) => {
+        const formData = new FormData();
+        formData.append("profile_picture", file);
+    
+        try {
+          const res = await myAxios.post("/api/profile-picture", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          setUser((prev) => ({ ...prev, profile_picture: res.data.profile_picture }));
+          toast.success("Profilkép frissítve!");
+        } catch (error) {
+          toast.error("Hiba történt a feltöltés során.");
+          console.error(error);
+        }
+      };
+    
+      const changePassword = async (data) => {
+        try {
+          await myAxios.post("/api/change-password", data);
+          toast.success("Jelszó sikeresen megváltoztatva!");
+        } catch (error) {
+          toast.error("Hiba történt a jelszó frissítésekor.");
+          console.error(error);
+        }
+      };
 
     return (
         <AuthContext.Provider value={{
@@ -76,7 +104,9 @@ export const AuthProvider = ({ children }) => {
             loginReg,
             errors,
             getUser,
-            user
+            user,
+            changePassword,
+            uploadProfilePicture
         }}>
             {children}
         </AuthContext.Provider>
