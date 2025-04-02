@@ -87,16 +87,25 @@ export const AuthProvider = ({ children }) => {
         }
       };
     
-      const changePassword = async (data) => {
+      const changePassword = async (passwordData) => {
         try {
-          await myAxios.post("/api/change-password", data);
-          toast.success("Jelszó sikeresen megváltoztatva!");
+          await myAxios.put("/api/change-password", passwordData);
         } catch (error) {
-          toast.error("Hiba történt a jelszó frissítésekor.");
-          console.error(error);
+          if (
+            error.response &&
+            error.response.status === 403 &&
+            error.response.data.code === "INVALID_CURRENT_PASSWORD"
+          ) {
+            const err = new Error("A jelenlegi jelszó hibás.");
+            err.code = "INVALID_CURRENT_PASSWORD";
+            throw err;
+          }
+      
+          throw new Error("UNKNOWN_ERROR");
         }
       };
-
+      
+      
     return (
         <AuthContext.Provider value={{
             createReport,
