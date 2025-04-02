@@ -3,8 +3,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 import { Modal, Button, Form } from "react-bootstrap";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import useApiContext from "../contexts/ApiContext";
-import useAuthContext from "../contexts/AuthContext";
+
+import useApiContext from "../contexts/AuthContext";
+
 
 // Az alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;
@@ -26,8 +27,9 @@ function ClickableMap({ onMarkerAdd }) {
 function Terkep() {
   const position = [47.4979, 19.0402];  // Alapértelmezett középpont
   const zoom = 13;
-  const { macskaLISTA, getMacsCard  } = useApiContext();  // Az összes macska adatának 
-  const {user} = useAuthContext();
+
+  const { macskaLISTA, getMacsCard  } = useApiContext();  // Az összes macska adatának lekérése
+
   const [markers, setMarkers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [currentLatLng, setCurrentLatLng] = useState(null);
