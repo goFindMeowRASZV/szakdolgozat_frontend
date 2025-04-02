@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Form, Button, Col, Row, InputGroup, ListGroup } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import {
+  Form,
+  Button,
+  Col,
+  Row,
+  ListGroup,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import useAuthContext from "../contexts/AuthContext";
 import "../Bejelentes.css";
 
@@ -13,40 +21,47 @@ const Bejelentes = () => {
     pattern: "",
     other_identifying_marks: "",
     health_status: "",
-    health_status: "",
     photo: null,
     chip_number: "",
     circumstances: "",
-    number_of_individuals: 0,
+    number_of_individuals: "",
     disappearance_date: "",
     activity: 1,
     lat: 1,
     lon: 1,
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
+  const requiredFields = [
+    "status",
+    "address",
+    "color",
+    "pattern",
+    "photo",
+    "number_of_individuals",
+    "disappearance_date",
+  ];
 
-    if (type === "date") {
-      const date = new Date(value);
-      const formattedDate = date.toISOString().split("T")[0]; // Az első része ISO formátumnak, pl. '2025-02-04'
-      setFormData({ ...formData, [name]: formattedDate });
-      console.log(date);
-    } else if (type === "file") {
+  const isFormValid = requiredFields.every((field) => {
+    const value = formData[field];
+    return field === "photo" ? value !== null : value !== "";
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
       setFormData({ ...formData, [name]: files[0] });
+    } else if (type === "date") {
+      const date = new Date(value).toISOString().split("T")[0];
+      setFormData({ ...formData, [name]: date });
     } else {
       setFormData({ ...formData, [name]: value });
     }
-
-    console.log(formData);
   };
 
-  // Cím keresése Nominatim API-val
   const fetchAddressSuggestions = async (query) => {
-    if (query.length < 3) {
-      setSuggestions([]);
-      return;
-    }
+    if (query.length < 3) return setSuggestions([]);
+
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -55,14 +70,6 @@ const Bejelentes = () => {
       );
       const data = await response.json();
       setSuggestions(data);
-
-      // Kiírás a koordinátákról, ha vannak
-      data.forEach((item) => {
-        if (item.lat && item.lon) {
-          console.log(`Cím: ${item.display_name}`);
-          console.log(`Szélesség: ${item.lat}, Hosszúság: ${item.lon}`);
-        }
-      });
     } catch (error) {
       console.error("Hiba a cím keresésekor:", error);
     }
@@ -75,34 +82,48 @@ const Bejelentes = () => {
   };
 
   const selectAddress = (address, lat, lon) => {
-    setFormData({
-      ...formData,
-      address,
-      lat, // Beállítjuk a szélességet
-      lon, // Beállítjuk a hosszúságot
-    });
+    setFormData({ ...formData, address, lat, lon });
     setSuggestions([]);
-    console.log(`Kiválasztott cím: ${address}`);
-    console.log(`Szélesség: ${lat}, Hosszúság: ${lon}`);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user.id);
-    setFormData({ ...formData, creator_id: user.id });
-    console.log(formData);
-
-    createReport(formData, "/api/create-report");
+    createReport({ ...formData, creator_id: user.id }, "/api/create-report");
   };
+
+  const requiredLabel = (label) => (
+    <>
+      {label}{" "}
+      <OverlayTrigger
+        placement="right"
+        overlay={<Tooltip id={`tooltip-${label}`}>Kötelező mező</Tooltip>}
+      >
+        <span style={{ color: "red", cursor: "help" }}>*</span>
+      </OverlayTrigger>
+    </>
+  );
+
+  const labelInfo = (label) => (
+    <>
+      {label}{" "}
+      <OverlayTrigger
+        placement="right"
+        overlay={<Tooltip id={`tooltip-${label}`}>15 karakter</Tooltip>}
+      >
+        <span style={{ color: "grey", fontSize: "small" }}>?</span>
+      </OverlayTrigger>
+    </>
+  );
 
   return (
     <div className="bejelentes-wrapper">
       <h1>Új bejelentés</h1>
       <Form onSubmit={handleSubmit}>
+        {/* 1. szakasz – két oszlop */}
         <Row>
           <Col md={6}>
             <Form.Group controlId="status">
-              <Form.Label>Állapot</Form.Label>
+              <Form.Label>{requiredLabel("Állapot")}</Form.Label>
               <Form.Control
                 as="select"
                 name="status"
@@ -117,39 +138,39 @@ const Bejelentes = () => {
               </Form.Control>
             </Form.Group>
           </Col>
+
           <Col md={6}>
-            <Form.Group controlId="address">
-              <Form.Label>Cím</Form.Label>
+            <Form.Group controlId="address" className="position-relative">
+              <Form.Label>{requiredLabel("Cím")}</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Adja meg a címet"
                 name="address"
+                autoComplete="off"
                 value={formData.address}
                 onChange={handleAddressChange}
               />
               {suggestions.length > 0 && (
-                <ListGroup>
+                <div className="autocomplete-dropdown">
                   {suggestions.map((item, index) => (
-                    <ListGroup.Item
+                    <div
                       key={index}
-                      action
+                      className="autocomplete-item"
                       onClick={() =>
                         selectAddress(item.display_name, item.lat, item.lon)
                       }
                     >
                       {item.display_name}
-                    </ListGroup.Item>
+                    </div>
                   ))}
-                </ListGroup>
+                </div>
               )}
             </Form.Group>
           </Col>
-        </Row>
 
-        <Row>
           <Col md={6}>
-            <Form.Group controlId="color" className="select-dropdown">
-              <Form.Label>Cica színe</Form.Label>
+            <Form.Group controlId="color">
+              <Form.Label>{requiredLabel("Cica színe")}</Form.Label>
               <Form.Control
                 as="select"
                 name="color"
@@ -157,26 +178,27 @@ const Bejelentes = () => {
                 onChange={handleChange}
               >
                 <option value="">Válassz színt</option>
-                <option value="bezs">Bézs</option>
                 <option value="feher">Fehér</option>
+                <option value="fekete">Fekete</option>
                 <option value="barna">Barna</option>
                 <option value="voros">Vörös</option>
-                <option value="fekete">Fekete</option>
+                <option value="bezs">Bézs</option>
                 <option value="szurke">Szürke</option>
-                <option value="barnabezs">Barna + bézs</option>
-                <option value="vorosfeher">Vörös + fehér</option>
-                <option value="barnafeher">Barna + fehér</option>
-                <option value="feketefeher">Fekete + fehér</option>
-                <option value="feketevoros">Fekete + vörös</option>
-                <option value="szurkefeher">Szürke + fehér</option>
-                <option value="feketefehervoros">Fekete + fehér + vörös</option>
+                <option value="feketefeher">Fekete - fehér</option>
+                <option value="feketefehervoros">Fekete - fehér - vörös</option>
+                <option value="feketevoros">Fekete - vörös</option>
+                <option value="vorosfeher">Vörös - fehér</option>
+                <option value="szurkefeher">Szürke - fehér</option>
+                <option value="barnafeher">Barna - fehér</option>
+                <option value="barnabezs">Barna - bézs</option>
                 <option value="egyeb">Egyéb</option>
               </Form.Control>
             </Form.Group>
           </Col>
+
           <Col md={6}>
-            <Form.Group controlId="pattern" className="select-dropdown">
-              <Form.Label>Cica mintája</Form.Label>
+            <Form.Group controlId="pattern">
+              <Form.Label>{requiredLabel("Cica mintája")}</Form.Label>
               <Form.Control
                 as="select"
                 name="pattern"
@@ -196,11 +218,11 @@ const Bejelentes = () => {
           </Col>
         </Row>
 
+        {/* 2. szakasz – egy oszlop */}
         <Form.Group controlId="other_identifying_marks">
           <Form.Label>Egyéb ismertetőjel</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Adja meg a további ismertetőjeleket"
             name="other_identifying_marks"
             value={formData.other_identifying_marks}
             onChange={handleChange}
@@ -211,30 +233,8 @@ const Bejelentes = () => {
           <Form.Label>Egészségügyi állapot</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Adja meg az egészségi állapotot"
             name="health_status"
-            value={formData.health_status || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="photo">
-          <Form.Label>Kép</Form.Label>
-          <Form.Control
-            type="file"
-            name="photo"
-            //accept="image/png, image/jpeg, image/jpg, image/gif, image/svg+xml"
-            onChange={handleChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="chip_number">
-          <Form.Label>Chip szám</Form.Label>
-          <Form.Control
-            type="number"
-            placeholder="Adja meg a chip számot"
-            name="chip_number"
-            value={formData.chip_number}
+            value={formData.health_status}
             onChange={handleChange}
           />
         </Form.Group>
@@ -243,42 +243,71 @@ const Bejelentes = () => {
           <Form.Label>Körülmények</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Adja meg a körülményeket"
             name="circumstances"
             value={formData.circumstances}
             onChange={handleChange}
           />
         </Form.Group>
 
-        <Form.Group controlId="number_of_individuals">
-          <Form.Label>Példányok száma</Form.Label>
-          <Form.Control
-            type="number"
-            min="1"
-            max="10"
-            placeholder="Adja meg a példányszámot"
-            name="number_of_individuals"
-            value={formData.number_of_individuals}
-            onChange={handleChange}
-          />
-          <Form.Text>{formData.number_of_individuals}</Form.Text>
-        </Form.Group>
+        {/* 3. szakasz – két oszlop */}
+        <Row>
+          <Col md={6}>
+            <Form.Group controlId="photo">
+              <Form.Label>{requiredLabel("Fájl feltöltés")}</Form.Label>
+              <Form.Control type="file" name="photo" onChange={handleChange} />
+            </Form.Group>
+          </Col>
 
-        <Form.Group controlId="disappearance_date">
-          <Form.Label>Esemény dátuma</Form.Label>
-          <Form.Control
-            type="date"
-            name="disappearance_date"
-            value={formData.disappearance_date || ""}
-            onChange={handleChange}
-          />
-        </Form.Group>
+          <Col md={6}>
+            <Form.Group controlId="chip_number">
+              <Form.Label>{labelInfo("Chip szám")}</Form.Label>
+              <Form.Control
+                type="number"
+                name="chip_number"
+                value={formData.chip_number}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
 
-        <Button variant="dark" type="submit">
-          Form Beküldése
+          <Col md={6}>
+            <Form.Group controlId="number_of_individuals">
+              <Form.Label>{requiredLabel("Példányok száma")}</Form.Label>
+              <Form.Control
+                type="number"
+                min="1"
+                max="10"
+                name="number_of_individuals"
+                value={formData.number_of_individuals}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+
+          <Col md={6}>
+            <Form.Group controlId="disappearance_date">
+              <Form.Label>{requiredLabel("Dátum")}</Form.Label>
+              <Form.Control
+                type="date"
+                name="disappearance_date"
+                value={formData.disappearance_date}
+                onChange={handleChange}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Button
+          variant="dark"
+          type="submit"
+          className="mt-3"
+          disabled={!isFormValid}
+        >
+          Beküldés
         </Button>
       </Form>
     </div>
   );
 };
+
 export default Bejelentes;
