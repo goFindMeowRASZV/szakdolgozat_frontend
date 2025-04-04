@@ -18,6 +18,7 @@ import Terkep from "./components/Terkep";
 import Szures from "./components/Szures";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import UsersPage from "./pages/Users";
 
 function App() {
   return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="terkep" element={<Terkep />} />
           <Route path="MacskaProfil" element={<MacskaProfil />} />
           <Route path="profil" element={<Profil />} />
-          
+          <Route path="users" element={<UsersPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
