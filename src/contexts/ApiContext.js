@@ -15,15 +15,11 @@ export const ApiProvider = ({ children }) => {
 
     const { user, setUser } = useAuthContext();
 
-    
-    //lekérjük a csrf tokent a backendről
-    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
-
+  
     useEffect(() => {
         const fetchData = async () => {
           await getMacsCardMenhely(); // mindig lekérhető
           try {
-            await csrf();
             const { data: user } = await myAxios.get("/api/whoami", { withCredentials: true });
             setUser(user);
             await getMacsCard();
@@ -65,7 +61,6 @@ export const ApiProvider = ({ children }) => {
     //menhelyLista
     const getMacsCardMenhely = async () => {
         try {
-            await csrf();
           const { data } = await myAxios.get("/api/get-sheltered-reports");
           setMenhelyLista(data);
         } catch (error) {
@@ -99,7 +94,6 @@ export const ApiProvider = ({ children }) => {
     //komment letrehozasa
     const createComment = async (formData, vegpont) => {
         try {
-            await csrf();
             const response = await myAxios.post(vegpont, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -117,7 +111,6 @@ export const ApiProvider = ({ children }) => {
     //komment törlése
     const deleteComment = async (commentId) => {
         try {
-            await csrf();
             const response = await myAxios.delete(`/admin/delete-comment/${commentId}`, {
                 withCredentials: true,
             });
@@ -146,7 +139,6 @@ export const ApiProvider = ({ children }) => {
     //macska menhelyre küldés 
     const shelterCat = async (adat, vegpont) => {
         try {
-            await csrf();
             await myAxios.post(vegpont, adat, { withCredentials: true });
             alert("A macska menhelyre került!");
         } catch (error) {
@@ -157,11 +149,10 @@ export const ApiProvider = ({ children }) => {
 
     const archiveReport = async (id) => {
         try {
-          await csrf();
           const res = await myAxios.patch(`/api/reports/${id}/archive`, {}, { withCredentials: true });
       
           toast.success("Sikeres archiválás!", { position: "top-right" });
-          getMacsCard(user.role);
+          getMacsCard();
         } catch (error) {
           console.error("Hiba az archiválásnál:", error);
           toast.error("Nem sikerült archiválni.", { position: "top-right" });
@@ -172,11 +163,10 @@ export const ApiProvider = ({ children }) => {
     
     const updateReport = async (reportData) => {
         try {
-            await csrf();
             await myAxios.put(`/api/reports/${reportData.report_id}`, reportData, {
                 withCredentials: true,
             });
-            getMacsCard(user.role);
+            getMacsCard();
         } catch (error) {
             console.error("Hiba a módosításnál:", error);
         }

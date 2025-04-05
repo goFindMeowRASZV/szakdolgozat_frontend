@@ -16,17 +16,10 @@ export const AuthProvider = ({ children }) => {
         password: "",
         password_confirmation: "",
     });
-
-    //lekérjük a csrf tokent a backendről
-    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
-
-    useEffect(() => {
-        getUser();
-    }, []);
+;
 
     //store fuggveny
     const createReport = async ({ ...adat }, vegpont) => {
-        await csrf();
         try {
             await myAxios.post(vegpont, adat, {
                 headers: {
@@ -46,7 +39,6 @@ export const AuthProvider = ({ children }) => {
     const getUser = async () => {
 
         try {
-            await csrf(); // csak ha még nincs meg
             const { data } = await myAxios.get("/api/whoami");
             setUser(data);
         } catch (error) {
@@ -62,7 +54,6 @@ export const AuthProvider = ({ children }) => {
 
     //elküldi a kijelentkezési kérelmet, majd törli a felhasználói adatokat
     const logout = async () => {
-        await csrf();
         myAxios.post("/logout").then((resp) => {
             setUser(null);
             
@@ -72,10 +63,8 @@ export const AuthProvider = ({ children }) => {
 
     //elküldi a bejelentkezési v. regisztrációs kérelmet
     const loginReg = async ({ ...adat }, vegpont) => {
-        await csrf();
         try {
             await myAxios.post(vegpont, adat);
-            getUser();
             navigate("/");
         } catch (error) {
             if (error.response.status === 422) {

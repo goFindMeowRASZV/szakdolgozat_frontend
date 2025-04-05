@@ -17,9 +17,7 @@ const UsersPage = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
 
-    // CSRF cookie lekérése Sanctum-hoz
-    const csrf = () => myAxios.get("/sanctum/csrf-cookie");
-
+   
     useEffect(() => {
         if (!user || (user.role !== 0 && user.role !== 1)) {
             navigate("/");
@@ -33,7 +31,6 @@ const UsersPage = () => {
 
     const fetchUsers = async () => {
         try {
-          await csrf();
           const res = await myAxios.get("/api/get-users");
       
           const filtered = user?.role === 1
@@ -51,7 +48,6 @@ const UsersPage = () => {
         if (!confirmed) return;
 
         try {
-            await csrf(); // minden módosító kérés előtt CSRF
             await myAxios.delete(`/api/admin/delete-user/${id}`);
             toast.success("Felhasználó törölve.");
             setUsers(users.filter((u) => u.id !== id));
