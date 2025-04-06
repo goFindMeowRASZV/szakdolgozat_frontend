@@ -7,17 +7,17 @@ export default function Navigacio() {
     const isHomePage = Location.pathname === "/kezdolap2";
 
     return (
-        <nav 
-        className="navbar-expand-sm"
-        style={isHomePage ? { background: "transparent" } : {
-            backgroundImage: `url(${process.env.PUBLIC_URL}/images/NavHatter.png)`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat"
-        }}
-    >
-            <div className="container-fluid" style={{ width:'100%', padding: '0' , height:'39px',   borderBottom: '1px solid white',marginBottom:'1px', position:'relative', zIndex:'1'}}>
-                <ul className="menu navbar-nav w-100" style={{ height:'39px'}}>
+        <nav
+            className="navbar-expand-sm"
+            style={isHomePage ? { background: "transparent" } : {
+                backgroundImage: `url(${process.env.PUBLIC_URL}/images/NavHatter.png)`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat"
+            }}
+        >
+            <div className="container-fluid" style={{ width: '100%', padding: '0', height: '39px', borderBottom: '1px solid white', marginBottom: '1px', position: 'relative', zIndex: '1' }}>
+                <ul className="menu navbar-nav w-100" style={{ height: '39px' }}>
                     <li className="navbar-item">
                         <Link className="nav-link" to="/kezdolap2">
                             Kezdőlap
@@ -55,6 +55,14 @@ export default function Navigacio() {
                                     Kijelentkezés
                                 </Link>
                             </li>
+                    
+                            {(user?.role === 0 || user?.role === 1) && (
+                                <li className="users navbar-item">
+                                <Link className="nav-link" to="/users">
+                                    Felhasználók
+                                </Link>
+                            </li>
+                            )}
                         </>
                     ) : (
                         <>
@@ -84,4 +92,4 @@ export default function Navigacio() {
             </div>
         </nav>
     );
-                    }
+}

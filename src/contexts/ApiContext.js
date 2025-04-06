@@ -12,30 +12,26 @@ export const ApiProvider = ({ children }) => {
   const [aktualisMacska, setAktualisMacska] = useState(null);
   const [comments, setComments] = useState([]); // ApiContext.js-ben
 
-  const { user, setUser } = useAuthContext();
+    const { user, setUser } = useAuthContext();
 
-  //lekérjük a csrf tokent a backendről
-  const csrf = () => myAxios.get("/sanctum/csrf-cookie");
+  
+    useEffect(() => {
+        const fetchData = async () => {
+          await getMacsCardMenhely(); // mindig lekérhető
+          try {
+            const { data: user } = await myAxios.get("/api/whoami", { withCredentials: true });
+            setUser(user);
+            await getMacsCard();
+          } catch (error) {
+            console.log("Vendégként nézed az oldalt – csak a menhely adatok lesznek betöltve.");
+          }
+          
+        };
+      
+        fetchData();
+      }, []);
+      
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getMacsCardMenhely(); // mindig lekérhető
-      try {
-        await csrf();
-        const { data: user } = await myAxios.get("/api/whoami", {
-          withCredentials: true,
-        });
-        setUser(user);
-        await getMacsCard();
-      } catch (error) {
-        console.log(
-          "Vendégként nézed az oldalt – csak a menhely adatok lesznek betöltve."
-        );
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const getMacsCard = async () => {
     try {
@@ -59,16 +55,16 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
-  //menhelyLista
-  const getMacsCardMenhely = async () => {
-    try {
-      await csrf();
-      const { data } = await myAxios.get("/api/get-sheltered-reports");
-      setMenhelyLista(data);
-    } catch (error) {
-      console.error("Hiba a menhelyi lista lekérésénél:", error);
-    }
-  };
+    //menhelyLista
+    const getMacsCardMenhely = async () => {
+        try {
+          const { data } = await myAxios.get("/api/get-sheltered-reports");
+          setMenhelyLista(data);
+        } catch (error) {
+          console.error("Hiba a menhelyi lista lekérésénél:", error);
+        }
+      };
+      
 
   //szűrési jelentések
   const getReportsFilter = async (filters) => {
@@ -96,122 +92,98 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
-  //komment letrehozasa
-  const createComment = async (formData, vegpont) => {
-    try {
-      await csrf();
-      const response = await myAxios.post(vegpont, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
-      console.log("Komment elküldve:", response.data);
-      return response.data; // <<< visszatér az új kommenttel
-    } catch (error) {
-      console.error(
-        "Hiba a komment létrehozásánál:",
-        error.response?.data || error.message
-      );
-      throw error; // <<< hogy a komponensben is lehessen kezelni
-    }
-  };
-
-  //komment törlése
-  const deleteComment = async (commentId) => {
-    try {
-      await csrf();
-      const response = await myAxios.delete(
-        `/admin/delete-comment/${commentId}`,
-        {
-          withCredentials: true,
+    //komment letrehozasa
+    const createComment = async (formData, vegpont) => {
+        try {
+            const response = await myAxios.post(vegpont, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                withCredentials: true,
+            });
+            console.log("Komment elküldve:", response.data);
+            return response.data; // <<< visszatér az új kommenttel
+        } catch (error) {
+            console.error("Hiba a komment létrehozásánál:", error.response?.data || error.message);
+            throw error; // <<< hogy a komponensben is lehessen kezelni
         }
-      );
-      console.log("Komment törölve");
-      return response.data; // <<< visszatérés
-    } catch (error) {
-      console.error(
-        "Hiba a komment törlésekor:",
-        error.response?.data || error.message
-      );
-      throw error; // <<< dob hibát, ha van
-    }
-  };
-  //komment lekérése
-  const getComments = async (reportId) => {
-    try {
-      const response = await myAxios.get(
-        `/api/comments/by-report/${reportId}`,
-        {
-          withCredentials: true,
+    };
+    
+    //komment törlése
+    const deleteComment = async (commentId) => {
+        try {
+            const response = await myAxios.delete(`/admin/delete-comment/${commentId}`, {
+                withCredentials: true,
+            });
+            console.log("Komment törölve");
+            return response.data; // <<< visszatérés
+        } catch (error) {
+            console.error("Hiba a komment törlésekor:", error.response?.data || error.message);
+            throw error; // <<< dob hibát, ha van
         }
-      );
-      setComments(response.data);
-    } catch (error) {
-      console.error(
-        "Hiba a kommentek lekérésekor:",
-        error.response?.data || error.message
-      );
-    }
-  };
+    };
+    //komment lekérése
+    const getComments = async (reportId) => {
+        try {
+            const response = await myAxios.get(`/api/comments/by-report/${reportId}`, {
+                withCredentials: true,
+            });
+            setComments(response.data);
+        } catch (error) {
+            console.error("Hiba a kommentek lekérésekor:", error.response?.data || error.message);
+        }
+    };
+    
+    
+    
+    
+    //MENHELY
+    const shelterCat = async (adat, vegpont) => {
+        try {
+            await myAxios.post(vegpont, adat, { withCredentials: true });
+            alert("A macska menhelyre került!");
+        } catch (error) {
+            console.error("Hiba történt:", error.response?.data?.error || error.message);
+        }
+    };
+    const updateShelteredCat = async (catId, data) => {
+      try {
+        await myAxios.put(`/api/update-sheltered-cat/${catId}`, data);
+        toast.success("Sikeres módosítás!");
+        getMacsCardMenhely(); // lista újratöltése
+      } catch (error) {
+        console.error("Hiba a macska módosításánál:", error);
+        toast.error("Nem sikerült a módosítás.");
+        throw error;
+      }
+    };
 
-  //MENHELY
-  const shelterCat = async (adat, vegpont) => {
-    try {
-      await csrf();
-      await myAxios.post(vegpont, adat, { withCredentials: true });
-      alert("A macska menhelyre került!");
-    } catch (error) {
-      console.error(
-        "Hiba történt:",
-        error.response?.data?.error || error.message
-      );
-    }
-  };
+    const archiveReport = async (id) => {
+        try {
+          const res = await myAxios.patch(`/api/reports/${id}/archive`, {}, { withCredentials: true });
+      
+          toast.success("Sikeres archiválás!", { position: "top-right" });
+          getMacsCard();
+        } catch (error) {
+          console.error("Hiba az archiválásnál:", error);
+          toast.error("Nem sikerült archiválni.", { position: "top-right" });
+        }
+      };
+      
+    
+    
+    const updateReport = async (reportData) => {
+        try {
+            await myAxios.put(`/api/reports/${reportData.report_id}`, reportData, {
+                withCredentials: true,
+            });
+            getMacsCard();
+        } catch (error) {
+            console.error("Hiba a módosításnál:", error);
+        }
+    };    
 
- const updateShelteredCat = async (catId, data) => {
-  try {
-    await csrf();
-    await myAxios.put(`/api/update-sheltered-cat/${catId}`, data);
-    toast.success("Sikeres módosítás!");
-    getMacsCardMenhely(); // lista újratöltése
-  } catch (error) {
-    console.error("Hiba a macska módosításánál:", error);
-    toast.error("Nem sikerült a módosítás.");
-    throw error;
-  }
-};
-
-
-  const archiveReport = async (id) => {
-    try {
-      await csrf();
-      const res = await myAxios.patch(
-        `/api/reports/${id}/archive`,
-        {},
-        { withCredentials: true }
-      );
-
-      toast.success("Sikeres archiválás!", { position: "top-right" });
-      getMacsCard(user.role);
-    } catch (error) {
-      console.error("Hiba az archiválásnál:", error);
-      toast.error("Nem sikerült archiválni.", { position: "top-right" });
-    }
-  };
-
-  const updateReport = async (reportData) => {
-    try {
-      await csrf();
-      await myAxios.put(`/api/reports/${reportData.report_id}`, reportData, {
-        withCredentials: true,
-      });
-      getMacsCard(user.role);
-    } catch (error) {
-      console.error("Hiba a módosításnál:", error);
-    }
-  };
-  //örökbefogadás
+    //örökbefogadás
   const submitAdoptionRequest = async (data) => {
     try {
       const response = await myAxios.post("/api/orokbefogadas", data, {
