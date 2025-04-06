@@ -83,11 +83,13 @@ const Kommenteles = ({ reportId }) => {
                     >
                       <div className="row">
                         <div className="col-xs-2 col-md-1">
+                        <a href="/profil">
                           <img
-                            src={comment.user?.photo || "/images/user.jpg"}
-                            className="rounded-circle img-fluid"
+                          src={`http://localhost:8000${comment.user.profile_picture}`}
+                            className="kommentProfil"
                             alt="Profilkép"
                           />
+                        </a>
                         </div>
                         <div className="col-xs-10 col-md-11">
                           <div className="mic-info">
