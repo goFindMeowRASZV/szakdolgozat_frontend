@@ -2,42 +2,24 @@ import React, { useState } from "react";
 import useAuthContext from "../contexts/AuthContext";
 import Kommenteles from "../components/Kommenteles";
 import useApiContext from "../contexts/ApiContext";
-
-
+import OrokbefogadasModal from "../components/OrokbefogadasModal";
 
 function MacskaProfil() {
   const { user } = useAuthContext();
   const { aktualisMacska, shelterCat } = useApiContext();
 
-  const [formData] = useState({
-    rescuer: "",
-    report: "",
-    owner: "",
-    adoption_date: "",
-    kennel_number: "",
-    medical_record: "",
-    status: "",
-    chip_number: "",
-    breed: "",
-    photo: "",
-  });
- 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    const updatedFormData = {
-      ...formData,
-      rescuer: user.id, 
-      report: aktualisMacska.report_id, 
-    };
-    
-    console.log("Küldött adatok:", updatedFormData); 
-  
-    
-    shelterCat(updatedFormData, "/api/shelter-cat");
-  };
-  
+  const [showModal, setShowModal] = useState(false);
 
+  const handleShelter = (e) => {
+    e.preventDefault();
+
+    const formData = {
+      rescuer: user.id,
+      report: aktualisMacska.report_id,
+    };
+
+    shelterCat(formData, "/api/shelter-cat");
+  };
 
   return (
     <div
@@ -49,56 +31,32 @@ function MacskaProfil() {
         margin: "auto",
       }}
     >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "20px",
-          width: "100%",
-        }}
-      >
+      <div style={{ display: "flex", alignItems: "center", gap: "20px", width: "100%" }}>
         <div className="profilKepElem">
-          <img
-            className="profilKep"
-            src={aktualisMacska.photo}
-            alt={aktualisMacska.photo}
-          />
+          <img className="profilKep" src={aktualisMacska.photo} alt="macska" />
         </div>
         <div>
-          {/* <h2>{aktualisMacska.photo}</h2> */}
-          <p>
-            <strong>Szín:</strong> {aktualisMacska.color}
-          </p>
-          <p>
-            <strong>Minta:</strong> {aktualisMacska.pattern}
-          </p>
+          <p><strong>Szín:</strong> {aktualisMacska.color}</p>
+          <p><strong>Minta:</strong> {aktualisMacska.pattern}</p>
         </div>
       </div>
-      {aktualisMacska.status === "m"
-              ? " "
-              :  <button onClick={handleSubmit}>Befogás</button>} 
-      <div style={{ marginTop: "20px", width: "100%" }}>
-        {/* <h3>Hozzászólások</h3>
-        <ul>
-          {comments.map((comment, index) => (
-            <li key={index}>{comment.text}</li>
-          ))}
-        </ul>
-        <form //</div>onSubmit={handleCommentSubmit} 
-        style={{ marginTop: "10px" }}>
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Írj egy hozzászólást..."
-            rows="3"
-            style={{ width: "100%" }}
+
+      {aktualisMacska.status === "m" ? (
+        <>
+          <button onClick={() => setShowModal(true)}>Örökbefogadom</button>
+          <OrokbefogadasModal
+            show={showModal}
+            onClose={() => setShowModal(false)}
+            macska={aktualisMacska}
+            user={user}
           />
-          <button type="submit">Küldés</button>
-        </form> */}
-        <div><Kommenteles reportId={aktualisMacska.report_id} />
-        </div>
-        
-      </div>
+        </>
+      ) : (
+        <button onClick={handleShelter}>Befogás</button>
+      )}
+
+      <div style={{ marginTop: "20px", width: "100%" }} />
+      <Kommenteles reportId={aktualisMacska.report_id} />
     </div>
   );
 }

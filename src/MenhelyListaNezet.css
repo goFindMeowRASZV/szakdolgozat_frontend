@@ -1,99 +1,120 @@
 .menhely-lista-container {
-    overflow-x: auto;
-    margin-top: 20px;
-  }
-  
-  .menhely-lista-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .menhely-lista-table th,
-  .menhely-lista-table td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-    vertical-align: middle;
-  }
-  
-  .menhely-lista-table th {
-    background-color: #f5f5f5;
-    font-weight: bold;
-    white-space: nowrap;
-  }
-  
-  .menhely-lista-table tr:hover {
-    background-color: #f0f0f0;
-    cursor: pointer;
-  }
-  
-  .menhely-lista-table td img {
-    display: block;
-    border-radius: 10px;
-    object-fit: cover;
-  }
-  .action-dropdown-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    padding: 6px 10px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-  }
-  
-  .action-dropdown-button:hover {
-    background-color: rgba(0, 0, 0, 0.05); /* halványszürke háttér */
-  }
+  overflow-x: auto;
+  margin-top: 20px;
+  overflow: visible !important;
+  position: relative;
+}
 
-  .action-dropdown-wrapper {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .action-dropdown-button {
-    background: none;
-    border: none;
-    font-size: 20px;
-    padding: 6px 10px;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-    cursor: pointer;
-  }
-  
-  .action-dropdown-button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-  
-  .action-dropdown-menu {
-    position: absolute;
-    right: 0;
-    top: 110%;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 999;
-    min-width: 140px;
-  }
-  
-  .action-dropdown-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .action-dropdown-menu li {
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-  }
-  
-  .action-dropdown-menu li:hover {
-    background-color: #f0f0f0;
-  }
-  
+.menhely-lista-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  /* overflow removed */
+}
+
+/* Lekerekített felső sarkok csak az első fejlécsorra */
+.menhely-lista-table thead tr:first-child th:first-child {
+  border-top-left-radius: 10px;
+}
+.menhely-lista-table thead tr:first-child th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.menhely-lista-table th,
+.menhely-lista-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  vertical-align: middle;
+}
+
+.menhely-lista-table:hover {
+  border-radius: 10px !important;
+}
+
+.menhely-lista-table,
+.menhely-lista-table tbody,
+.menhely-lista-table tr {
+  overflow: visible !important;
+}
+
+.menhely-lista-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.menhely-lista-table tbody tr:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  /* ne vágjon le semmit */
+  border-radius: 10px;
+}
+
+.menhely-lista-table td img {
+  display: block;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* Dropdown */
+.action-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.action-dropdown-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  padding: 6px 10px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.action-dropdown-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.action-dropdown-menu {
+  position: absolute;
+  right: 0;
+  z-index: 999;
+  min-width: 140px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.action-dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.action-dropdown-menu li {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.action-dropdown-menu:hover, .action-dropdown-menu ul:hover, .action-dropdown-menu li:hover {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+}
+.action-dropdown-menu:hover{
+  border-radius: 10px;
+}
+
+.action-dropdown-menu.open-down {
+  top: 110%;
+}
+
+.action-dropdown-menu.open-up {
+  bottom: 110%;
+  top: auto !important;
+}
