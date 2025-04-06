@@ -11,6 +11,7 @@ const Kommenteles = ({ reportId }) => {
   const [content, setContent] = useState("");
   const [photo, setPhoto] = useState(null);
   const bottomRef = useRef(null);
+  const [modalPhoto, setModalPhoto] = useState(null);
 
   useEffect(() => {
     if (reportId) {
@@ -50,7 +51,7 @@ const Kommenteles = ({ reportId }) => {
 
   const handleDelete = async (reportId, userId) => {
     if (!window.confirm("Biztosan törölni szeretnéd ezt a kommentet?")) return;
-  
+
     try {
       await deleteComment(reportId, userId);
       getComments(reportId);
@@ -59,7 +60,6 @@ const Kommenteles = ({ reportId }) => {
       toast.error("Hiba történt a törlés során.");
     }
   };
-  
 
   return (
     <>
@@ -106,8 +106,13 @@ const Kommenteles = ({ reportId }) => {
                             <img
                               src={comment.photo}
                               alt="Komment kép"
-                              style={{ maxWidth: "200px", borderRadius: "6px" }}
+                              style={{
+                                maxWidth: "200px",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                              }}
                               className="mb-2"
+                              onClick={() => setModalPhoto(comment.photo)}
                             />
                           )}
 
@@ -118,8 +123,9 @@ const Kommenteles = ({ reportId }) => {
                                 type="button"
                                 className="kukaGomb"
                                 title="Delete"
-                                onClick={() => handleDelete(comment.report, comment.user.id)}
-
+                                onClick={() =>
+                                  handleDelete(comment.report, comment.user.id)
+                                }
                               >
                                 <img
                                   src="/images/bin.png"
@@ -161,6 +167,18 @@ const Kommenteles = ({ reportId }) => {
           </div>
         </div>
       </div>
+      {modalPhoto && (
+        <div
+          className="modal-backdrop-custom"
+          onClick={() => setModalPhoto(null)}
+        >
+          <img
+            src={modalPhoto}
+            alt="Nagyított komment kép"
+            className="modal-image"
+          />
+        </div>
+      )}
     </>
   );
 };
