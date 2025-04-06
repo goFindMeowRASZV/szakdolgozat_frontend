@@ -5,7 +5,7 @@ import MenhelyiMacskaModositasModal from "./MenhelyiMacskaModositasModal";
 const ActionDropdown = ({ macska }) => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef();
-  const { archiveReport, getMacsCardMenhely } = useApiContext();
+  const { getMacsCardMenhely } = useApiContext();
   const [showEditModal, setShowEditModal] = useState(false);
 
   // Kattintás kívülre: bezárja a menüt
@@ -20,11 +20,7 @@ const ActionDropdown = ({ macska }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleArchive = () => {
-    archiveReport(macska.report_id);
-    getMacsCardMenhely();
-    setOpen(false);
-  };
+  
 
   const handleEdit = () => {
     console.log("Módosítás"); // csak debugra
@@ -44,7 +40,6 @@ const ActionDropdown = ({ macska }) => {
         {open && (
           <div className="action-dropdown-menu">
             <ul>
-              <li onClick={handleArchive}>Archiválás</li>
               <li onClick={handleEdit}>Módosítás</li>
             </ul>
           </div>

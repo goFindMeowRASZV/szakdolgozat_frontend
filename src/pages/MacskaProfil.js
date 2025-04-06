@@ -31,13 +31,24 @@ function MacskaProfil() {
         margin: "auto",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "20px", width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
+          width: "100%",
+        }}
+      >
         <div className="profilKepElem">
           <img className="profilKep" src={aktualisMacska.photo} alt="macska" />
         </div>
         <div>
-          <p><strong>Szín:</strong> {aktualisMacska.color}</p>
-          <p><strong>Minta:</strong> {aktualisMacska.pattern}</p>
+          <p>
+            <strong>Szín:</strong> {aktualisMacska.color}
+          </p>
+          <p>
+            <strong>Minta:</strong> {aktualisMacska.pattern}
+          </p>
         </div>
       </div>
 
@@ -52,7 +63,7 @@ function MacskaProfil() {
           />
         </>
       ) : (
-        <button onClick={handleShelter}>Befogás</button>
+        user?.role === 1 && <button onClick={handleShelter}>Befogás</button>
       )}
 
       <div style={{ marginTop: "20px", width: "100%" }} />

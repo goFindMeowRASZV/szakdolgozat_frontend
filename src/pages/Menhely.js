@@ -27,8 +27,6 @@ function Menhely() {
       <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
 
       <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-      <Szures type="sheltered" />
-
       {menhelyLISTA ? (
         viewMode === "card" ? (
           <MenhelyCardNezet data={menhelyLISTA} onCardClick={handleItemClick} />
