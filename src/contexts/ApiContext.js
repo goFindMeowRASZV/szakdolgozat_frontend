@@ -110,18 +110,15 @@ export const ApiProvider = ({ children }) => {
     };
     
     //komment törlése
-    const deleteComment = async (commentId) => {
-        try {
-            const response = await myAxios.delete(`/admin/delete-comment/${commentId}`, {
-                withCredentials: true,
-            });
-            console.log("Komment törölve");
-            return response.data; // <<< visszatérés
-        } catch (error) {
-            console.error("Hiba a komment törlésekor:", error.response?.data || error.message);
-            throw error; // <<< dob hibát, ha van
-        }
+    const deleteComment = async (reportId, userId) => {
+      try {
+        await myAxios.delete(`/api/delete-comment/${reportId}/${userId}`);
+      } catch (error) {
+        console.error("Hiba a komment törlésekor:", error);
+        throw error;
+      }
     };
+    
     //komment lekérése
     const getComments = async (reportId) => {
         try {

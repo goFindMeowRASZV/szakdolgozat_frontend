@@ -1,0 +1,63 @@
+.profilContainer {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin: 40px auto;
+  }
+  
+  .profilAdatok {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .profilKepElem {
+    width: 100%;
+    max-width: 220px;
+    height: 220px;
+    overflow: hidden;
+    box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 20px;
+  }
+  
+  .profilKep {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+  
+  .profilInfo {
+    flex: 1;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  
+  .profilInfo p {
+    margin: 0;
+  }
+  
+  .profilFormBtn {
+    background-color: #000;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    align-self: center;
+    width: 200px;
+    font-weight: bold;
+  }
+  
+  .profilFormBtn:hover {
+    background-color: #333;
+  }
+  

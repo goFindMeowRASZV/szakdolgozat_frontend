@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import useAuthContext from "../contexts/AuthContext";
-import Kommenteles from "../components/Kommenteles";
 import useApiContext from "../contexts/ApiContext";
+import Kommenteles from "../components/Kommenteles";
 import OrokbefogadasModal from "../components/OrokbefogadasModal";
+import "../MacskaProfil.css";
 
 function MacskaProfil() {
   const { user } = useAuthContext();
@@ -12,38 +13,34 @@ function MacskaProfil() {
 
   const handleShelter = (e) => {
     e.preventDefault();
-
     const formData = {
       rescuer: user.id,
       report: aktualisMacska.report_id,
     };
-
     shelterCat(formData, "/api/shelter-cat");
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        maxWidth: "1000px",
-        margin: "auto",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: "20px", width: "100%" }}>
+    <div className="profilContainer">
+      <div className="profilAdatok">
         <div className="profilKepElem">
           <img className="profilKep" src={aktualisMacska.photo} alt="macska" />
         </div>
-        <div>
+
+        <div className="profilInfo">
           <p><strong>Szín:</strong> {aktualisMacska.color}</p>
           <p><strong>Minta:</strong> {aktualisMacska.pattern}</p>
+          <p><strong>Ismertetőjel:</strong> {aktualisMacska.other_identifying_marks || "-"}</p>
+          <p><strong>Egészségügyi állapot:</strong> {aktualisMacska.health_status || "-"}</p>
+          <p><strong>Chip:</strong> {aktualisMacska.chip_number || "-"}</p>
+          <p><strong>Körülmények:</strong> {aktualisMacska.circumstances || "-"}</p>
+          <p><strong>Dátum:</strong> {aktualisMacska.disappearance_date || "-"}</p>
         </div>
       </div>
 
       {aktualisMacska.status === "m" ? (
         <>
-          <button onClick={() => setShowModal(true)}>Örökbefogadom</button>
+          <button className="profilFormBtn" onClick={() => setShowModal(true)}>Örökbefogadom</button>
           <OrokbefogadasModal
             show={showModal}
             onClose={() => setShowModal(false)}
@@ -52,10 +49,9 @@ function MacskaProfil() {
           />
         </>
       ) : (
-        <button onClick={handleShelter}>Befogás</button>
+        <button className="profilFormBtn" onClick={handleShelter}>Befogás</button>
       )}
 
-      <div style={{ marginTop: "20px", width: "100%" }} />
       <Kommenteles reportId={aktualisMacska.report_id} />
     </div>
   );
