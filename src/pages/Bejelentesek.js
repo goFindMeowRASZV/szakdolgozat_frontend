@@ -5,21 +5,22 @@ import useApiContext from "../contexts/ApiContext";
 import Szures from "../components/Szures";
 import MacsCard from "../components/MacsCard";
 import BejelentesMenhelyModal from "../components/BejelentesMenhelyModal";
-import { myAxios } from "../contexts/MyAxios";
 
 function Bejelentesek() {
   const { user } = useAuthContext();
-  const { macskaLISTA, getMacsCard, archiveReport, setAktualisMacska } =
-    useApiContext();
+  const {
+    macskaLISTA,
+    setMacskaLista,
+    getMacsCard,
+    archiveReport,
+    setAktualisMacska,
+  } = useApiContext();
   const navigate = useNavigate();
   const [expandedRow, setExpandedRow] = useState(null);
   const [editData, setEditData] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (user?.role !== undefined) getMacsCard(user.role);
-    };
-    fetchData();
+    getMacsCard();
   }, []);
 
   const handleCardClick = (elem) => {
@@ -118,53 +119,21 @@ function Bejelentesek() {
                                 />
                               </div>
                             )}
-                            <p>
-                              <strong>Koordináták:</strong> {elem.lat},{" "}
-                              {elem.lon}
-                            </p>
-                            <p>
-                              <strong>Szín:</strong> {elem.color}
-                            </p>
-                            <p>
-                              <strong>Minta:</strong> {elem.pattern}
-                            </p>
-                            <p>
-                              <strong>Állapot:</strong> {elem.status}
-                            </p>
-                            <p>
-                              <strong>Egészségi állapot:</strong>{" "}
-                              {elem.health_status}
-                            </p>
-                            <p>
-                              <strong>Chip szám:</strong>{" "}
-                              {elem.chip_number || "—"}
-                            </p>
-                            <p>
-                              <strong>Körülmények:</strong>{" "}
-                              {elem.circumstances || "—"}
-                            </p>
-                            <p>
-                              <strong>Egyéb ismertetőjel:</strong>{" "}
-                              {elem.other_identifying_marks || "—"}
-                            </p>
-                            <p>
-                              <strong>Példányok száma:</strong>{" "}
-                              {elem.number_of_individuals || "—"}
-                            </p>
-                            <p>
-                              <strong>Esemény dátuma:</strong>{" "}
-                              {elem.disappearance_date || "—"}
-                            </p>
-                            <p>
-                              <strong>Aktivitás:</strong>{" "}
-                              {elem.activity === 1 ? "Aktív" : "Inaktív"}
-                            </p>
+                            <p><strong>Koordináták:</strong> {elem.lat}, {elem.lon}</p>
+                            <p><strong>Szín:</strong> {elem.color}</p>
+                            <p><strong>Minta:</strong> {elem.pattern}</p>
+                            <p><strong>Állapot:</strong> {elem.status}</p>
+                            <p><strong>Egészségi állapot:</strong> {elem.health_status}</p>
+                            <p><strong>Chip szám:</strong> {elem.chip_number || "—"}</p>
+                            <p><strong>Körülmények:</strong> {elem.circumstances || "—"}</p>
+                            <p><strong>Egyéb ismertetőjel:</strong> {elem.other_identifying_marks || "—"}</p>
+                            <p><strong>Példányok száma:</strong> {elem.number_of_individuals || "—"}</p>
+                            <p><strong>Esemény dátuma:</strong> {elem.disappearance_date || "—"}</p>
+                            <p><strong>Aktivitás:</strong> {elem.activity === 1 ? "Aktív" : "Inaktív"}</p>
 
                             <div className="flex gap-2 pt-2">
                               <button
-                                onClick={() =>
-                                  handleArchiveClick(elem.report_id)
-                                }
+                                onClick={() => handleArchiveClick(elem.report_id)}
                                 className="bg-black-400 text-white px-3 py-1 rounded"
                               >
                                 Archiválás
@@ -197,8 +166,14 @@ function Bejelentesek() {
       {editData && (
         <BejelentesMenhelyModal
           onClose={() => setEditData(null)}
-          onSave={() => {
-            getMacsCard();
+          onSave={(updatedReport) => {
+            setMacskaLista((prev) =>
+              prev.map((item) =>
+                item.report_id === updatedReport.report_id
+                  ? updatedReport
+                  : item
+              )
+            );
             setEditData(null);
           }}
           initialData={editData}
