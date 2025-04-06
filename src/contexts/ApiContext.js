@@ -6,31 +6,23 @@ import { toast } from "react-toastify";
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
-  const [macskaLISTA, setMacskaLista] = useState(null);
-  const [menhelyLISTA, setMenhelyLista] = useState(null);
+  const [macskaLISTA, setMacskaLista] = useState([]);
+  const [menhelyLISTA, setMenhelyLista] = useState([]);
   const [szuresLISTA, setSzuresLista] = useState([]);
   const [aktualisMacska, setAktualisMacska] = useState(null);
   const [comments, setComments] = useState([]); // ApiContext.js-ben
+  const { user, setUser } = useAuthContext();
 
-    const { user, setUser } = useAuthContext();
-
+  useEffect(() => {
+    getMacsCard(); 
+    getMacsCardMenhely();
+    myAxios.get("/api/whoami", { withCredentials: true })
+      .then(({ data }) => setUser(data))
+      .catch(() => {
+        console.log("Vendégként nézed az oldalt – csak a menhely adatok lesznek betöltve.");
+      });
+  }, []);
   
-    useEffect(() => {
-        const fetchData = async () => {
-          await getMacsCardMenhely(); // mindig lekérhető
-          try {
-            const { data: user } = await myAxios.get("/api/whoami", { withCredentials: true });
-            setUser(user);
-            await getMacsCard();
-          } catch (error) {
-            console.log("Vendégként nézed az oldalt – csak a menhely adatok lesznek betöltve.");
-          }
-          
-        };
-      
-        fetchData();
-      }, []);
-      
 
 
   const getMacsCard = async () => {
@@ -46,6 +38,15 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
+  const getMacsCardMenhely = async () => {
+    try {
+      const { data } = await myAxios.get("/api/get-sheltered-reports");
+      setMenhelyLista(data);
+    } catch (error) {
+      console.error("Hiba a menhelyi lista lekérésénél:", error);
+    }
+  };
+
   const getMapReports = async () => {
     try {
       const { data } = await myAxios.get("/api/get-map-reports");
@@ -54,17 +55,6 @@ export const ApiProvider = ({ children }) => {
       console.error("Hiba a térképes bejelentések lekérésekor:", error);
     }
   };
-
-    //menhelyLista
-    const getMacsCardMenhely = async () => {
-        try {
-          const { data } = await myAxios.get("/api/get-sheltered-reports");
-          setMenhelyLista(data);
-        } catch (error) {
-          console.error("Hiba a menhelyi lista lekérésénél:", error);
-        }
-      };
-      
 
   //szűrési jelentések
   const getReportsFilter = async (filters) => {
@@ -155,30 +145,18 @@ export const ApiProvider = ({ children }) => {
       }
     };
 
-    const archiveReport = async (id) => {
-        try {
-          const res = await myAxios.patch(`/api/reports/${id}/archive`, {}, { withCredentials: true });
-      
-          toast.success("Sikeres archiválás!", { position: "top-right" });
-          getMacsCard();
-        } catch (error) {
-          console.error("Hiba az archiválásnál:", error);
-          toast.error("Nem sikerült archiválni.", { position: "top-right" });
-        }
-      };
-      
     
-    
-    const updateReport = async (reportData) => {
-        try {
-            await myAxios.put(`/api/reports/${reportData.report_id}`, reportData, {
-                withCredentials: true,
-            });
-            getMacsCard();
-        } catch (error) {
-            console.error("Hiba a módosításnál:", error);
-        }
-    };    
+    const updateReport = async (id, data) => {
+      try {
+        await myAxios.put(`/api/update-reports/${id}`, data);
+        toast.success("Sikeres módosítás!");
+        getMacsCard(); // lista újratöltése
+      } catch (error) {
+        console.error("Hiba a bejelentés módosításánál:", error);
+        toast.error("Nem sikerült a módosítás.");
+        throw error;
+      }
+    };
 
     //örökbefogadás
   const submitAdoptionRequest = async (data) => {
@@ -216,7 +194,6 @@ export const ApiProvider = ({ children }) => {
         szuresLISTA,
         createComment,
         setSzuresLista,
-        archiveReport,
         updateReport,
         deleteComment,
         setComments,
@@ -224,7 +201,8 @@ export const ApiProvider = ({ children }) => {
         getComments,
         getMapReports,
         submitAdoptionRequest,
-        updateShelteredCat
+        updateShelteredCat,
+        updateReport
       }}
     >
       {children}
