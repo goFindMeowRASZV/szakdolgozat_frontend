@@ -8,19 +8,19 @@ function MenhelyListaNezet({ data, onRowClick }) {
       <table className="menhely-lista-table">
         <thead>
           <tr>
-            <th>Kép</th>
-            <th>Státusz</th>
-            <th>Aktív</th>
-            <th>Cím</th>
-            <th>Szín</th>
-            <th>Minta</th>
-            <th>Ismertetőjel</th>
-            <th>Egészség</th>
-            <th>Chip</th>
-            <th>Körülmények</th>
-            <th>Példány</th>
-            <th>Dátum</th>
-            <th>Egyéb</th>
+          <th>Kép</th>
+          <th>Macska ID</th>
+          <th>Mentő</th>
+          <th>Bejelentés ID</th>
+          <th>Gazdi</th>
+          <th>Behozatal</th>
+          <th>Kikerülés</th>
+          <th>Kennel</th>
+          <th>Kórlap</th>
+          <th>Státusz</th>
+          <th>Chip</th>
+          <th>Fajta</th>
+          <th></th>
           </tr>
         </thead>
         <tbody>
@@ -38,19 +38,19 @@ function MenhelyListaNezet({ data, onRowClick }) {
                   }}
                 />
               </td>
-              <td>{macska.status?.toUpperCase()}</td>
-              <td>{macska.activity === 1 ? "Igen" : "Nem"}</td>
-              <td>{macska.address}</td>
-              <td>{macska.color}</td>
-              <td>{macska.pattern}</td>
-              <td>{macska.other_identifying_marks || "-"}</td>
-              <td>{macska.health_status || "-"}</td>
+              <td>{macska.cat_id}</td>
+              <td>{macska.rescuer}</td>
+              <td>{macska.report}</td>
+              <td>{macska.owner || "-"}</td>
+              <td>{macska.created_at}</td>
+              <td>{macska.adoption_date || "-"}</td>
+              <td>{macska.kennel_number || "-"}</td>
+              <td>{macska.medical_record || "-"}</td>
+              <td>{macska.s_status?.toUpperCase()}</td>
               <td>{macska.chip_number || "-"}</td>
-              <td>{macska.circumstances || "-"}</td>
-              <td>{macska.number_of_individuals || 1}</td>
-              <td>{macska.disappearance_date || "-"}</td>
+              <td>{macska.breed || "-"}</td>
               <td onClick={(e) => e.stopPropagation()}>
-                <ActionDropdown reportId={macska.report_id} />
+                <ActionDropdown macska={macska} />
               </td>
             </tr>
           ))}

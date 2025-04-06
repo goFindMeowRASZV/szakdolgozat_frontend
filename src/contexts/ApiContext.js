@@ -155,7 +155,7 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
-  //macska menhelyre küldés
+  //MENHELY
   const shelterCat = async (adat, vegpont) => {
     try {
       await csrf();
@@ -168,6 +168,20 @@ export const ApiProvider = ({ children }) => {
       );
     }
   };
+
+ const updateShelteredCat = async (catId, data) => {
+  try {
+    await csrf();
+    await myAxios.put(`/api/update-sheltered-cat/${catId}`, data);
+    toast.success("Sikeres módosítás!");
+    getMacsCardMenhely(); // lista újratöltése
+  } catch (error) {
+    console.error("Hiba a macska módosításánál:", error);
+    toast.error("Nem sikerült a módosítás.");
+    throw error;
+  }
+};
+
 
   const archiveReport = async (id) => {
     try {
@@ -216,6 +230,8 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
+  
+
   return (
     <ApiContext.Provider
       value={{
@@ -239,6 +255,7 @@ export const ApiProvider = ({ children }) => {
         getComments,
         getMapReports,
         submitAdoptionRequest,
+        updateShelteredCat
       }}
     >
       {children}
