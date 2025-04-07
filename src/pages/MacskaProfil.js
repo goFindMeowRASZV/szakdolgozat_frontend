@@ -49,9 +49,12 @@ function MacskaProfil() {
           />
         </>
       ) : (
-        <button className="profilFormBtn" onClick={handleShelter}>Befogás</button>
+        user?.role === 1 && (
+          <button className="profilFormBtn" onClick={handleShelter}>
+            Befogás
+          </button>
+        )
       )}
-
       <Kommenteles reportId={aktualisMacska.report_id} />
     </div>
   );

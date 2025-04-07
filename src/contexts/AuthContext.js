@@ -61,17 +61,19 @@ export const AuthProvider = ({ children }) => {
         navigate("/");
     };
 
-    //elküldi a bejelentkezési v. regisztrációs kérelmet
-    const loginReg = async ({ ...adat }, vegpont) => {
-        try {
-            await myAxios.post(vegpont, adat);
-            navigate("/");
-        } catch (error) {
-            if (error.response.status === 422) {
-                setErrors(error.response.data.errors);
+        //elküldi a bejelentkezési v. regisztrációs kérelmet
+        const loginReg = async ({ ...adat }, vegpont) => {
+            try {
+                await myAxios.post(vegpont, adat);
+                await getUser();
+                navigate("/");
+            } catch (error) {
+                if (error.response.status === 422) {
+                    setErrors(error.response.data.errors);
+                }
             }
-        }
-    };
+        };
+    
 
     const uploadProfilePicture = async (file) => {
         const formData = new FormData();

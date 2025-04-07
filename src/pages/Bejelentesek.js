@@ -68,6 +68,7 @@ function Bejelentesek() {
 
   return (
     <>
+      <Szures type="reports" />
       <div className="px-4 pb-8">
         <Kereses
           onSearch={(keyword) => {

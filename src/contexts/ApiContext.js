@@ -59,7 +59,7 @@ export const ApiProvider = ({ children }) => {
   //szűrési jelentések
   const getReportsFilter = async (filters) => {
     const { userStatus, color, pattern } = filters;
-    const endpoint = `/api/get-report-filter/${userStatus || ""},${
+    const endpoint = `/api/get-reports-filter/${userStatus || ""},${
       color || ""
     },${pattern || ""}`;
     try {
