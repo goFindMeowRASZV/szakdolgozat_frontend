@@ -27,6 +27,7 @@ export const AuthProvider = ({ children }) => {
                 },
             });
             toast.success("Sikeres létrehozás!", { position: "top-right" });
+            navigate("/bejelentesek");
         } catch (error) {
             if (error.response && error.response.status === 422) {
                 setErrors(error.response.data.errors);
