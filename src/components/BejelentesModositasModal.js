@@ -67,20 +67,10 @@ const BejelentesModositasModal = ({ show, onClose, report }) => {
           <div><strong>Cím:</strong> {report?.address}</div>
           <div><strong>Koordináták:</strong> {report?.lat}, {report?.lon}</div>
           <div><strong>Bejelentés ID:</strong> {report?.report_id}</div>
+          <div><strong>Állapot:</strong> {report?.status}</div>
         </div>
 
         <Form>
-          <Form.Group>
-            <Form.Label>Állapot</Form.Label>
-            <Form.Select name="status" value={formData.status} onChange={handleChange} required>
-              <option value="">Válassz...</option>
-              <option value="k">Keresett</option>
-              <option value="t">Talált</option>
-              <option value="l">Látott</option>
-              <option value="m">Mentett</option>
-            </Form.Select>
-          </Form.Group>
-
           <Form.Group>
             <Form.Label>Szín</Form.Label>
             <Form.Select name="color" value={formData.color} onChange={handleChange} required>
