@@ -17,7 +17,7 @@ function MacskaProfil() {
       rescuer: user.id,
       report: aktualisMacska.report_id,
     };
-    shelterCat(formData, "/api/shelter-cat");
+    shelterCat(formData, "/api/staff/create-sheltered-cat");
   };
 
   return (

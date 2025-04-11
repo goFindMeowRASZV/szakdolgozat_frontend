@@ -258,6 +258,8 @@ h3 {
   margin: auto;
   max-width: 800px; /* Maximális szélesség 800px */
   padding: 20px; /* Ha szükséges, adhatsz hozzá padding-ot */
+  place-items: center;
+  place-content: center;
 }
 
 /* Kommentek */
@@ -395,4 +397,26 @@ h3 {
   color: white;
 }
 
+.cicak{
+  margin: auto;
+  place-items: center;
+  place-content: center;
+}
+.kepek{
+  display: flex;
+  flex-wrap: wrap;
 
+
+}
+.flex-item {
+  flex: 1 0 30%; /* vagy fix: width: 30% */
+  min-width: 200px;
+}
+
+@media screen and (max-width: 787px) {
+  .kepek{
+   
+    justify-content: center;
+  
+  }
+}
