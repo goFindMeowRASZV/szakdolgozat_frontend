@@ -5,6 +5,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import useApiContext from "../contexts/ApiContext";
 import { statusIcons } from "../assets/icons/MarkerIcons";
+import "../Terkep.css";
 
 // Alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;
@@ -71,7 +72,7 @@ function Terkep() {
   return (
     <div>
       <h1>Térkép</h1>
-      <div style={{
+      <div className = "terkep" style={{
         height: "40vw",
         width: "80%",
         margin: "0 auto", 
