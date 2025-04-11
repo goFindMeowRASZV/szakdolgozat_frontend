@@ -85,14 +85,7 @@ html, body,#root{
 .logOut>a:hover{
   color: #ffffff !important;
 }
-.galeriaCim{
-  text-align: center;
-  color: white;
-  padding-top: 0px;
-  font-family: "Quicksand", serif;
-  font-weight: 800;
-  font-size: 36px;
-}
+
 
 .cica-cim{
   text-align: center;

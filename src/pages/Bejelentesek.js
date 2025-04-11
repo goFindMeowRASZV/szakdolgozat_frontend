@@ -9,6 +9,8 @@ import { myAxios } from "../contexts/MyAxios.js";
 import MacsCard from "../components/MacsCard.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle";
 import BejelentesListaNezet from "../components/BejelentesListaNezet";
+import styles from '../Fonts.module.css';
+
 
 function Bejelentesek() {
   const { macskaLISTA, getMacsCard, setAktualisMacska } = useApiContext();
@@ -66,8 +68,8 @@ function Bejelentesek() {
     searchResults && Array.isArray(searchResults) && searchResults.length > 0
       ? searchResults
       : Array.isArray(macskaLISTA)
-      ? macskaLISTA
-      : [];
+        ? macskaLISTA
+        : [];
 
   return (
     <>
@@ -80,8 +82,9 @@ function Bejelentesek() {
           }}
         />
         <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-        <h1 className="text-2xl font-bold text-center my-8">Bejelentések</h1>
-
+        <h1 className={styles.aesthetic}>
+          Bejelentések
+        </h1>
         {viewMode === "card" ? (
           <div className="kepek">
             {megjelenitendoLista.length > 0 ? (

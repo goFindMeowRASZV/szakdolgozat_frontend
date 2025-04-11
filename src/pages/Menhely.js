@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import useApiContext from "../contexts/ApiContext";
 import useAuthContext from "../contexts/AuthContext";
 import Szures from "../components/Szures";
+import styles from '../Fonts.module.css';
+
 
 import MenhelyCardNezet from "../components/MenhelyCardNezet.js";
 import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
@@ -24,7 +26,7 @@ function Menhely() {
 
   return (
     <div className="galeriaBody" style={{ paddingTop: "60px" }}>
-      <h1 className="galeriaCim">GAZDIKERESŐ CICÁINK</h1>
+      <h1 className={styles.aesthetic}>Gazdikereső cicáink</h1>
 
       <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
       {menhelyLISTA ? (
