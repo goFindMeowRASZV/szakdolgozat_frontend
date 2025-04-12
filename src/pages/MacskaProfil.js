@@ -17,7 +17,7 @@ function MacskaProfil() {
       rescuer: user.id,
       report: aktualisMacska.report_id,
     };
-    shelterCat(formData, "/api/shelter-cat");
+    shelterCat(formData, "/api/staff/create-sheltered-cat");
   };
 
   return (
@@ -49,9 +49,12 @@ function MacskaProfil() {
           />
         </>
       ) : (
-        <button className="profilFormBtn" onClick={handleShelter}>Befogás</button>
+        user?.role === 1 && (
+          <button className="profilFormBtn" onClick={handleShelter}>
+            Befogás
+          </button>
+        )
       )}
-
       <Kommenteles reportId={aktualisMacska.report_id} />
     </div>
   );

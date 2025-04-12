@@ -5,6 +5,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import useApiContext from "../contexts/ApiContext";
 import { statusIcons } from "../assets/icons/MarkerIcons";
+import "../Terkep.css";
 
 // Alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;
@@ -46,11 +47,11 @@ function Terkep() {
   useEffect(() => {
     getMapReports();
   }, []);
-  
+
   useEffect(() => {
     console.log("macskaLISTA:", macskaLISTA);
   }, [macskaLISTA]);
-  
+
 
   const handleMarkerAdd = (latlng) => {
     setCurrentLatLng(latlng);
@@ -71,7 +72,13 @@ function Terkep() {
   return (
     <div>
       <h1>Térkép</h1>
-      <div style={{ height: "400px", width: "100%" }}>
+      <div className = "terkep" style={{
+        height: "40vw",
+        width: "80%",
+        margin: "0 auto", 
+        borderRadius: "20px", 
+        overflow: "hidden",
+      }}>
         <MapContainer center={position} zoom={zoom} style={{ height: "100%", width: "100%" }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <ClickableMap onMarkerAdd={handleMarkerAdd} />
@@ -86,14 +93,14 @@ function Terkep() {
                   <Popup>
                     <img src={macska.photo} alt="Cica kép" style={{ width: "100%" }} />
                     <br />
-                    <strong>Koordináták:</strong> 
+                    <strong>Koordináták:</strong>
                     {macska.lat?.toFixed(5)}, {macska.lon?.toFixed(5)}
                     <br />
                     <strong>Cím:</strong> {macska.address}
                   </Popup>
                 </Marker>
               ) : null
-          )}          
+            )}
         </MapContainer>
       </div>
 

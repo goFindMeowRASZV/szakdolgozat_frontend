@@ -8,7 +8,7 @@ function Kezdolap() {
 
   return (
     <div className='wallpaper'>
-      <h1 className={styles.aesthetic}>GoFindMeow</h1>
+      <h1 className={styles.focim}>GoFindMeow</h1>
       <img className="wallpaperPhoto" src="images/KezdolapKep.png" alt="Wallpaper image"/>
       <div className='kezdolapFelezett'>
         <div className='bekezdes'>

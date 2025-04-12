@@ -1,0 +1,25 @@
+
+/* torespontok */
+@media screen and (max-width: 1200px) {
+    .terkep{
+        height: 83vw !important
+    
+    }
+  }
+
+  
+  @media screen and (max-width: 800px) {
+    .terkep{
+        height: 130vw !important
+    
+    }
+  }
+
+
+@media screen and (max-width: 480px) {
+    .terkep{
+        height: 150vw !important
+    
+    }
+  }
+

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { myAxios } from "../contexts/MyAxios";
 
@@ -10,10 +11,11 @@ const UserModal = ({ onClose, onSave, userData, currentUser }) => {
     userData?.role ?? (currentUser?.role === 1 ? 1 : 2)
   );
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (isEdit) {
         await myAxios.put(`/api/admin/update-user/${userData.id}`, {
@@ -37,89 +39,80 @@ const UserModal = ({ onClose, onSave, userData, currentUser }) => {
       onClose();
     } catch (err) {
       toast.error("Hiba történt mentés közben.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow w-[90%] max-w-md"
-      >
-        <h2 className="text-xl font-bold mb-4">
+    <Modal show onHide={onClose} centered size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>
           {isEdit ? "Felhasználó szerkesztése" : "Új felhasználó"}
-        </h2>
-
-        <label className="block mb-2">
-          Név:
-          <input
-            className="w-full p-2 border rounded mt-1"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
-
-        <label className="block mb-2">
-          Email:
-          <input
-            type="email"
-            className="w-full p-2 border rounded mt-1"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-
-        {!isEdit && (
-          <label className="block mb-2">
-            Jelszó:
-            <input
-              type="password"
-              className="w-full p-2 border rounded mt-1"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3">
+            <Form.Label>Név</Form.Label>
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
-          </label>
-        )}
+          </Form.Group>
 
-        <label className="block mb-4">
-          Szerepkör:
-          <select
-            className="w-full p-2 border rounded mt-1"
-            value={role}
-            onChange={(e) => setRole(parseInt(e.target.value))}
-            disabled={currentUser?.role !== 0 && !isEdit}
-          >
-            {currentUser?.role === 0 && (
-              <>
-                <option value={0}>Admin</option>
-                <option value={1}>Staff</option>
-                <option value={2}>User</option>
-              </>
-            )}
-            {currentUser?.role === 1 && <option value={1}>Staff</option>}
-          </select>
-        </label>
+          <Form.Group className="mb-3">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </Form.Group>
 
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="px-4 py-2 bg-gray-300 rounded"
-            onClick={onClose}
-          >
-            Mégse
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800"
-          >
-            Mentés
-          </button>
-        </div>
-      </form>
-    </div>
+          {!isEdit && (
+            <Form.Group className="mb-3">
+              <Form.Label>Jelszó</Form.Label>
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+          )}
+
+          <Form.Group className="mb-3">
+            <Form.Label>Szerepkör</Form.Label>
+            <Form.Select
+              value={role}
+              onChange={(e) => setRole(parseInt(e.target.value))}
+              disabled={currentUser?.role !== 0 && !isEdit}
+            >
+              {currentUser?.role === 0 && (
+                <>
+                  <option value={0}>Admin</option>
+                  <option value={1}>Staff</option>
+                  <option value={2}>User</option>
+                </>
+              )}
+              {currentUser?.role === 1 && <option value={1}>Staff</option>}
+            </Form.Select>
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={onClose}>
+          Mégse
+        </Button>
+        <Button variant="dark" onClick={handleSubmit} disabled={loading}>
+          {loading ? <Spinner size="sm" animation="border" /> : "Mentés"}
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

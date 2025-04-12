@@ -85,14 +85,7 @@ html, body,#root{
 .logOut>a:hover{
   color: #ffffff !important;
 }
-.galeriaCim{
-  text-align: center;
-  color: white;
-  padding-top: 0px;
-  font-family: "Quicksand", serif;
-  font-weight: 800;
-  font-size: 36px;
-}
+
 
 .cica-cim{
   text-align: center;
@@ -258,6 +251,8 @@ h3 {
   margin: auto;
   max-width: 800px; /* Maximális szélesség 800px */
   padding: 20px; /* Ha szükséges, adhatsz hozzá padding-ot */
+  place-items: center;
+  place-content: center;
 }
 
 /* Kommentek */
@@ -393,4 +388,28 @@ h3 {
   border-radius: 35px;
   box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
   color: white;
+}
+
+.cicak{
+  margin: auto;
+  place-items: center;
+  place-content: center;
+}
+.kepek{
+  display: flex;
+  flex-wrap: wrap;
+
+
+}
+.flex-item {
+  flex: 1 0 30%; /* vagy fix: width: 30% */
+  min-width: 200px;
+}
+
+@media screen and (max-width: 787px) {
+  .kepek{
+   
+    justify-content: center;
+  
+  }
 }
