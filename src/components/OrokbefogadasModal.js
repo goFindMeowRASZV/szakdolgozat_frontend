@@ -26,6 +26,7 @@ const OrokbefogadasModal = ({ show, onClose, macska, user }) => {
         report_photo: macska.photo,
         user_id: user.id,
         user_email: user.email,
+        user_name: user.name,
       };
   
       await submitAdoptionRequest(data);
