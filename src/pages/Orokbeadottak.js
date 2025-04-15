@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApiContext from "../contexts/ApiContext";
-import useAuthContext from "../contexts/AuthContext";
 import Szures from "../components/Szures";
 import styles from "../Fonts.module.css";
 import Kereses from "../components/Kereses";
-import MenhelyCardNezet from "../components/MenhelyCardNezet.js";
 import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle.js";
 import { myAxios } from "../contexts/MyAxios.js";
 import "../SzuresKereses.css";
 
-function Menhely() {
-  const { menhelyLISTA, getMacsCardMenhely, setAktualisMacska } =
-    useApiContext();
+function Orokbeadottak() {
+  const {
+    orokbeadottMenhelyLISTA,
+    getOrokbeadottMacsCardMenhely,
+    setAktualisMacska,
+  } = useApiContext();
   const [viewMode, setViewMode] = useState("card");
   const navigate = useNavigate();
   const [szuresEredmeny, setSzuresEredmeny] = useState(null);
@@ -21,7 +22,7 @@ function Menhely() {
   const [kereso, setKereso] = useState("");
 
   useEffect(() => {
-    getMacsCardMenhely();
+    getOrokbeadottMacsCardMenhely();
   }, []);
 
   const handleItemClick = (elem) => {
@@ -32,7 +33,7 @@ function Menhely() {
     try {
       if (keyword.trim() === "") {
         // üres keresés esetén visszatérünk az eredeti listához
-        getMacsCardMenhely();
+        getOrokbeadottMacsCardMenhely();
         setSearchResults(null);
         return;
       }
@@ -50,17 +51,14 @@ function Menhely() {
 
   if (searchResults && searchResults.length > 0) {
     megjelenitendoLista = searchResults;
-  } else if (!kereso && szuresEredmeny && szuresEredmeny.length > 0) {
-    megjelenitendoLista = szuresEredmeny;
   } else {
-    megjelenitendoLista = menhelyLISTA || [];
+    megjelenitendoLista = orokbeadottMenhelyLISTA || [];
   }
 
   return (
     <div className="galeriaBody" style={{ paddingTop: "60px" }}>
-      <h1 className={styles.aesthetic}>Gazdikereső cicáink</h1>
+      <h1 className={styles.aesthetic}>Örökbeadott cicáink</h1>
       <div className="szuresKereses">
-        <Szures type="sheltered" onSzures={setSzuresEredmeny} />
         <Kereses
           onSearch={(keyword) => {
             handleSearch(keyword);
@@ -69,24 +67,12 @@ function Menhely() {
         />
       </div>
 
-      <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-      {megjelenitendoLista ? (
-        viewMode === "card" ? (
-          <MenhelyCardNezet
-            data={megjelenitendoLista}
-            onCardClick={handleItemClick}
-          />
-        ) : (
-          <MenhelyListaNezet
-            data={megjelenitendoLista}
-            onRowClick={handleItemClick}
-          />
-        )
-      ) : (
-        <p>Betöltés...</p>
-      )}
+      <MenhelyListaNezet
+        data={megjelenitendoLista}
+        onRowClick={handleItemClick}
+      />
     </div>
   );
 }
 
-export default Menhely;
+export default Orokbeadottak;

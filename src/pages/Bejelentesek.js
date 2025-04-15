@@ -10,6 +10,7 @@ import MacsCard from "../components/MacsCard.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle";
 import BejelentesListaNezet from "../components/BejelentesListaNezet";
 import styles from "../Fonts.module.css";
+import "../SzuresKereses.css";
 
 function Bejelentesek() {
   const { macskaLISTA, getMacsCard, setAktualisMacska } = useApiContext();
@@ -77,7 +78,7 @@ function Bejelentesek() {
   return (
     <>
       <h1 className={styles.aesthetic}>Bejelentések</h1>
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between flex-wrap gap-4 px-4 pt-4 pb-2">
+      <div className="szuresKereses">
         <Szures type="reports" onSzures={setSzuresEredmeny} />
         <Kereses
           onSearch={(keyword) => {

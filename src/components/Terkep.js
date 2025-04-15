@@ -62,12 +62,12 @@ function Terkep() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  /* const handleSubmit = (e) => {
     e.preventDefault();
     setMarkers([...markers, { latlng: currentLatLng, data: formData }]);
     setShowModal(false);
     setFormData({ status: "", address: "", color: "", pattern: "" });
-  };
+  }; */
 
   return (
     <div>
@@ -104,55 +104,7 @@ function Terkep() {
         </MapContainer>
       </div>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Új bejegyzés</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group>
-              <Form.Label>Állapot</Form.Label>
-              <Form.Control
-                as="select"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
-                <option value="">Válasszon állapotot</option>
-                <option value="t">Találtam</option>
-                <option value="k">Keresem</option>
-                <option value="l">Láttam</option>
-                <option value="m">Menhely</option>
-              </Form.Control>
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Cím</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Adja meg a címet"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Cica színe</Form.Label>
-              <Form.Control type="text" name="color" value={formData.color} onChange={handleChange} />
-            </Form.Group>
-
-            <Form.Group>
-              <Form.Label>Cica mintája</Form.Label>
-              <Form.Control type="text" name="pattern" value={formData.pattern} onChange={handleChange} />
-            </Form.Group>
-
-            <Button variant="dark" type="submit" className="mt-3">
-              Mentés
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      
     </div>
   );
 }

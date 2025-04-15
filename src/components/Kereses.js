@@ -14,7 +14,7 @@ const Kereses = ({ onSearch }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 mb-4 items-center">
+    <form onSubmit={handleSubmit} className="kereses">
       <input
         type="text"
         value={query}

@@ -87,16 +87,16 @@ const Szures = ({ type, onSzures }) => {
   };
 
   return (
-    <div className="px-4 pt-4 pb-2">
+    <div >
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col lg:flex-row gap-4 items-center mb-6"
+        className="szures"
       >
         {type === "reports" && (
           <select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className="border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
+            className="select border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
           >
             <option value="">Bejelentés állapota</option>
             {statusOptions.map((option) => (
@@ -110,7 +110,7 @@ const Szures = ({ type, onSzures }) => {
         <select
           value={formData.color}
           onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-          className="border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
+          className="select z-20 border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
         >
           <option value="">Cica színe</option>
           {colorOptions.map((option) => (
@@ -123,7 +123,7 @@ const Szures = ({ type, onSzures }) => {
         <select
           value={formData.pattern}
           onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
-          className="border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
+          className="select  border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
         >
           <option value="">Cica mintája</option>
           {patternOptions.map((option) => (
@@ -132,8 +132,8 @@ const Szures = ({ type, onSzures }) => {
             </option>
           ))}
         </select>
+        <div className="gombok">
 
-        <div className="flex gap-2">
           <button
             type="submit"
             className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 shadow"
@@ -148,7 +148,7 @@ const Szures = ({ type, onSzures }) => {
           >
             ✕
           </button>
-        </div>
+          </div>
       </form>
 
       {loading && <p>Betöltés...</p>}
