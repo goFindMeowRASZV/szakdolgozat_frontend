@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Form, Button, Col, Row, Modal, ListGroup } from "react-bootstrap";
 import useApiContext from "../contexts/ApiContext";
-import MacsCard from "./MacsCard";
-import { useNavigate } from "react-router-dom";
 
-const Szures = ({ type }) => {
-  const { getReportsFilter, getShelteredReportsFilter, szuresLISTA, setAktualisMacska } = useApiContext();
-  const navigate = useNavigate();
+const Szures = ({ type, onSzures }) => {
+  const {
+    getReportsFilter,
+    getShelteredReportsFilter,
+    getMacsCard,
+  } = useApiContext();
 
   const [formData, setFormData] = useState({
     status: "",
@@ -15,138 +15,143 @@ const Szures = ({ type }) => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+
+  const statusOptions = [
+    { label: "Talált", value: "t" },
+    { label: "Keresett", value: "k" },
+    { label: "Látott", value: "l" },
+  ];
+
+  const colorOptions = [
+    { label: "Fehér", value: "feher" },
+    { label: "Fekete", value: "fekete" },
+    { label: "Barna", value: "barna" },
+    { label: "Vörös", value: "voros" },
+    { label: "Bézs", value: "bezs" },
+    { label: "Szürke", value: "szurke" },
+    { label: "Fekete-fehér", value: "feketefeher" },
+    { label: "Fekete-fehér-vörös", value: "feketefehervoros" },
+    { label: "Fekete-vörös", value: "feketevoros" },
+    { label: "Vörös-fehér", value: "vorosfeher" },
+    { label: "Szürke-fehér", value: "szurkefeher" },
+    { label: "Barna-fehér", value: "barnafeher" },
+    { label: "Barna-bézs", value: "barnabezs" },
+    { label: "Egyéb", value: "egyeb" },
+  ];
+
+  const patternOptions = [
+    { label: "Cirmos", value: "cirmos" },
+    { label: "Foltos", value: "foltos" },
+    { label: "Egyszínű", value: "egyszinu" },
+    { label: "Teknőctarka", value: "teknoctarka" },
+    { label: "Kopasz", value: "kopasz" },
+    { label: "Fóka", value: "foka" },
+    { label: "Kalikó", value: "kaliko" },
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const filters = {
-      status: formData.status || "*",
       color: formData.color || "*",
       pattern: formData.pattern || "*",
     };
 
     if (type === "reports") {
-      await getReportsFilter(filters);
+      filters.status = formData.status || "*";
+    }
+
+    const isEmpty = Object.values(filters).every((val) => val === "*");
+
+    if (isEmpty) {
+      await getMacsCard();
+      onSzures(null);
     } else {
-      await getShelteredReportsFilter(filters);
+      let result;
+      if (type === "reports") {
+        result = await getReportsFilter(filters);
+      } else {
+        result = await getShelteredReportsFilter(filters);
+      }
+      onSzures(result);
     }
 
     setLoading(false);
-    setShowModal(false);
   };
 
-  const handleCardClick = (elem) => {
-    navigate(`/MacskaProfil`);
-    setAktualisMacska(elem);
+  const handleClear = async () => {
+    setFormData({ status: "", color: "", pattern: "" });
+    await getMacsCard();
+    onSzures(null);
   };
-
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
 
   return (
-    <div>
-      <Button variant="dark" onClick={handleShow}>
-        Szűrés a cicák között
-      </Button>
-
-      <Modal show={showModal} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{type === "reports" ? "Bejelentések szűrése" : "Menhelyi macskák szűrése"}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Row>
-              <Col md={6}>
-                {type === "reports" && (
-                  <Form.Group>
-                    <Form.Label>Bejelentés állapota</Form.Label>
-                    {["t", "k", "l"].map((val) => (
-                      <Form.Check
-                        key={`status-${val}`}
-                        id={`status-${val}`}
-                        type="radio"
-                        label={
-                          val === "t" ? "Talált" : val === "k" ? "Keresett" : "Látott"
-                        }
-                        value={val}
-                        checked={formData.status === val}
-                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        name="status"
-                      />
-                    ))}
-                  </Form.Group>
-                )}
-
-                <Form.Group>
-                  <Form.Label>Cica színe</Form.Label>
-                  {[
-                    "feher", "fekete", "barna", "voros", "bezs", "szurke",
-                    "feketefeher", "feketefehervoros", "feketevoros",
-                    "vorosfeher", "szurkefeher", "barnafeher", "barnabezs", "egyeb"
-                  ].map((val) => (
-                    <Form.Check
-                      key={`color-${val}`}
-                      id={`color-${val}`}
-                      type="radio"
-                      label={val.replace(/-/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2")}
-                      value={val}
-                      checked={formData.color === val}
-                      onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                      name="color"
-                    />
-                  ))}
-                </Form.Group>
-              </Col>
-
-              <Col md={6}>
-                <Form.Group>
-                  <Form.Label>Cica mintája</Form.Label>
-                  {["cirmos", "foltos", "egyszinu", "teknoctarka", "kopasz", "foka", "kaliko"].map((val) => (
-                    <Form.Check
-                      key={`pattern-${val}`}
-                      id={`pattern-${val}`}
-                      type="radio"
-                      label={val.charAt(0).toUpperCase() + val.slice(1)}
-                      value={val}
-                      checked={formData.pattern === val}
-                      onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
-                      name="pattern"
-                    />
-                  ))}
-                </Form.Group>
-              </Col>
-            </Row>
-
-            <Button variant="dark" type="submit">
-              Keresés
-            </Button>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="dark" onClick={handleClose}>
-            Bezárás
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      {loading ? (
-        <p>Betöltés...</p>
-      ) : szuresLISTA && szuresLISTA.length > 0 ? (
-        <div>
-          <h3>Eredmények:</h3>
-          <div className="card-deck">
-            {szuresLISTA.map((elem, index) => (
-              <div key={index} onClick={() => handleCardClick(elem)} style={{ cursor: "pointer" }}>
-                <MacsCard adat={elem} index={elem.id} />
-              </div>
+    <div className="px-4 pt-4 pb-2">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col lg:flex-row gap-4 items-center mb-6"
+      >
+        {type === "reports" && (
+          <select
+            value={formData.status}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            className="border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
+          >
+            <option value="">Bejelentés állapota</option>
+            {statusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
-          </div>
+          </select>
+        )}
+
+        <select
+          value={formData.color}
+          onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+          className="border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
+        >
+          <option value="">Cica színe</option>
+          {colorOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={formData.pattern}
+          onChange={(e) => setFormData({ ...formData, pattern: e.target.value })}
+          className="border rounded px-3 py-2 bg-white text-black shadow-sm w-full sm:max-w-xs"
+        >
+          <option value="">Cica mintája</option>
+          {patternOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 shadow"
+          >
+            Szűrés
+          </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="border px-4 py-2 rounded text-black hover:bg-gray-100 shadow"
+            title="Szűrés törlése"
+          >
+            ✕
+          </button>
         </div>
-      ) : (
-        <p style={{ color: "black" }}>Nincs találat.</p>
-      )}
+      </form>
+
+      {loading && <p>Betöltés...</p>}
     </div>
   );
 };

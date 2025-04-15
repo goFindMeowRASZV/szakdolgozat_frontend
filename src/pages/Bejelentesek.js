@@ -9,8 +9,7 @@ import { myAxios } from "../contexts/MyAxios.js";
 import MacsCard from "../components/MacsCard.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle";
 import BejelentesListaNezet from "../components/BejelentesListaNezet";
-import styles from '../Fonts.module.css';
-
+import styles from "../Fonts.module.css";
 
 function Bejelentesek() {
   const { macskaLISTA, getMacsCard, setAktualisMacska } = useApiContext();
@@ -23,6 +22,7 @@ function Bejelentesek() {
   const [searchResults, setSearchResults] = useState([]);
   const [kereso, setKereso] = useState("");
   const [viewMode, setViewMode] = useState("card");
+  const [szuresEredmeny, setSzuresEredmeny] = useState(null);
 
   useEffect(() => {
     getMacsCard();
@@ -64,27 +64,30 @@ function Bejelentesek() {
     navigate("/MacskaProfil");
   };
 
-  const megjelenitendoLista =
-    searchResults && Array.isArray(searchResults) && searchResults.length > 0
-      ? searchResults
-      : Array.isArray(macskaLISTA)
-        ? macskaLISTA
-        : [];
+  let megjelenitendoLista = [];
+
+  if (searchResults && searchResults.length > 0) {
+    megjelenitendoLista = searchResults;
+  } else if (!kereso && szuresEredmeny && szuresEredmeny.length > 0) {
+    megjelenitendoLista = szuresEredmeny;
+  } else {
+    megjelenitendoLista = macskaLISTA || [];
+  }
 
   return (
     <>
-      <Szures type="reports" />
-      <div className="cicak px-4 pb-8">
+      <h1 className={styles.aesthetic}>Bejelentések</h1>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between flex-wrap gap-4 px-4 pt-4 pb-2">
+        <Szures type="reports" onSzures={setSzuresEredmeny} />
         <Kereses
           onSearch={(keyword) => {
             handleSearch(keyword);
             setKereso(keyword);
           }}
         />
+      </div>
+      <div className="cicak px-4 pb-8">
         <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-        <h1 className={styles.aesthetic}>
-          Bejelentések
-        </h1>
         {viewMode === "card" ? (
           <div className="kepek">
             {megjelenitendoLista.length > 0 ? (

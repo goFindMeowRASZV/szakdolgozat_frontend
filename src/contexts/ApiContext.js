@@ -58,16 +58,18 @@ export const ApiProvider = ({ children }) => {
 
   //szűrési jelentések
   const getReportsFilter = async (filters) => {
-    const { userStatus, color, pattern } = filters;
-    const endpoint = `/api/get-reports-filter/${userStatus || ""},${
+    const { status, color, pattern } = filters;
+    const endpoint = `/api/get-report-filter/${status || ""},${
       color || ""
     },${pattern || ""}`;
     try {
       const { data } = await myAxios.get(endpoint);
       setSzuresLista(Array.isArray(data) ? data : []);
+      return(data);
     } catch (error) {
       console.error("Hiba történt a lekérdezés során:", error);
     }
+  
   };
   const getShelteredReportsFilter = async (filters) => {
     const { color, pattern } = filters;
@@ -77,6 +79,7 @@ export const ApiProvider = ({ children }) => {
     try {
       const { data } = await myAxios.get(endpoint);
       setSzuresLista(Array.isArray(data) ? data : []);
+      return(data);
     } catch (error) {
       console.error("Hiba történt a lekérdezés során:", error);
     }
