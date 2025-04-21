@@ -21,7 +21,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-// Új marker hozzáadását kezelő komponens (ha kell később)
+// Klikkelhető térkép – ha később szükség lesz rá
 function ClickableMap({ onMarkerAdd }) {
   useMapEvents({
     click(e) {
@@ -55,6 +55,18 @@ export default function Terkep() {
     navigate("/MacskaProfil");
   };
 
+  if (!macskaLISTA || macskaLISTA.length === 0) {
+    return (
+      <div className="loader-container">
+        <img
+          src="/images/loading.gif"
+          alt="Betöltés..."
+          className="loader-gif"
+        />
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1 className="text-center my-4">Térkép</h1>
@@ -76,40 +88,39 @@ export default function Terkep() {
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <ClickableMap onMarkerAdd={handleMarkerAdd} />
 
-          {macskaLISTA &&
-            macskaLISTA.map((macska, index) =>
-              macska.lat && macska.lon ? (
-                <Marker
-                  key={index}
-                  position={[macska.lat, macska.lon]}
-                  icon={
-                    statusIcons[macska.status?.toLowerCase()] ||
-                    new L.Icon.Default()
-                  }
-                >
-                  <Popup>
-                    <div
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handlePopupClick(macska)}
-                    >
-                      <img
-                        src={macska.photo}
-                        alt="Cica kép"
-                        style={{
-                          width: "100%",
-                          borderRadius: "10px",
-                          marginBottom: "5px",
-                        }}
-                      />
-                      <strong>Koordináták:</strong>{" "}
-                      {macska.lat.toFixed(5)}, {macska.lon.toFixed(5)}
-                      <br />
-                      <strong>Cím:</strong> {macska.address}
-                    </div>
-                  </Popup>
-                </Marker>
-              ) : null
-            )}
+          {macskaLISTA.map((macska, index) =>
+            macska.lat && macska.lon ? (
+              <Marker
+                key={index}
+                position={[macska.lat, macska.lon]}
+                icon={
+                  statusIcons[macska.status?.toLowerCase()] ||
+                  new L.Icon.Default()
+                }
+              >
+                <Popup>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handlePopupClick(macska)}
+                  >
+                    <img
+                      src={macska.photo}
+                      alt="Cica kép"
+                      style={{
+                        width: "100%",
+                        borderRadius: "10px",
+                        marginBottom: "5px",
+                      }}
+                    />
+                    <strong>Koordináták:</strong>{" "}
+                    {macska.lat.toFixed(5)}, {macska.lon.toFixed(5)}
+                    <br />
+                    <strong>Cím:</strong> {macska.address}
+                  </div>
+                </Popup>
+              </Marker>
+            ) : null
+          )}
         </MapContainer>
       </div>
     </div>

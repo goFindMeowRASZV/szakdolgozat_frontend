@@ -20,7 +20,7 @@ function Bejelentesek() {
   const [expandedRow, setExpandedRow] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
   const [kereso, setKereso] = useState("");
   const [viewMode, setViewMode] = useState("card");
   const [szuresEredmeny, setSzuresEredmeny] = useState(null);
@@ -47,7 +47,6 @@ function Bejelentesek() {
   const handleSearch = async (keyword) => {
     try {
       if (keyword.trim() === "") {
-        // üres keresés esetén visszatérünk az eredeti listához
         getMacsCard();
         setSearchResults(null);
         return;
@@ -65,14 +64,14 @@ function Bejelentesek() {
     navigate("/MacskaProfil");
   };
 
-  let megjelenitendoLista = [];
+  let megjelenitendoLista = null;
 
   if (searchResults && searchResults.length > 0) {
     megjelenitendoLista = searchResults;
   } else if (!kereso && szuresEredmeny && szuresEredmeny.length > 0) {
     megjelenitendoLista = szuresEredmeny;
-  } else {
-    megjelenitendoLista = macskaLISTA || [];
+  } else if (macskaLISTA && macskaLISTA.length >= 0) {
+    megjelenitendoLista = macskaLISTA;
   }
 
   return (
@@ -89,7 +88,15 @@ function Bejelentesek() {
       </div>
       <div className="cicak px-4 pb-8">
         <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-        {viewMode === "card" ? (
+        {!megjelenitendoLista ? (
+          <div className="loader-container">
+            <img
+              src="/images/loading.gif"
+              alt="Betöltés..."
+              className="loader-gif"
+            />
+          </div>
+        ) : viewMode === "card" ? (
           <div className="kepek">
             {megjelenitendoLista.length > 0 ? (
               megjelenitendoLista.map((elem, index) => (

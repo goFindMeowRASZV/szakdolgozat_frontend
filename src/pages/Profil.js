@@ -26,7 +26,8 @@ function Profil() {
     setProfilData(aktualisFelhasznalo || user);
   }, [aktualisFelhasznalo, user, setAktualisFelhasznalo]);
 
-  const isSajatProfil = !aktualisFelhasznalo || aktualisFelhasznalo.id === user.id;
+  const isSajatProfil =
+    !aktualisFelhasznalo || aktualisFelhasznalo.id === user.id;
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -79,7 +80,15 @@ function Profil() {
   };
 
   if (!profilData) {
-    return <div>Betöltés...</div>;
+    return (
+      <div className="loader-container">
+        <img
+          src="/images/loading.gif"
+          alt="Betöltés..."
+          className="loader-gif"
+        />
+      </div>
+    );
   }
 
   return (

@@ -83,7 +83,13 @@ function Menhely() {
           />
         )
       ) : (
-        <p>Betöltés...</p>
+        <div className="loader-container">
+          <img
+            src="/images/loading.gif"
+            alt="Betöltés..."
+            className="loader-gif"
+          />
+        </div>
       )}
     </div>
   );
