@@ -8,6 +8,7 @@ const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
   const navigate = useNavigate();
+  const [aktualisFelhasznalo, setAktualisFelhasznalo] = useState(null);
   const [macskaLISTA, setMacskaLista] = useState([]);
   const [menhelyLISTA, setMenhelyLista] = useState([]);
   const [orokbeadottMenhelyLISTA, setOrokbeadottMenhelyLista] = useState([]);
@@ -215,6 +216,8 @@ export const ApiProvider = ({ children }) => {
         getMacsCard,
         aktualisMacska,
         setAktualisMacska,
+        aktualisFelhasznalo,
+        setAktualisFelhasznalo,
         shelterCat,
         menhelyLISTA,
         getMacsCardMenhely,

@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
-import { Modal, Button, Form } from "react-bootstrap";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useNavigate } from "react-router-dom";
 import useApiContext from "../contexts/ApiContext";
 import { statusIcons } from "../assets/icons/MarkerIcons";
 import "../Terkep.css";
@@ -15,6 +21,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
+// Új marker hozzáadását kezelő komponens (ha kell később)
 function ClickableMap({ onMarkerAdd }) {
   useMapEvents({
     click(e) {
@@ -24,89 +31,87 @@ function ClickableMap({ onMarkerAdd }) {
   return null;
 }
 
-function Terkep() {
-  const position = [47.4979, 19.0402];
+export default function Terkep() {
+  const position = [47.4979, 19.0402]; // Budapest
   const zoom = 13;
 
-  const { macskaLISTA, getMapReports } = useApiContext();
+  const navigate = useNavigate();
+  const { macskaLISTA, getMapReports, setAktualisMacska } = useApiContext();
 
-  const [markers, setMarkers] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [currentLatLng, setCurrentLatLng] = useState(null);
-  const [formData, setFormData] = useState({
-    status: "",
-    address: "",
-    color: "",
-    pattern: "",
-  });
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     getMapReports();
   }, []);
-
-  useEffect(() => {
-    getMapReports();
-  }, []);
-
-  useEffect(() => {
-    console.log("macskaLISTA:", macskaLISTA);
-  }, [macskaLISTA]);
-
 
   const handleMarkerAdd = (latlng) => {
     setCurrentLatLng(latlng);
     setShowModal(true);
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handlePopupClick = (macska) => {
+    setAktualisMacska(macska);
+    navigate("/MacskaProfil");
   };
-
-  /* const handleSubmit = (e) => {
-    e.preventDefault();
-    setMarkers([...markers, { latlng: currentLatLng, data: formData }]);
-    setShowModal(false);
-    setFormData({ status: "", address: "", color: "", pattern: "" });
-  }; */
 
   return (
     <div>
-      <h1>Térkép</h1>
-      <div className = "terkep" style={{
-        height: "40vw",
-        width: "80%",
-        margin: "0 auto", 
-        borderRadius: "20px", 
-        overflow: "hidden",
-      }}>
-        <MapContainer center={position} zoom={zoom} style={{ height: "100%", width: "100%" }}>
+      <h1 className="text-center my-4">Térkép</h1>
+      <div
+        className="terkep"
+        style={{
+          height: "40vw",
+          width: "80%",
+          margin: "0 auto",
+          borderRadius: "20px",
+          overflow: "hidden",
+        }}
+      >
+        <MapContainer
+          center={position}
+          zoom={zoom}
+          style={{ height: "100%", width: "100%" }}
+        >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <ClickableMap onMarkerAdd={handleMarkerAdd} />
+
           {macskaLISTA &&
             macskaLISTA.map((macska, index) =>
               macska.lat && macska.lon ? (
                 <Marker
                   key={index}
                   position={[macska.lat, macska.lon]}
-                  icon={statusIcons[macska.status.toLowerCase()] || new L.Icon.Default()}
+                  icon={
+                    statusIcons[macska.status?.toLowerCase()] ||
+                    new L.Icon.Default()
+                  }
                 >
                   <Popup>
-                    <img src={macska.photo} alt="Cica kép" style={{ width: "100%" }} />
-                    <br />
-                    <strong>Koordináták:</strong>
-                    {macska.lat?.toFixed(5)}, {macska.lon?.toFixed(5)}
-                    <br />
-                    <strong>Cím:</strong> {macska.address}
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handlePopupClick(macska)}
+                    >
+                      <img
+                        src={macska.photo}
+                        alt="Cica kép"
+                        style={{
+                          width: "100%",
+                          borderRadius: "10px",
+                          marginBottom: "5px",
+                        }}
+                      />
+                      <strong>Koordináták:</strong>{" "}
+                      {macska.lat.toFixed(5)}, {macska.lon.toFixed(5)}
+                      <br />
+                      <strong>Cím:</strong> {macska.address}
+                    </div>
                   </Popup>
                 </Marker>
               ) : null
             )}
         </MapContainer>
       </div>
-
-      
     </div>
   );
 }
-
-export default Terkep;

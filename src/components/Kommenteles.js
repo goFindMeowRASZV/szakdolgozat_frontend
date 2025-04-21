@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import useAuthContext from "../contexts/AuthContext";
 import useApiContext from "../contexts/ApiContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Kommenteles = ({ reportId }) => {
   const { user } = useAuthContext();
-  const { comments, getComments, deleteComment, createComment } =
-    useApiContext();
+  const { comments, getComments, deleteComment, createComment, setAktualisFelhasznalo } = useApiContext();
 
   const [content, setContent] = useState("");
   const [photo, setPhoto] = useState(null);
   const bottomRef = useRef(null);
   const [modalPhoto, setModalPhoto] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (reportId) {
@@ -40,7 +41,6 @@ const Kommenteles = ({ reportId }) => {
       toast.success("Komment sikeresen elküldve!");
       getComments(reportId);
 
-      // Smooth scroll to the bottom
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 200);
@@ -61,87 +61,95 @@ const Kommenteles = ({ reportId }) => {
     }
   };
 
+  const handleUserClick = (commentUser) => {
+    console.log("Kiválasztott kommentelő:", commentUser);
+    setAktualisFelhasznalo(commentUser);
+    navigate("/profil");
+  };
+  
+
   return (
     <>
       <div className="container">
         <div className="row">
           <div className="panel panel-default widget">
             <div className="panel-heading">
-              <span className="glyphicon glyphicon-comment"></span>
               <h3 className="panel-title">Kommentek</h3>
               <span className="label label-info">{comments.length}</span>
             </div>
 
             <div className="panel-body">
               <ul className="list-group">
-                {comments.map((comment, idx) => {
-                  console.log("comment", comment);
-                  return (
-                    <li
-                      className="list-group-item comment"
-                      key={comment.id || idx}
-                    >
-                      <div className="row">
-                        <div className="col-xs-2 col-md-1">
-                        <a href="/profil">
+                {comments.map((comment, idx) => (
+                  <li
+                    className="list-group-item comment"
+                    key={comment.id || idx}
+                  >
+                    <div className="row">
+                      <div className="col-xs-2 col-md-1">
+                        <span
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleUserClick(comment.user)}
+                        >
                           <img
-                          src={`http://localhost:8000${comment.user.profile_picture}`}
+                            src={`http://localhost:8000${comment.user.profile_picture}`}
                             className="kommentProfil"
                             alt="Profilkép"
                           />
-                        </a>
-                        </div>
-                        <div className="col-xs-10 col-md-11">
-                          <div className="mic-info">
-                            <a href="/profil">
-                              {comment.user?.name || "Ismeretlen felhasználó"}
-                            </a>{" "}
-                            on{" "}
-                            {new Date(comment.created_at).toLocaleDateString()}
-                          </div>
-
-                          <div className="comment-text mt-1 mb-1">
-                            {comment.content}
-                          </div>
-
-                          {comment.photo && (
-                            <img
-                              src={comment.photo}
-                              alt="Komment kép"
-                              style={{
-                                maxWidth: "200px",
-                                borderRadius: "6px",
-                                cursor: "pointer",
-                              }}
-                              className="mb-2"
-                              onClick={() => setModalPhoto(comment.photo)}
-                            />
-                          )}
-
-                          {(user.id === comment.user?.id ||
-                            user.role === 0) && (
-                            <div className="action">
-                              <button
-                                type="button"
-                                className="kukaGomb"
-                                title="Delete"
-                                onClick={() =>
-                                  handleDelete(comment.report, comment.user.id)
-                                }
-                              >
-                                <img
-                                  src="/images/bin.png"
-                                  alt="Törlés"
-                                  className="kukaGombKep"
-                                />
-                              </button>
-                            </div>
-                          )}
-                        </div>
+                        </span>
                       </div>
-                    </li>
-                  );
-                })}
+                      <div className="col-xs-10 col-md-11">
+                        <div className="mic-info">
+                          <span
+                            style={{ cursor: "pointer", color: "dodgerblue" }}
+                            onClick={() => handleUserClick(comment.user)}
+                          >
+                            {comment.user?.name || "Ismeretlen felhasználó"}
+                          </span>{" "}
+                          – {new Date(comment.created_at).toLocaleDateString()}
+                        </div>
+
+                        <div className="comment-text mt-1 mb-1">
+                          {comment.content}
+                        </div>
+
+                        {comment.photo && (
+                          <img
+                            src={comment.photo}
+                            alt="Komment kép"
+                            style={{
+                              maxWidth: "200px",
+                              borderRadius: "6px",
+                              cursor: "pointer",
+                            }}
+                            className="mb-2"
+                            onClick={() => setModalPhoto(comment.photo)}
+                          />
+                        )}
+
+                        {(user.id === comment.user?.id || user.role === 0) && (
+                          <div className="action">
+                            <button
+                              type="button"
+                              className="kukaGomb"
+                              title="Törlés"
+                              onClick={() =>
+                                handleDelete(comment.report, comment.user.id)
+                              }
+                            >
+                              <img
+                                src="/images/bin.png"
+                                alt="Törlés"
+                                className="kukaGombKep"
+                              />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+                <div ref={bottomRef} />
               </ul>
             </div>
 
@@ -169,6 +177,7 @@ const Kommenteles = ({ reportId }) => {
           </div>
         </div>
       </div>
+
       {modalPhoto && (
         <div
           className="modal-backdrop-custom"
@@ -184,4 +193,5 @@ const Kommenteles = ({ reportId }) => {
     </>
   );
 };
+
 export default Kommenteles;
