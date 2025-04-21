@@ -1,0 +1,14 @@
+
+.szuresKereses{
+    display: flex;
+    flex-direction: column;
+
+}
+.szures{
+    display: flex;
+    flex-direction: row;
+
+}
+.select{
+    width: 20% !important;
+}

@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { myAxios } from "./contexts/MyAxios";
 import useAuthContext from "./contexts/AuthContext";
+import Orokbeadottak from "./pages/Orokbeadottak";
 
 function App() {
   const { getUser } = useAuthContext();
@@ -45,6 +46,7 @@ function App() {
           <Route path="bejelentes" element={<Bejelentes />} />
           <Route path="bejelentesek" element={<Bejelentesek />} />
           <Route path="menhely" element={<Menhely />} />
+          <Route path="orokbeadott" element={<Orokbeadottak />} />
           <Route path="szures" element={<Szures />} />
           <Route path="terkep" element={<Terkep />} />
           <Route path="MacskaProfil" element={<MacskaProfil />} />

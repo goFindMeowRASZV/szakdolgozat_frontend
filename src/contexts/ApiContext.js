@@ -2,12 +2,15 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { myAxios } from "./MyAxios.js";
 import useAuthContext from "./AuthContext.js";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ApiContext = createContext();
 
 export const ApiProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [macskaLISTA, setMacskaLista] = useState([]);
   const [menhelyLISTA, setMenhelyLista] = useState([]);
+  const [orokbeadottMenhelyLISTA, setOrokbeadottMenhelyLista] = useState([]);
   const [szuresLISTA, setSzuresLista] = useState([]);
   const [aktualisMacska, setAktualisMacska] = useState(null);
   const [comments, setComments] = useState([]); // ApiContext.js-ben
@@ -46,6 +49,14 @@ export const ApiProvider = ({ children }) => {
       console.error("Hiba a menhelyi lista lekérésénél:", error);
     }
   };
+  const getOrokbeadottMacsCardMenhely = async () => {
+    try {
+      const { data } = await myAxios.get("/api/get-adopted-sheltered-reports");
+      setOrokbeadottMenhelyLista(data);
+    } catch (error) {
+      console.error("Hiba a menhelyi lista lekérésénél:", error);
+    }
+  };
 
   const getMapReports = async () => {
     try {
@@ -58,16 +69,18 @@ export const ApiProvider = ({ children }) => {
 
   //szűrési jelentések
   const getReportsFilter = async (filters) => {
-    const { userStatus, color, pattern } = filters;
-    const endpoint = `/api/get-reports-filter/${userStatus || ""},${
+    const { status, color, pattern } = filters;
+    const endpoint = `/api/get-report-filter/${status || ""},${
       color || ""
     },${pattern || ""}`;
     try {
       const { data } = await myAxios.get(endpoint);
       setSzuresLista(Array.isArray(data) ? data : []);
+      return(data);
     } catch (error) {
       console.error("Hiba történt a lekérdezés során:", error);
     }
+  
   };
   const getShelteredReportsFilter = async (filters) => {
     const { color, pattern } = filters;
@@ -77,6 +90,7 @@ export const ApiProvider = ({ children }) => {
     try {
       const { data } = await myAxios.get(endpoint);
       setSzuresLista(Array.isArray(data) ? data : []);
+      return(data);
     } catch (error) {
       console.error("Hiba történt a lekérdezés során:", error);
     }
@@ -145,6 +159,21 @@ export const ApiProvider = ({ children }) => {
       }
     };
 
+  
+    const orokbeadasMenhely = async (id, payload) => {
+      try {
+        const response = await myAxios.patch(`/api/sheltered-cats/${id}/orokbeadas`, payload);
+        toast.success("Sikeres örökbeadás!");
+        navigate("/orokbefogadottak");
+        return response.data;
+
+      } catch (error) {
+        console.error("Hiba az örökbeadás során:", error);
+        toast.error("Nem sikerült az örökbeadás.");
+        throw error;
+      }
+    };
+    
     
     const updateReport = async (id, data) => {
       try {
@@ -202,7 +231,11 @@ export const ApiProvider = ({ children }) => {
         getMapReports,
         submitAdoptionRequest,
         updateShelteredCat,
-        updateReport
+        updateReport,
+        orokbeadasMenhely,
+        getOrokbeadottMacsCardMenhely,
+        orokbeadottMenhelyLISTA,
+        setOrokbeadottMenhelyLista
       }}
     >
       {children}
