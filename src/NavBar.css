@@ -94,31 +94,41 @@
 @media screen and (max-width: 580px) {
   .menu {
     display: none;
-    height: 0; /* 🔥 fontos! ne legyen magassága! */
-    overflow: hidden;
+    flex-direction: column;
+    position: absolute;
+    top: 39px;
+    left: 0;
+    width: 100vw;
+    max-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 10px 0;
+    overflow-y: auto;
+    z-index: 999;
+    min-height: 300px !important;
   }
 
   .menu.menu-open {
     display: flex;
-    flex-direction: column;
-    position: absolute;
-    top: 39px;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 10;
-    height: auto;
-    padding: 5px 0;
   }
 
   .menu > li {
     width: 100%;
     text-align: center;
-    margin: 5px 0;
+    margin: 8px 0;
   }
 
   .hamburger {
     display: block;
-    z-index: 11;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 39px;
+    z-index: 1001;
   }
 
   .logOut {
@@ -126,8 +136,11 @@
     margin-left: 0;
     top: auto;
     right: auto;
+    width: 100%;
+    text-align: center;
   }
 }
+
 
 /* Asztali nézet: min-width 581px */
 @media screen and (min-width: 581px) {
