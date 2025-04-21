@@ -1,0 +1,145 @@
+/* Navbar alap */
+.navbar-expand-sm {
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Menü elemek */
+.menu {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 40px;
+  align-items: center;
+  z-index: 1;
+}
+
+.menu > li {
+  border: 1px solid white;
+  border-radius: 35px;
+  margin:1px 1px 1px 1px;
+  padding: 2px;
+}
+
+.menu > li > a {
+  color: white;
+  font-weight: 450;
+  padding: 5px 20px 5px;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.menu > li > a:hover {
+  color: rgb(209, 195, 189);
+}
+
+.menu > li:hover {
+  background-color: rgba(255, 255, 255, 0.26);
+}
+
+.menu > li > a:focus {
+  color: rgb(209, 195, 189);
+}
+
+.menu > li:focus {
+  background-color: rgba(255, 255, 255, 0.26);
+}
+
+/* Kijelentkezés stílus */
+.logOut {
+  margin-left: auto;
+  position: absolute;
+  top: 0;
+  right: 1px;
+  height: 39px;
+  background-color: rgba(255, 255, 255, 0.26);
+}
+
+.logOut:hover {
+  background-color: rgba(51, 51, 51, 0) !important;
+}
+
+.logOut > a:hover {
+  color: #ffffff !important;
+}
+
+/* Hamburger ikon alapértelmezetten rejtve */
+.hamburger {
+  display: none;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  bottom: 10px;
+  right: 10px;
+  height: 31px;
+  padding-top: 0px;
+  padding-bottom: 8px;
+  z-index: 1001;
+}
+
+.hamburger-wrapper {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+/* Mobilnézet: max-width 580px */
+@media screen and (max-width: 580px) {
+  .menu {
+    display: none;
+    height: 0; /* 🔥 fontos! ne legyen magassága! */
+    overflow: hidden;
+  }
+
+  .menu.menu-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 39px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+    height: auto;
+    padding: 5px 0;
+  }
+
+  .menu > li {
+    width: 100%;
+    text-align: center;
+    margin: 5px 0;
+  }
+
+  .hamburger {
+    display: block;
+    z-index: 11;
+  }
+
+  .logOut {
+    position: relative;
+    margin-left: 0;
+    top: auto;
+    right: auto;
+  }
+}
+
+/* Asztali nézet: min-width 581px */
+@media screen and (min-width: 581px) {
+  .menu {
+    display: flex !important;
+    flex-direction: row;
+    position: static;
+    background: none;
+    height: 39px;
+  }
+
+  .hamburger {
+    display: none !important;
+  }
+}

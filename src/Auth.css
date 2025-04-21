@@ -1,0 +1,39 @@
+/* Bejelentkezés és regisztráció */
+.bejelentkezesHatter,
+.regisztracioHatter {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5%;
+  max-width: 40%;
+  min-width: 420px;
+  border-radius: 35px;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.4);
+  color: white;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.bejelentkezesHatter {
+  background-image: url('/public/images/blurredHatter2.png');
+}
+
+.regisztracioHatter {
+  background-image: url('/public/images/blurredHatter2.png');
+}
+
+.bejelentkezes {
+    margin-top: 100px;
+  }
+
+  @media screen and (max-width: 420px) {
+    .bejelentkezesHatter,
+    .regisztracioHatter {
+      max-width: 95%;
+      min-width: unset;
+      padding: 20px;
+    }
+
+  }
