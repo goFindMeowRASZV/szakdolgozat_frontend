@@ -8,7 +8,6 @@ import "leaflet/dist/leaflet.css";
 import useApiContext from "../contexts/AuthContext";
 
 
-// Az alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
@@ -26,10 +25,10 @@ function ClickableMap({ onMarkerAdd }) {
 }
 
 function TerkepCreateReport() {
-  const position = [47.4979, 19.0402];  // Alapértelmezett középpont
+  const position = [47.4979, 19.0402];  
   const zoom = 13;
 
-  const { macskaLISTA, getMacsCard  } = useApiContext();  // Az összes macska adatának lekérése
+  const { macskaLISTA, getMacsCard  } = useApiContext(); 
   const { user } = useAuthContext();
   const [markers, setMarkers] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -71,7 +70,7 @@ function TerkepCreateReport() {
         <MapContainer center={position} zoom={zoom} style={{ height: "100%", width: "100%" }}>
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <ClickableMap onMarkerAdd={handleMarkerAdd} />
-          {/* A macskaLISTA előtt egy null ellenőrzés */}
+         
           {macskaLISTA && macskaLISTA.map((macska, index) => (
           <Marker key={index} position={[macska.lat, macska.lon]}>
               <Popup>

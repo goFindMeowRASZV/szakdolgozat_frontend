@@ -32,7 +32,6 @@ function Orokbeadottak() {
   const handleSearch = async (keyword) => {
     try {
       if (keyword.trim() === "") {
-        // üres keresés esetén visszatérünk az eredeti listához
         getOrokbeadottMacsCardMenhely();
         setSearchResults(null);
         return;

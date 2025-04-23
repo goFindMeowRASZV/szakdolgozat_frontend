@@ -18,7 +18,6 @@ const Kommenteles = ({ reportId }) => {
     if (reportId) {
       getComments(reportId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportId]);
 
   const handleSubmit = async (e) => {

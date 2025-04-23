@@ -10,7 +10,7 @@ const Kereses = ({ onSearch }) => {
 
   const handleClear = () => {
     setQuery("");
-    onSearch(""); // törléskor is lefuttatjuk a keresést üres stringgel
+    onSearch(""); 
   };
 
   return (

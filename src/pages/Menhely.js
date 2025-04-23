@@ -31,7 +31,6 @@ function Menhely() {
   const handleSearch = async (keyword) => {
     try {
       if (keyword.trim() === "") {
-        // üres keresés esetén visszatérünk az eredeti listához
         getMacsCardMenhely();
         setSearchResults(null);
         return;

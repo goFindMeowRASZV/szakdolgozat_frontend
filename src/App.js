@@ -28,8 +28,8 @@ function App() {
 
   useEffect(() => {
     const initApp = async () => {
-      await myAxios.get("/sanctum/csrf-cookie"); // csak egyszer
-      await getUser(); // csak egyszer
+      await myAxios.get("/sanctum/csrf-cookie");  
+      await getUser(); 
     };
 
     initApp();

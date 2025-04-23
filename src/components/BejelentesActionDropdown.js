@@ -6,7 +6,6 @@ const BejelentesActionDropdown = ({ report }) => {
   const wrapperRef = useRef();
   const [showEditModal, setShowEditModal] = useState(false);
 
-  // Kattintás kívülre: bezárja a menüt
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {

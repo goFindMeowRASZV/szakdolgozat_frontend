@@ -1,7 +1,6 @@
 import React from 'react';
 
 function MacsCard(props) {
-    //const url='http://localhost:8000';
   
     return (
       <div className="cica"> 

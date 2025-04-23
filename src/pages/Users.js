@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../contexts/MyAxios";
 import UserModal from "../components/UserModal.js";
-import "../MenhelyListaNezet.css"; // új: újrahasználjuk a stílust
+import "../MenhelyListaNezet.css"; 
 
 const Users = () => {
   const { user } = useAuthContext();
@@ -111,7 +111,6 @@ const Users = () => {
         </table>
       </div>
 
-      {/* Modalok */}
       {showCreateModal && (
         <UserModal
           onClose={() => setShowCreateModal(false)}
