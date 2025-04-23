@@ -18,12 +18,18 @@ const Kommenteles = ({ reportId }) => {
   const [photo, setPhoto] = useState(null);
   const bottomRef = useRef(null);
   const [modalPhoto, setModalPhoto] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (reportId) {
-      getComments(reportId);
-    }
+    const fetchComments = async () => {
+      if (reportId) {
+        setLoading(true);
+        await getComments(reportId);
+        setLoading(false);
+      }
+    };
+    fetchComments();
   }, [reportId]);
 
   const handleSubmit = async (e) => {
@@ -41,7 +47,7 @@ const Kommenteles = ({ reportId }) => {
       setContent("");
       setPhoto(null);
       toast.success("Komment sikeresen elküldve!");
-      getComments(reportId);
+      await getComments(reportId);
 
       setTimeout(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -79,85 +85,95 @@ const Kommenteles = ({ reportId }) => {
             </div>
 
             <div className="panel-body">
-              <ul className="list-group">
-                {comments.map((comment, idx) => (
-                  <li className="list-group-item comment" key={comment.id || idx}>
-                    <div className="row">
-                      <div className="col-xs-2 col-md-1">
-                        <span
-                          style={{ cursor: "pointer" }}
-                          onClick={() => handleUserClick(comment.user)}
-                        >
-                          <img
-                            src={`http://localhost:8000${comment.user.profile_picture}`}
-                            className="kommentProfil"
-                            alt="Profilkép"
-                          />
-                        </span>
-                      </div>
-                      <div className="col-xs-10 col-md-11">
-                        <div className="mic-info">
+              {loading ? (
+                <div className="loader-container-komment">
+                  <img
+                    src="/images/loading.gif"
+                    alt="Betöltés..."
+                    className="loader-gif"
+                  />
+                </div>
+              ) : (
+                <ul className="list-group">
+                  {comments.map((comment, idx) => (
+                    <li className="list-group-item comment" key={comment.id || idx}>
+                      <div className="row">
+                        <div className="col-xs-2 col-md-1">
                           <span
-                            style={{ cursor: "pointer", color: "dodgerblue" }}
+                            style={{ cursor: "pointer" }}
                             onClick={() => handleUserClick(comment.user)}
                           >
-                            {comment.user?.name || "Ismeretlen felhasználó"}
-                          </span>{" "}
-                          – {new Date(comment.created_at).toLocaleDateString()}
+                            <img
+                              src={`http://localhost:8000${comment.user.profile_picture}`}
+                              className="kommentProfil"
+                              alt="Profilkép"
+                            />
+                          </span>
                         </div>
+                        <div className="col-xs-10 col-md-11">
+                          <div className="mic-info">
+                            <span
+                              style={{ cursor: "pointer", color: "dodgerblue" }}
+                              onClick={() => handleUserClick(comment.user)}
+                            >
+                              {comment.user?.name || "Ismeretlen felhasználó"}
+                            </span>{" "}
+                            – {new Date(comment.created_at).toLocaleDateString()}
+                          </div>
 
-                        <div className="comment-text mt-1 mb-1">
-                          {comment.content}
-                        </div>
+                          <div className="comment-text mt-1 mb-1">
+                            {comment.content}
+                          </div>
 
-                        {comment.photo && (
-                          <img
-                            src={
-                              comment.photo.startsWith("http")
-                                ? comment.photo
-                                : `http://localhost:8000${comment.photo}`
-                            }
-                            alt="Komment kép"
-                            style={{
-                              maxWidth: "200px",
-                              borderRadius: "6px",
-                              cursor: "pointer",
-                            }}
-                            className="mb-2"
-                            onClick={() =>
-                              setModalPhoto(
+                          {comment.photo && (
+                            <img
+                              src={
                                 comment.photo.startsWith("http")
                                   ? comment.photo
                                   : `http://localhost:8000${comment.photo}`
-                              )
-                            }
-                          />
-                        )}
-
-                        {(user?.id === comment.user?.id || user?.role === 0) && (
-                          <div className="action">
-                            <button
-                              type="button"
-                              className="kukaGomb"
-                              title="Törlés"
-                              onClick={() =>
-                                handleDelete(comment.report, comment.user.id)
                               }
-                            >
-                              <img
-                                src="/images/bin.png"
-                                alt="Törlés"
-                                className="kukaGombKep"
-                              />
-                            </button>
-                          </div>
-                        )}
+                              alt="Komment kép"
+                              style={{
+                                maxWidth: "200px",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                              }}
+                              className="mb-2"
+                              onClick={() =>
+                                setModalPhoto(
+                                  comment.photo.startsWith("http")
+                                    ? comment.photo
+                                    : `http://localhost:8000${comment.photo}`
+                                )
+                              }
+                            />
+                          )}
+
+                          {user?.role === 0 && (
+                            <div className="action">
+                              <button
+                                type="button"
+                                className="kukaGomb"
+                                title="Törlés"
+                                onClick={() =>
+                                  handleDelete(comment.report, comment.user.id)
+                                }
+                              >
+                                <img
+                                  src="/images/bin.png"
+                                  alt="Törlés"
+                                  className="kukaGombKep"
+                                />
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </li>
-                ))}
-                <div ref={bottomRef} />
-              </ul>
+                    </li>
+                  ))}
+                  <div ref={bottomRef} />
+                </ul>
+              )}
             </div>
 
             <div className="panel-body">

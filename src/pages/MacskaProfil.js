@@ -55,7 +55,8 @@ function MacskaProfil() {
           </p>
         </div>
       </div>
-      {aktualisMacska.status === "m" && (
+
+      {user?.role === 2 && aktualisMacska.status === "m" && (
         <>
           <button className="profilFormBtn" onClick={() => setShowModal(true)}>
             Örökbefogadom
@@ -66,7 +67,11 @@ function MacskaProfil() {
             macska={aktualisMacska}
             user={user}
           />
+        </>
+      )}
 
+      {aktualisMacska.status === "m" && (
+        <>
           <button
             onClick={() => setShowOrokbeadasModal(true)}
             className="profilFormBtn"

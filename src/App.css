@@ -19,7 +19,16 @@ html, body, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 20px;
+  padding-top: 80px;
+}
+.loader-container-komment {
+  height: 100px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .loader-gif {
@@ -233,13 +242,14 @@ h3 {
   justify-content: center;
   padding: 0;
   margin: 0;
-  border: 0;
+  border: 1.5px solid black;
   border-radius: 6px;
-  background-color: rgb(218, 12, 12);
+  background-color: rgb(223, 223, 223);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .kukaGomb:hover {
-  background-color: rgb(175, 9, 9);
+  background-color: rgba(77, 77, 77, 0.292);
 }
 
 .kukaGombKep {

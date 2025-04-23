@@ -9,6 +9,7 @@ import "../assets/styles/MenhelyListaNezet.css";
 const Users = () => {
   const { user } = useAuthContext();
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -23,6 +24,7 @@ const Users = () => {
   }, [user]);
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const res = await myAxios.get("/api/get-users");
       const filtered =
@@ -30,6 +32,8 @@ const Users = () => {
       setUsers(filtered);
     } catch (err) {
       toast.error("Hiba a felhasználók lekérésekor.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,55 +65,64 @@ const Users = () => {
         </button>
       </div>
 
-      <div className="menhely-lista-container">
-        <table className="menhely-lista-table">
-          <thead>
-            <tr>
-              <th>Név</th>
-              <th>Email</th>
-              <th>Szerepkör</th>
-              <th>Műveletek</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u.id}>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>
-                  {u.role === 0 ? "Admin" : u.role === 1 ? "Staff" : "User"}
-                </td>
-                <td className="px-4 py-2 flex gap-2 justify-center">
-                  <button
-                    className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800 transition"
-                    onClick={() => {
-                      setSelectedUser(u);
-                      setShowEditModal(true);
-                    }}
-                  >
-                    Szerkesztés
-                  </button>
-
-                  <button
-                    className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition disabled:opacity-50"
-                    onClick={() => handleDelete(u.id)}
-                    disabled={u.id === user.id}
-                  >
-                    Törlés
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {users.length === 0 && (
+      {loading ? (
+        <div className="loader-container">
+          <img
+            src="/images/loading.gif"
+            alt="Betöltés..."
+            className="loader-gif"
+          />
+        </div>
+      ) : (
+        <div className="menhely-lista-container">
+          <table className="menhely-lista-table">
+            <thead>
               <tr>
-                <td colSpan="4" className="text-center py-6 text-gray-500">
-                  Nincs felhasználó.
-                </td>
+                <th>Név</th>
+                <th>Email</th>
+                <th>Szerepkör</th>
+                <th>Műveletek</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.name}</td>
+                  <td>{u.email}</td>
+                  <td>
+                    {u.role === 0 ? "Admin" : u.role === 1 ? "Staff" : "User"}
+                  </td>
+                  <td className="px-4 py-2 flex gap-2 justify-center">
+                    <button
+                      className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800 transition"
+                      onClick={() => {
+                        setSelectedUser(u);
+                        setShowEditModal(true);
+                      }}
+                    >
+                      Szerkesztés
+                    </button>
+                    <button
+                      className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition disabled:opacity-50"
+                      onClick={() => handleDelete(u.id)}
+                      disabled={u.id === user.id}
+                    >
+                      Törlés
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {users.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center py-6 text-gray-500">
+                    Nincs felhasználó.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {showCreateModal && (
         <UserModal

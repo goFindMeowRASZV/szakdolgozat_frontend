@@ -16,23 +16,32 @@ function Orokbeadottak() {
     setAktualisMacska,
   } = useApiContext();
   const [viewMode, setViewMode] = useState("card");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [szuresEredmeny, setSzuresEredmeny] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const [kereso, setKereso] = useState("");
 
   useEffect(() => {
-    getOrokbeadottMacsCardMenhely();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    setLoading(true);
+    await getOrokbeadottMacsCardMenhely();
+    setLoading(false);
+  };
 
   const handleItemClick = (elem) => {
     navigate(`/MacskaProfil`);
     setAktualisMacska(elem);
   };
+
   const handleSearch = async (keyword) => {
     try {
+      setKereso(keyword);
       if (keyword.trim() === "") {
-        getOrokbeadottMacsCardMenhely();
+        fetchData();
         setSearchResults(null);
         return;
       }
@@ -50,7 +59,7 @@ function Orokbeadottak() {
 
   if (searchResults && searchResults.length > 0) {
     megjelenitendoLista = searchResults;
-  } else {
+  } else if (!kereso) {
     megjelenitendoLista = orokbeadottMenhelyLISTA || [];
   }
 
@@ -61,15 +70,28 @@ function Orokbeadottak() {
         <Kereses
           onSearch={(keyword) => {
             handleSearch(keyword);
-            setKereso(keyword);
           }}
         />
       </div>
 
-      <MenhelyListaNezet
-        data={megjelenitendoLista}
-        onRowClick={handleItemClick}
-      />
+      {loading ? (
+        <div className="loader-container">
+          <img
+            src="/images/loading.gif"
+            alt="Betöltés..."
+            className="loader-gif"
+          />
+        </div>
+      ) : megjelenitendoLista.length > 0 ? (
+        <MenhelyListaNezet
+          data={megjelenitendoLista}
+          onRowClick={handleItemClick}
+        />
+      ) : (
+        <p className="text-center text-gray-500 py-6">
+          Jelenleg nincs örökbeadott cica.
+        </p>
+      )}
     </div>
   );
 }
