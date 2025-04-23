@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import useAuthContext from "../contexts/AuthContext";
-import "../Bejelentes.css";
+import "../assets/styles/Bejelentes.css";
 
 const Bejelentes = () => {
   const { createReport, user } = useAuthContext();

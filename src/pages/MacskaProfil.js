@@ -3,7 +3,7 @@ import useAuthContext from "../contexts/AuthContext";
 import useApiContext from "../contexts/ApiContext";
 import Kommenteles from "../components/Kommenteles";
 import OrokbefogadasModal from "../components/OrokbefogadasModal";
-import "../MacskaProfil.css";
+import "../assets/styles/MacskaProfil.css";
 import OrokbeadasModal from "../components/OrokbeadasModal";
 
 function MacskaProfil() {

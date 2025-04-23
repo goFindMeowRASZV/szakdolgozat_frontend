@@ -7,7 +7,7 @@ import Kereses from "../components/Kereses";
 import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle.js";
 import { myAxios } from "../contexts/MyAxios.js";
-import "../SzuresKereses.css";
+import "../assets/styles/SzuresKereses.css";
 
 function Orokbeadottak() {
   const {

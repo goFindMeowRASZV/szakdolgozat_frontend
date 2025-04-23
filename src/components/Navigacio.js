@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import useAuthContext from "../contexts/AuthContext";
 import useApiContext from "../contexts/ApiContext";
 import { Link, useLocation } from "react-router-dom";
-import "../NavBar.css";
+import "../assets/styles/NavBar.css";
 
 export default function Navigacio() {
   const { user, logout } = useAuthContext();

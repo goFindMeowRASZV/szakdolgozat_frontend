@@ -1,6 +1,6 @@
 import React from "react";
 import BejelentesActionDropdown from "./BejelentesActionDropdown";
-import "../MenhelyListaNezet.css";
+import "../assets/styles/MenhelyListaNezet.css";
 
 export default function BejelentesListaNezet({
   data,
