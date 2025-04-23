@@ -10,7 +10,7 @@ import MacsCard from "../components/MacsCard.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle";
 import BejelentesListaNezet from "../components/BejelentesListaNezet";
 import styles from "../Fonts.module.css";
-import "../SzuresKereses.css";
+import "../assets/styles/SzuresKereses.css";
 
 function Bejelentesek() {
   const { macskaLISTA, getMacsCard, setAktualisMacska } = useApiContext();

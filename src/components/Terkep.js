@@ -11,7 +11,7 @@ import "leaflet/dist/leaflet.css";
 import { useNavigate } from "react-router-dom";
 import useApiContext from "../contexts/ApiContext";
 import { statusIcons } from "../assets/icons/MarkerIcons";
-import "../Terkep.css";
+import "../assets/styles/Terkep.css";
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({

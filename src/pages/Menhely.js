@@ -9,7 +9,7 @@ import MenhelyCardNezet from "../components/MenhelyCardNezet.js";
 import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle.js";
 import { myAxios } from "../contexts/MyAxios.js";
-import "../SzuresKereses.css";
+import "../assets/styles/SzuresKereses.css";
 
 function Menhely() {
   const { menhelyLISTA, getMacsCardMenhely, setAktualisMacska } =

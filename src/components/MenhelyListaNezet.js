@@ -1,5 +1,5 @@
 import React from "react";
-import "../MenhelyListaNezet.css";
+import "../assets/styles/MenhelyListaNezet.css";
 import ActionDropdown from "./ActionDropdown";
 
 function MenhelyListaNezet({ data, onRowClick }) {

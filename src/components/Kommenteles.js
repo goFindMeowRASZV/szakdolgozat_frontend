@@ -2,11 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import useAuthContext from "../contexts/AuthContext";
 import useApiContext from "../contexts/ApiContext";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Kommenteles = ({ reportId }) => {
   const { user } = useAuthContext();
-  const { comments, getComments, deleteComment, createComment, setAktualisFelhasznalo } = useApiContext();
+  const {
+    comments,
+    getComments,
+    deleteComment,
+    createComment,
+    setAktualisFelhasznalo,
+  } = useApiContext();
 
   const [content, setContent] = useState("");
   const [photo, setPhoto] = useState(null);
@@ -22,16 +28,13 @@ const Kommenteles = ({ reportId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!content.trim()) return;
 
     const formData = new FormData();
     formData.append("report", reportId);
     formData.append("user", user.id);
     formData.append("content", content);
-    if (photo) {
-      formData.append("photo", photo);
-    }
+    if (photo) formData.append("photo", photo);
 
     try {
       await createComment(formData, "/api/create-comment");
@@ -61,11 +64,9 @@ const Kommenteles = ({ reportId }) => {
   };
 
   const handleUserClick = (commentUser) => {
-    console.log("Kiválasztott kommentelő:", commentUser);
     setAktualisFelhasznalo(commentUser);
     navigate("/profil");
   };
-  
 
   return (
     <>
@@ -80,10 +81,7 @@ const Kommenteles = ({ reportId }) => {
             <div className="panel-body">
               <ul className="list-group">
                 {comments.map((comment, idx) => (
-                  <li
-                    className="list-group-item comment"
-                    key={comment.id || idx}
-                  >
+                  <li className="list-group-item comment" key={comment.id || idx}>
                     <div className="row">
                       <div className="col-xs-2 col-md-1">
                         <span
@@ -114,7 +112,11 @@ const Kommenteles = ({ reportId }) => {
 
                         {comment.photo && (
                           <img
-                            src={comment.photo}
+                            src={
+                              comment.photo.startsWith("http")
+                                ? comment.photo
+                                : `http://localhost:8000${comment.photo}`
+                            }
                             alt="Komment kép"
                             style={{
                               maxWidth: "200px",
@@ -122,11 +124,17 @@ const Kommenteles = ({ reportId }) => {
                               cursor: "pointer",
                             }}
                             className="mb-2"
-                            onClick={() => setModalPhoto(comment.photo)}
+                            onClick={() =>
+                              setModalPhoto(
+                                comment.photo.startsWith("http")
+                                  ? comment.photo
+                                  : `http://localhost:8000${comment.photo}`
+                              )
+                            }
                           />
                         )}
 
-                        {(user.id === comment.user?.id || user.role === 0) && (
+                        {(user?.id === comment.user?.id || user?.role === 0) && (
                           <div className="action">
                             <button
                               type="button"
@@ -153,25 +161,39 @@ const Kommenteles = ({ reportId }) => {
             </div>
 
             <div className="panel-body">
-              <form onSubmit={handleSubmit}>
-                <textarea
-                  name="content"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Írj egy hozzászólást..."
-                  rows="3"
-                  className="form-control"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setPhoto(e.target.files[0])}
-                  className="form-control mt-2 mb-2"
-                />
-                <button type="submit" className="btn btn-dark btn-round">
-                  Küldés
-                </button>
-              </form>
+              {user ? (
+                <form onSubmit={handleSubmit}>
+                  <textarea
+                    name="content"
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="Írj egy hozzászólást..."
+                    rows="3"
+                    className="form-control"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setPhoto(e.target.files[0])}
+                    className="form-control mt-2 mb-2"
+                  />
+                  <button type="submit" className="btn btn-dark btn-round">
+                    Küldés
+                  </button>
+                </form>
+              ) : (
+                <>
+                  <textarea
+                    placeholder="Írj egy hozzászólást..."
+                    rows="3"
+                    className="form-control"
+                    disabled
+                  />
+                  <div className="mt-2 text-muted" style={{ fontSize: "0.9rem" }}>
+                    💡 <Link to="/bejelentkezes">Jelentkezz be</Link>, hogy hozzászólhass!
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

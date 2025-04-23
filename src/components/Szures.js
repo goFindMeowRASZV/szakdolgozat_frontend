@@ -150,14 +150,6 @@ const Szures = ({ type, onSzures }) => {
           </button>
           </div>
       </form>
-
-      {loading && <div className="loader-container-szures">
-        <img
-          src="/images/loading.gif"
-          alt="Betöltés..."
-          className="loader-gif"
-        />
-      </div>}
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../contexts/MyAxios";
 import UserModal from "../components/UserModal.js";
-import "../MenhelyListaNezet.css"; 
+import "../assets/styles/MenhelyListaNezet.css";
 
 const Users = () => {
   const { user } = useAuthContext();
