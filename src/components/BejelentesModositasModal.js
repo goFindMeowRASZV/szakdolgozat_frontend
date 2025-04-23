@@ -62,7 +62,6 @@ const BejelentesModositasModal = ({ show, onClose, report }) => {
         <Modal.Title>Bejelentés adatainak módosítása</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* 🔒 Eredeti adatok csak olvasásra */}
         <div className="mb-4 text-sm text-muted">
           <div><strong>Cím:</strong> {report?.address}</div>
           <div><strong>Koordináták:</strong> {report?.lat}, {report?.lon}</div>

@@ -119,7 +119,6 @@ const Bejelentes = () => {
     <div className="bejelentes-wrapper">
       <h1>Új bejelentés</h1>
       <Form onSubmit={handleSubmit}>
-        {/* 1. szakasz – két oszlop */}
         <Row>
           <Col md={6}>
             <Form.Group controlId="status">
@@ -218,7 +217,6 @@ const Bejelentes = () => {
           </Col>
         </Row>
 
-        {/* 2. szakasz – egy oszlop */}
         <Form.Group controlId="other_identifying_marks">
           <Form.Label>Egyéb ismertetőjel</Form.Label>
           <Form.Control
@@ -249,7 +247,6 @@ const Bejelentes = () => {
           />
         </Form.Group>
 
-        {/* 3. szakasz – két oszlop */}
         <Row>
           <Col md={6}>
             <Form.Group controlId="photo">

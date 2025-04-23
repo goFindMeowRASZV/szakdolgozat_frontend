@@ -111,7 +111,6 @@ const Users = () => {
         </table>
       </div>
 
-      {/* Modalok */}
       {showCreateModal && (
         <UserModal
           onClose={() => setShowCreateModal(false)}

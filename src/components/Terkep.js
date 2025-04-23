@@ -13,7 +13,6 @@ import useApiContext from "../contexts/ApiContext";
 import { statusIcons } from "../assets/icons/MarkerIcons";
 import "../assets/styles/Terkep.css";
 
-// Alapértelmezett marker ikon beállítása
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
@@ -21,7 +20,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
-// Klikkelhető térkép – ha később szükség lesz rá
 function ClickableMap({ onMarkerAdd }) {
   useMapEvents({
     click(e) {

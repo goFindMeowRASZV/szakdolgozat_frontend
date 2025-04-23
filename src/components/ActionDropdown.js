@@ -8,7 +8,6 @@ const ActionDropdown = ({ macska }) => {
   const { getMacsCardMenhely } = useApiContext();
   const [showEditModal, setShowEditModal] = useState(false);
 
-  // Kattintás kívülre: bezárja a menüt
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -23,7 +22,7 @@ const ActionDropdown = ({ macska }) => {
   
 
   const handleEdit = () => {
-    console.log("Módosítás"); // csak debugra
+    console.log("Módosítás"); 
     setShowEditModal(true);
     setOpen(false);
   };
@@ -46,7 +45,6 @@ const ActionDropdown = ({ macska }) => {
         )}
       </div>
 
-      {/* ✅ Modal ide került be, így mindig renderelve van, de csak show=true-nál látszik */}
       <MenhelyiMacskaModositasModal
         show={showEditModal}
         onClose={() => setShowEditModal(false)}

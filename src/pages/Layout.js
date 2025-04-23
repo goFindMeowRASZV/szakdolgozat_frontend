@@ -4,7 +4,7 @@ import Navigacio from "../components/Navigacio";
 
 function Layout() {
     return (
-        <div /* className="container" */>
+        <div >
             <header className="App-header">
             </header>
                 <Navigacio />

@@ -14,8 +14,8 @@ export const ApiProvider = ({ children }) => {
   const [orokbeadottMenhelyLISTA, setOrokbeadottMenhelyLista] = useState([]);
   const [szuresLISTA, setSzuresLista] = useState([]);
   const [aktualisMacska, setAktualisMacska] = useState(null);
-  const [comments, setComments] = useState([]); // ApiContext.js-ben
-  const { user, setUser } = useAuthContext();
+  const [comments, setComments] = useState([]);
+  const {setUser } = useAuthContext();
 
   useEffect(() => {
     getMacsCard(); 
@@ -68,7 +68,6 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
-  //szűrési jelentések
   const getReportsFilter = async (filters) => {
     const { status, color, pattern } = filters;
     const endpoint = `/api/get-report-filter/${status || ""},${
@@ -97,7 +96,6 @@ export const ApiProvider = ({ children }) => {
     }
   };
 
-    //komment letrehozasa
     const createComment = async (formData, vegpont) => {
         try {
             const response = await myAxios.post(vegpont, formData, {
@@ -107,14 +105,13 @@ export const ApiProvider = ({ children }) => {
                 withCredentials: true,
             });
             console.log("Komment elküldve:", response.data);
-            return response.data; // <<< visszatér az új kommenttel
+            return response.data; 
         } catch (error) {
             console.error("Hiba a komment létrehozásánál:", error.response?.data || error.message);
-            throw error; // <<< hogy a komponensben is lehessen kezelni
+            throw error; 
         }
     };
     
-    //komment törlése
     const deleteComment = async (reportId, userId) => {
       try {
         await myAxios.delete(`/api/delete-comment/${reportId}/${userId}`);
@@ -124,7 +121,6 @@ export const ApiProvider = ({ children }) => {
       }
     };
     
-    //komment lekérése
     const getComments = async (reportId) => {
         try {
             const response = await myAxios.get(`/api/comments/by-report/${reportId}`, {
@@ -138,8 +134,6 @@ export const ApiProvider = ({ children }) => {
     
     
     
-    
-    //MENHELY
     const shelterCat = async (adat, vegpont) => {
         try {
             await myAxios.post(vegpont, adat, { withCredentials: true });
@@ -152,7 +146,7 @@ export const ApiProvider = ({ children }) => {
       try {
         await myAxios.put(`/api/update-sheltered-cat/${catId}`, data);
         toast.success("Sikeres módosítás!");
-        getMacsCardMenhely(); // lista újratöltése
+        getMacsCardMenhely(); 
       } catch (error) {
         console.error("Hiba a macska módosításánál:", error);
         toast.error("Nem sikerült a módosítás.");
@@ -180,7 +174,7 @@ export const ApiProvider = ({ children }) => {
       try {
         await myAxios.put(`/api/update-reports/${id}`, data);
         toast.success("Sikeres módosítás!");
-        getMacsCard(); // lista újratöltése
+        getMacsCard(); 
       } catch (error) {
         console.error("Hiba a bejelentés módosításánál:", error);
         toast.error("Nem sikerült a módosítás.");
@@ -188,7 +182,7 @@ export const ApiProvider = ({ children }) => {
       }
     };
 
-    //örökbefogadás
+  
   const submitAdoptionRequest = async (data) => {
     try {
       const response = await myAxios.post("/api/orokbefogadas", data, {

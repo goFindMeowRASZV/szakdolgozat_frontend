@@ -14,7 +14,6 @@ export default function Bejelentkezes() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    //Összegyűjtjük egyetlen objektumban az űrlap adatokat
     const adat = {
       email: email,
       password: password,
@@ -34,9 +33,7 @@ export default function Bejelentkezes() {
           </label>
           <input
             type="email"
-            // value beállítása a state értékére
             value={email}
-            // state értékének módosítása ha változik a beviteli mező tartalma
             onChange={(e) => {
               setEmail(e.target.value);
             }}
@@ -91,47 +88,3 @@ export default function Bejelentkezes() {
   );
 }
 
-/* import useAuthContext from "../model/contexts/AuthContext";
-
-
-function Bejelentkezes() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-  
-    const navigate = useNavigate();
-    const { loginReg, errors } = useAuthContext();
-  
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-  
-      //Összegyűjtjük egyetlen objektumban az űrlap adatokat
-      const adat = {
-        email: email,
-        password: password,
-      };
-      console.log(adat);
-  
-      loginReg(adat, "/login");
-    };
-
-    return (
-        <div className="m-auto" style={{maxWidth: "400px"}}>
-            <h1 className="text-center">Bejelentkezés</h1>
-        <form onSubmit={handleSubmit}>
-        <div className="mb-3 mt-3">
-          <label htmlFor="email" className="form-label">Email</label>
-          <input type="email" className="form-control" id="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}>
-         </input>
-        </div>
-        <div className="mb-3 mt-3">
-          <label htmlFor="password" className="form-label">Jelszó</label>
-          <input type="password" className="form-control" id="password" placeholder="Jelszó" value={password} onChange={(e)=>{setPassword(e.target.value)}}>
-         </input>
-        </div>
-        <button type="submit" class="btn btn-dark">Bejelentkezés</button>
-        </form>
-        </div>
-    )
-}
-
-export default Bejelentkezes */

@@ -18,7 +18,6 @@ function Profil() {
     new_password_confirmation: "",
   });
 
-  // Frissítjük a belső profil adatokat, ha változik az aktuális felhasználó vagy a bejelentkezett user
   useEffect(() => {
     if (aktualisFelhasznalo?.id === user.id) {
       setAktualisFelhasznalo(null);
