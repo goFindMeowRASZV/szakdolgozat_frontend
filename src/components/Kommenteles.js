@@ -3,6 +3,7 @@ import useAuthContext from "../contexts/AuthContext";
 import useApiContext from "../contexts/ApiContext";
 import { toast } from "react-toastify";
 import { useNavigate, Link } from "react-router-dom";
+import "../assets/styles/Kommentek.css";
 
 const Kommenteles = ({ reportId }) => {
   const { user } = useAuthContext();
@@ -93,6 +94,8 @@ const Kommenteles = ({ reportId }) => {
                     className="loader-gif"
                   />
                 </div>
+              ) : comments.length === 0 ? (
+                <p className="text-muted text-center">Még nincs hozzászólás.</p>
               ) : (
                 <ul className="list-group">
                   {comments.map((comment, idx) => (

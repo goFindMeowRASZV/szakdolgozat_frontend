@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/styles/MacsCard.css"; // importáljuk a hozzá tartozó CSS-t
+import "../assets/styles/MacsCard.css"; 
 
 function MacsCard({ adat }) {
   const statusMapping = {

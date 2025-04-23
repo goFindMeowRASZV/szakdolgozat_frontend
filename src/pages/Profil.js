@@ -44,15 +44,24 @@ function Profil() {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     setCurrentPasswordError(null);
-
+  
     if (passwordData.new_password !== passwordData.new_password_confirmation) {
       setPasswordMatch(false);
       return;
     }
-
+  
     try {
       await changePassword(passwordData);
       toast.success("A jelszó sikeresen frissítve!");
+  
+      // ⬇️ input mezők kiürítése
+      setPasswordData({
+        current_password: "",
+        new_password: "",
+        new_password_confirmation: "",
+      });
+      setIsPasswordValid(null);
+      setPasswordMatch(null);
     } catch (error) {
       if (error.code === "INVALID_CURRENT_PASSWORD") {
         toast.error("❗ A jelenlegi jelszó hibás.");
@@ -61,6 +70,7 @@ function Profil() {
       }
     }
   };
+  
 
   const handlePasswordInputChange = (e) => {
     const { name, value } = e.target;

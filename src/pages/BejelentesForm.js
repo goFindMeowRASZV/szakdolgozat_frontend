@@ -4,16 +4,17 @@ import {
   Button,
   Col,
   Row,
-  ListGroup,
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
 import useAuthContext from "../contexts/AuthContext";
 import "../assets/styles/Bejelentes.css";
 
+
 const Bejelentes = () => {
-  const { createReport, user } = useAuthContext();
+  const { createReport, user} = useAuthContext();
   const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     status: "",
     address: "",
@@ -86,10 +87,21 @@ const Bejelentes = () => {
     setSuggestions([]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createReport({ ...formData, creator_id: user.id }, "/api/create-report");
+    setLoading(true);
+    try {
+      await createReport(
+        { ...formData, creator_id: user.id },
+        "/api/create-report"
+      );
+    } catch (err) {
+      console.error("Hiba történt a beküldéskor:", err);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   const requiredLabel = (label) => (
     <>
@@ -293,14 +305,13 @@ const Bejelentes = () => {
             </Form.Group>
           </Col>
         </Row>
-
         <Button
           variant="dark"
           type="submit"
           className="mt-3"
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          Beküldés
+          {loading ? "Küldés..." : "Beküldés"}
         </Button>
       </Form>
     </div>

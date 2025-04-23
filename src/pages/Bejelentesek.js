@@ -24,9 +24,15 @@ function Bejelentesek() {
   const [kereso, setKereso] = useState("");
   const [viewMode, setViewMode] = useState("card");
   const [szuresEredmeny, setSzuresEredmeny] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getMacsCard();
+    const fetchData = async () => {
+      setLoading(true);
+      await getMacsCard();
+      setLoading(false);
+    };
+    fetchData();
   }, []);
 
   const toggleRowExpansion = (id) => {
@@ -52,10 +58,13 @@ function Bejelentesek() {
         return;
       }
 
+      setLoading(true);
       const { data } = await myAxios.get(`/api/reports-search?q=${keyword}`);
       setSearchResults(data);
+      setLoading(false);
     } catch (error) {
       console.error("Hiba a keresés során:", error);
+      setLoading(false);
     }
   };
 
@@ -88,8 +97,8 @@ function Bejelentesek() {
       </div>
       <div className="cicak px-4 pb-8">
         <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-        {!megjelenitendoLista ? (
-          <div className="loader-container">
+        {loading ? (
+          <div className="loader-container-szures">
             <img
               src="/images/loading.gif"
               alt="Betöltés..."
