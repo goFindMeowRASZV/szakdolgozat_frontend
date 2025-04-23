@@ -287,22 +287,29 @@ h3 {
   display: block;
 }
 
-.kezdolapFelezett {
+.sec {
   display: flex;
   flex-direction: 1fr 1fr;
   padding-top: 50%;
+
 }
 
-
+.sec2 {
+  display: flex;
+  flex-direction: 1fr 1fr;
+}
 
 .wallpaperPhoto2 {
   max-width: 50%;
   height: 50%;
+
 }
 
 .bekezdes {
-  margin: 20px 90px 40px 90px;
-  font-size: 19px;
+  font-size: 20px;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 5%;
 }
 
 .bekezdes > h2 {
@@ -310,6 +317,96 @@ h3 {
   font-size: 40px;
   margin-top: 10%;
 }
+
+.swiper-slide{
+  margin: auto;
+  place-items: center;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: black;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+
+}
+
+.swiper-pagination-bullet {
+  background-color: #d1d5db;
+  opacity: 1;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border-radius: 9999px; 
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: black !important;
+  transform: scale(1.3);
+}
+
+.skep{
+  height:325px !important;
+}
+
+/* faq */
+.faq-section {
+  margin: 0 auto;
+  padding: 2%; 
+}
+.faq-content{
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+}
+  
+
+.f-accordian-dropdown {
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  overflow: hidden; 
+
+}
+
+.f-accordian-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.f-accordian-title {
+  font-weight: bold;
+}
+
+
+.f-accordian-icon svg {
+  width: 24px;
+  height: 24px;
+  color:#004738;
+
+}
+
+.f-accordian-list {
+  background:transparent;
+  padding: 0 1rem 1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.f-paragraph-small-3 {
+  margin: 1rem 0 0 0;
+  font-weight: normal !important;
+}
+
 
 
 .cicak {
