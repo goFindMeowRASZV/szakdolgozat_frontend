@@ -30,6 +30,17 @@ function MacskaProfil() {
         </div>
 
         <div className="profilInfo">
+        {aktualisMacska.status !== "m" && (
+          <p>
+            <strong>Bejelentés típusa:</strong> 
+            {aktualisMacska.status === "k" ? "Keresett" :
+             aktualisMacska.status === "t" ? "Talált" :
+             aktualisMacska.status === "l" ? "Látott" :
+             aktualisMacska.status}
+          </p>
+        )}
+        
+        
           <p>
             <strong>Szín:</strong> {aktualisMacska.color}
           </p>

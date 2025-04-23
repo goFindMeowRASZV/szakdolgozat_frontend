@@ -31,9 +31,8 @@ html, body, #root {
 .cica-cim {
   text-align: center;
   color: white;
-  font-size: 36px;
-  font-family: "Quicksand", serif;
-  -webkit-text-stroke: 1px black;
+  font-size: 34px;
+  font-family: "Quicksand", sans-serif;
   padding: 0;
   margin-top: 0px;
   margin-bottom: 10px;
