@@ -8,6 +8,7 @@ import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
 import MenhelyNezetToggle from "../components/MenhelyNezetToggle.js";
 import { myAxios } from "../contexts/MyAxios.js";
 import "../assets/styles/SzuresKereses.css";
+import "../assets/styles/NavBar.css";
 
 function Orokbeadottak() {
   const {
