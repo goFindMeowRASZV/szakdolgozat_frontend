@@ -198,6 +198,7 @@ export const ApiProvider = ({ children }) => {
         }
       );
       console.log("Kép sikeresen feltöltve:", response.data);
+      getMacsCardMenhely();
       return response.data;
     } catch (error) {
       console.error(
