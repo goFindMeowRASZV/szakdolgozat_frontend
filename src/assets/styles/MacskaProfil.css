@@ -9,6 +9,7 @@
     flex-direction: column;
     gap: 30px;
     margin: 40px auto;
+    position: relative;
   }
   
   .profilAdatok {

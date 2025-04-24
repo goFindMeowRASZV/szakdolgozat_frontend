@@ -5,6 +5,7 @@ import Kommenteles from "../components/Kommenteles";
 import OrokbefogadasModal from "../components/OrokbefogadasModal";
 import "../assets/styles/MacskaProfil.css";
 import OrokbeadasModal from "../components/OrokbeadasModal";
+import ActionDropdown from "../components/ActionDropdown";
 
 function MacskaProfil() {
   const { user } = useAuthContext();
@@ -23,24 +24,32 @@ function MacskaProfil() {
   };
 
   return (
-    <div className="profilContainer">
+    <div className="profilContainer" style={{ position: "relative" }}>
+      {(user?.role === 0 || user?.role === 1) && (
+        <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+          <ActionDropdown macska={aktualisMacska} />
+        </div>
+      )}
+
       <div className="profilAdatok">
         <div className="profilKepElem">
           <img className="profilKep" src={aktualisMacska.photo} alt="macska" />
         </div>
 
         <div className="profilInfo">
-        {aktualisMacska.status !== "m" && (
-          <p>
-            <strong>Bejelentés típusa:</strong> 
-            {aktualisMacska.status === "k" ? "Keresett" :
-             aktualisMacska.status === "t" ? "Talált" :
-             aktualisMacska.status === "l" ? "Látott" :
-             aktualisMacska.status}
-          </p>
-        )}
-        
-        
+          {aktualisMacska.status !== "m" && (
+            <p>
+              <strong>Bejelentés típusa:</strong>
+              {aktualisMacska.status === "k"
+                ? "Keresett"
+                : aktualisMacska.status === "t"
+                ? "Talált"
+                : aktualisMacska.status === "l"
+                ? "Látott"
+                : aktualisMacska.status}
+            </p>
+          )}
+
           <p>
             <strong>Szín:</strong> {aktualisMacska.color}
           </p>
@@ -78,7 +87,7 @@ function MacskaProfil() {
             macska={aktualisMacska}
             user={user}
           />
-      
+
           {user.role === 1 && aktualisMacska.status === "m" && (
             <>
               <button
@@ -87,7 +96,7 @@ function MacskaProfil() {
               >
                 Örökbeadás
               </button>
-      
+
               <OrokbeadasModal
                 show={showOrokbeadasModal}
                 onClose={() => setShowOrokbeadasModal(false)}
