@@ -171,10 +171,71 @@ h3 {
   min-width: 200px;
 }
 
+/* NoPage */
+.no-page-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-page-panel {
+  background-color: #e6e5e6;
+  border-radius: 25px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  padding: 30px 10px 30px 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-page-image {
+  width: 500px;
+  height: auto;
+  margin-left: 20px;
+  padding: 0px 20px 100px;
+}
+
+.no-page-text {
+  font-size: 60px;
+  color: #111;
+  margin: 0;
+}
 
 @media screen and (max-width: 787px) {
   .kepek {
     justify-content: center;
   }
 
+}
+
+@media (max-width: 768px) {
+  .no-page-panel {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .no-page-text {
+    font-size: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .no-page-image {
+    width: 80%;
+    max-width: 300px;
+    margin-left: 0;
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .no-page-text {
+    font-size: 32px;
+  }
+
+  .no-page-image {
+    width: 100%;
+    max-width: 250px;
+  }
 }
