@@ -6,6 +6,10 @@ html, body, #root {
   background-color: rgb(221, 217, 207);
 }
 
+h1{
+  font-size: 20%;
+}
+
 .loader-container {
   display: flex;
   justify-content: center;
@@ -149,39 +153,7 @@ h3 {
   place-content: center;
 }
 
-/* Kezdőlap */
-.wallpaperPhoto {
-  width: 100%;
-  height: auto;
-  margin: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  display: block;
-}
 
-.kezdolapFelezett {
-  display: flex;
-  flex-direction: 1fr 1fr;
-  padding-top: 50%;
-}
-
-.wallpaperPhoto2 {
-  max-width: 50%;
-  height: 50%;
-}
-
-.bekezdes {
-  margin: 20px 90px 40px 90px;
-  font-size: 19px;
-}
-
-.bekezdes > h2 {
-  padding-bottom: 20px;
-  font-size: 40px;
-  margin-top: 10%;
-}
 
 .cicak {
   margin: auto;
@@ -198,6 +170,7 @@ h3 {
   flex: 1 0 30%;
   min-width: 200px;
 }
+
 
 @media screen and (max-width: 787px) {
   .kepek {

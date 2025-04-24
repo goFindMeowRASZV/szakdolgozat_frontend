@@ -10,25 +10,35 @@ export default function BejelentesListaNezet({
   onEditClick,
 }) {
   return (
-    <div className="menhely-lista-container">
-      <table className="menhely-lista-table">
-        <thead className="bg-gray-100 text-gray-700 text-sm font-medium">
-          <tr>
-            <th>Kép</th>
-            <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Bejelentő</th>
-            <th className="px-4 py-2">Státusz</th>
-            <th className="px-4 py-2">Létrehozva</th>
-            <th className="px-4 py-2">Cím</th>
-            <th className="px-4 py-2">További adatok</th>
-            <th className="px-4 py-2"></th>
-          </tr>
-        </thead>
-        <tbody className="text-sm text-gray-800">
-          {data?.length ? (
-            data.map((elem) => (
-              <React.Fragment key={elem.report_id}>
+    <div className="table-wrapper">
+      <div className="menhely-lista-container">
+        <table className="menhely-lista-table">
+          <thead className="bg-gray-100 text-gray-700 text-sm font-medium">
+            <tr>
+              <th>Kép</th>
+              <th>ID</th>
+              <th>Bejelentő</th>
+              <th>Státusz</th>
+              <th>Létrehozva</th>
+              <th>Cím</th>
+              <th>Koordináták</th>
+              <th>Szín</th>
+              <th>Minta</th>
+              <th>Egészségi állapot</th>
+              <th>Chip szám</th>
+              <th>Körülmények</th>
+              <th>Egyéb ismertetőjel</th>
+              <th>Példányok száma</th>
+              <th>Esemény dátuma</th>
+              <th>Aktivitás</th>
+              <th> </th>
+            </tr>
+          </thead>
+          <tbody className="text-sm text-gray-800">
+            {data?.length ? (
+              data.map((elem) => (
                 <tr
+                  key={elem.report_id}
                   className="hover:bg-gray-50 transition-all border-t"
                   onClick={() => onRowClick(elem)}
                 >
@@ -50,7 +60,6 @@ export default function BejelentesListaNezet({
                       </span>
                     )}
                   </td>
-
                   <td className="px-4 py-2">{elem.report_id}</td>
                   <td className="px-4 py-2">{elem.creator_id}</td>
                   <td className="px-4 py-2">{elem.status}</td>
@@ -64,89 +73,44 @@ export default function BejelentesListaNezet({
                     })}
                   </td>
                   <td className="px-4 py-2">{elem.address}</td>
+                  <td className="px-4 py-2">
+                    {elem.lat}, {elem.lon}
+                  </td>
+                  <td className="px-4 py-2">{elem.color}</td>
+                  <td className="px-4 py-2">{elem.pattern}</td>
+                  <td className="px-4 py-2">{elem.health_status}</td>
+                  <td className="px-4 py-2">{elem.chip_number || "—"}</td>
+                  <td className="px-4 py-2">{elem.circumstances || "—"}</td>
+                  <td className="px-4 py-2">
+                    {elem.other_identifying_marks || "—"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {elem.number_of_individuals || "—"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {elem.disappearance_date || "—"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {elem.activity === 1 ? "Aktív" : "Inaktív"}
+                  </td>
                   <td
-                    className="px-4 py-2"
+                    className="px-4 py-2 flex items-center gap-2"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <button
-                      className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800"
-                      onClick={() => toggleRowExpansion(elem.report_id)}
-                    >
-                      {expandedRow === elem.report_id ? "Bezárás" : "Részletek"}
-                    </button>
-                  </td>
-                  <td onClick={(e) => e.stopPropagation()}>
                     <BejelentesActionDropdown report={elem} />
                   </td>
                 </tr>
-
-                {expandedRow === elem.report_id && (
-                  <tr>
-                    <td colSpan="100%" className="bg-gray-50 px-6 py-4">
-                      <div className="space-y-2 text-sm">
-                    
-                        <p>
-                          <strong>Koordináták:</strong> {elem.lat}, {elem.lon}
-                        </p>
-                        <p>
-                          <strong>Szín:</strong> {elem.color}
-                        </p>
-                        <p>
-                          <strong>Minta:</strong> {elem.pattern}
-                        </p>
-                        <p>
-                          <strong>Állapot:</strong> {elem.status}
-                        </p>
-                        <p>
-                          <strong>Egészségi állapot:</strong>{" "}
-                          {elem.health_status}
-                        </p>
-                        <p>
-                          <strong>Chip szám:</strong> {elem.chip_number || "—"}
-                        </p>
-                        <p>
-                          <strong>Körülmények:</strong>{" "}
-                          {elem.circumstances || "—"}
-                        </p>
-                        <p>
-                          <strong>Egyéb ismertetőjel:</strong>{" "}
-                          {elem.other_identifying_marks || "—"}
-                        </p>
-                        <p>
-                          <strong>Példányok száma:</strong>{" "}
-                          {elem.number_of_individuals || "—"}
-                        </p>
-                        <p>
-                          <strong>Esemény dátuma:</strong>{" "}
-                          {elem.disappearance_date || "—"}
-                        </p>
-                        <p>
-                          <strong>Aktivitás:</strong>{" "}
-                          {elem.activity === 1 ? "Aktív" : "Inaktív"}
-                        </p>
-                        <div className="flex gap-2 pt-2">
-                          <button
-                            onClick={() => onEditClick(elem)}
-                            className="bg-black text-white px-3 py-1 rounded hover:bg-gray-800"
-                          >
-                            Módosítás
-                          </button>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </React.Fragment>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center py-6">
-                Nincsenek bejelentések.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="100%" className="text-center py-6">
+                  Nincsenek bejelentések.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

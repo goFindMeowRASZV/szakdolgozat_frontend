@@ -118,3 +118,32 @@
   bottom: 110%;
   top: auto !important;
 }
+
+
+/* collapsed table */
+.table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.menhely-lista-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 800px; /* Állítsd be a minimális szélességet az oszlopok számától függően */
+}
+
+.menhely-lista-table th,
+.menhely-lista-table td {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+}
+
+.menhely-lista-table th:first-child,
+.menhely-lista-table td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: #fff; /* Állítsd be a háttérszínt, hogy ne látszódjon át a többi oszlop */
+  z-index: 1;
+}
+

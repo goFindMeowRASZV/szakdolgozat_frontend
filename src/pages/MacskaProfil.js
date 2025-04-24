@@ -30,6 +30,17 @@ function MacskaProfil() {
         </div>
 
         <div className="profilInfo">
+        {aktualisMacska.status !== "m" && (
+          <p>
+            <strong>Bejelentés típusa:</strong> 
+            {aktualisMacska.status === "k" ? "Keresett" :
+             aktualisMacska.status === "t" ? "Talált" :
+             aktualisMacska.status === "l" ? "Látott" :
+             aktualisMacska.status}
+          </p>
+        )}
+        
+        
           <p>
             <strong>Szín:</strong> {aktualisMacska.color}
           </p>
@@ -67,26 +78,25 @@ function MacskaProfil() {
             macska={aktualisMacska}
             user={user}
           />
+      
+          {user.role === 1 && aktualisMacska.status === "m" && (
+            <>
+              <button
+                onClick={() => setShowOrokbeadasModal(true)}
+                className="profilFormBtn"
+              >
+                Örökbeadás
+              </button>
+      
+              <OrokbeadasModal
+                show={showOrokbeadasModal}
+                onClose={() => setShowOrokbeadasModal(false)}
+                macska={aktualisMacska}
+              />
+            </>
+          )}
         </>
       )}
-
-      {aktualisMacska.status === "m" && (
-        <>
-          <button
-            onClick={() => setShowOrokbeadasModal(true)}
-            className="profilFormBtn"
-          >
-            Örökbeadás
-          </button>
-
-          <OrokbeadasModal
-            show={showOrokbeadasModal}
-            onClose={() => setShowOrokbeadasModal(false)}
-            macska={aktualisMacska}
-          />
-        </>
-      )}
-
       {aktualisMacska.status !== "m" && user?.role === 1 && (
         <button className="profilFormBtn" onClick={handleShelter}>
           Befogás
