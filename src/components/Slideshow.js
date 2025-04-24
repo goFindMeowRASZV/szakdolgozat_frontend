@@ -67,12 +67,12 @@ function Slideshow() {
         breakpoints={{
           640: { slidesPerView: 1 },
           768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 },
+          1040: { slidesPerView: 3 },
         }}
       >
         {data.map((item, i) => (
           <SwiperSlide key={i}>
-            <div className="bg-white rounded-2xl shadow-lg p-4 h-full flex flex-col items-start" onClick={() => setSelectedStory(item)}>
+            <div className="scard bg-white rounded-2xl shadow-lg p-4 flex flex-col items-start" onClick={() => setSelectedStory(item)}>
               <img
                 src={item.img}
                 alt={item.title}

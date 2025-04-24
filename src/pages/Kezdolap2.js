@@ -2,8 +2,7 @@ import React, { useContext, useEffect } from "react";
 import useAuthContext from "../contexts/AuthContext";
 import styles from "../Fonts.module.css";
 import Slideshow from "../components/Slideshow";
-
-
+import "../assets/styles/Kezdolap.css";
 function Kezdolap() {
 
   const { user } = useAuthContext();

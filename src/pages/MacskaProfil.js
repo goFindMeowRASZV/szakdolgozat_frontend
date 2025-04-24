@@ -77,22 +77,25 @@ function MacskaProfil() {
             macska={aktualisMacska}
             user={user}
           />
-
-          <button
-            onClick={() => setShowOrokbeadasModal(true)}
-            className="profilFormBtn"
-          >
-            Örökbeadás
-          </button>
-
-          <OrokbeadasModal
-            show={showOrokbeadasModal}
-            onClose={() => setShowOrokbeadasModal(false)}
-            macska={aktualisMacska}
-          />
+      
+          {user.role === 1 && (
+            <>
+              <button
+                onClick={() => setShowOrokbeadasModal(true)}
+                className="profilFormBtn"
+              >
+                Örökbeadás
+              </button>
+      
+              <OrokbeadasModal
+                show={showOrokbeadasModal}
+                onClose={() => setShowOrokbeadasModal(false)}
+                macska={aktualisMacska}
+              />
+            </>
+          )}
         </>
       )}
-
       {aktualisMacska.status !== "m" && user?.role === 1 && (
         <button className="profilFormBtn" onClick={handleShelter}>
           Befogás
