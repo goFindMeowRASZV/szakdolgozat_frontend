@@ -1,7 +1,7 @@
 import React from "react";
-import MacsCard from "../components/MacsCard.js";
+import MacsCard from "./MacsCard.js";
 
-export default function MenhelyCardNezet({ data, onCardClick }) {
+export default function CardNezet({ data, onCardClick }) {
   return (
     <div className="kepek">
       {data.map((elem, index) => (

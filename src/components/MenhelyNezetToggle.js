@@ -7,12 +7,13 @@ export default function MenhelyNezetToggle({ viewMode, setViewMode }) {
   if (!user || (user.role !== 0 && user.role !== 1)) return null;
 
   return (
-    <div style={{ textAlign: "center", marginBottom: "20px" }}>
+    <div className="nezetToggle">
       <button
         onClick={() => setViewMode(viewMode === "card" ? "list" : "card")}
-        className="btn btn-outline-dark"
+        className="btn btn-outline-dark nezet-toggle-btn"
+        title="Nézetváltás"
       >
-        Nézet: {viewMode === "card" ? "Kártyás" : "Listás"} ⇄
+        <span className="toggle-text">Nézet </span>⇄
       </button>
     </div>
   );

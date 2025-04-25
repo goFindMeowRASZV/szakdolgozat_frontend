@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import React, { useState } from "react";
 
 const Kereses = ({ onSearch }) => {
@@ -10,7 +11,7 @@ const Kereses = ({ onSearch }) => {
 
   const handleClear = () => {
     setQuery("");
-    onSearch(""); 
+    onSearch("");
   };
 
   return (
@@ -20,7 +21,7 @@ const Kereses = ({ onSearch }) => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Keresés minden mezőben..."
-        className="border px-3 py-2 rounded w-full sm:max-w-md"
+        className="border px-3 py-2 rounded w-full sm:max-w-md keresesInput"
       />
       {query && (
         <button
@@ -34,9 +35,11 @@ const Kereses = ({ onSearch }) => {
       )}
       <button
         type="submit"
-        className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+        className="kereses-gomb bg-black text-white text-sm"
+        title="Keresés"
       >
-        Keresés
+        <span className="kereses-text">Keresés</span>
+        <Search className="kereses-icon" size={18} strokeWidth={2.25} />
       </button>
     </form>
   );
