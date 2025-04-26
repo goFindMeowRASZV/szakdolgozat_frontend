@@ -5,6 +5,8 @@ import Kommenteles from "../components/Kommenteles";
 import OrokbefogadasModal from "../components/OrokbefogadasModal";
 import "../assets/styles/MacskaProfil.css";
 import OrokbeadasModal from "../components/OrokbeadasModal";
+import VendegFigyelmeztetoModal from "../components/VendegFigyelmeztetoModal";
+
 
 function MacskaProfil() {
   const { user } = useAuthContext();
@@ -12,6 +14,7 @@ function MacskaProfil() {
 
   const [showModal, setShowModal] = useState(false);
   const [showOrokbeadasModal, setShowOrokbeadasModal] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
 
   const handleShelter = (e) => {
     e.preventDefault();
@@ -68,9 +71,19 @@ function MacskaProfil() {
       </div>
       {aktualisMacska.status === "m" && (
         <>
-          <button className="profilFormBtn" onClick={() => setShowModal(true)}>
+          <button
+            className="profilFormBtn"
+            onClick={() => {
+              if (user) {
+                setShowModal(true);
+              } else {
+                setShowGuestModal(true);
+              }
+            }}
+          >
             Örökbefogadom
           </button>
+      
           <OrokbefogadasModal
             show={showModal}
             onClose={() => setShowModal(false)}
@@ -78,22 +91,10 @@ function MacskaProfil() {
             user={user}
           />
       
-          {user.role === 1 && (
-            <>
-              <button
-                onClick={() => setShowOrokbeadasModal(true)}
-                className="profilFormBtn"
-              >
-                Örökbeadás
-              </button>
-      
-              <OrokbeadasModal
-                show={showOrokbeadasModal}
-                onClose={() => setShowOrokbeadasModal(false)}
-                macska={aktualisMacska}
-              />
-            </>
-          )}
+          <VendegFigyelmeztetoModal
+            show={showGuestModal}
+            onClose={() => setShowGuestModal(false)}
+          />
         </>
       )}
       {aktualisMacska.status !== "m" && user?.role === 1 && (
