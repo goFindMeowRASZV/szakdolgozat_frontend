@@ -90,8 +90,8 @@
   align-items: center;
 }
 
-/* Mobilnézet: max-width 580px */
-@media screen and (max-width: 580px) {
+/* Mobilnézet: max-width 785px */
+@media screen and (max-width: 785px) {
   .menu {
     display: none;
     flex-direction: column;
@@ -104,7 +104,7 @@
     padding: 10px 0;
     overflow-y: auto;
     z-index: 999;
-    min-height: 300px !important;
+    height: auto !important;
   }
 
   .menu.menu-open {
@@ -142,8 +142,8 @@
 }
 
 
-/* Asztali nézet: min-width 581px */
-@media screen and (min-width: 581px) {
+/* Asztali nézet: min-width 786px */
+@media screen and (min-width: 786px) {
   .menu {
     display: flex !important;
     flex-direction: row;
@@ -156,3 +156,4 @@
     display: none !important;
   }
 }
+

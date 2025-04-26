@@ -11,6 +11,7 @@ import MenhelyNezetToggle from "../components/MenhelyNezetToggle";
 import BejelentesListaNezet from "../components/BejelentesListaNezet";
 import styles from "../Fonts.module.css";
 import "../assets/styles/SzuresKereses.css";
+import CardNezet from "../components/CardNezet.js";
 
 function Bejelentesek() {
   const { macskaLISTA, getMacsCard, setAktualisMacska } = useApiContext();
@@ -24,19 +25,16 @@ function Bejelentesek() {
   const [kereso, setKereso] = useState("");
   const [viewMode, setViewMode] = useState("card");
   const [szuresEredmeny, setSzuresEredmeny] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getMacsCard();
+    const fetchData = async () => {
+      setLoading(true);
+      await getMacsCard();
+      setLoading(false);
+    };
+    fetchData();
   }, []);
-
-  const toggleRowExpansion = (id) => {
-    setExpandedRow((prev) => (prev === id ? null : id));
-  };
-
-  const handleEditClick = (report) => {
-    setSelectedReport(report);
-    setShowModal(true);
-  };
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -52,10 +50,13 @@ function Bejelentesek() {
         return;
       }
 
+      setLoading(true);
       const { data } = await myAxios.get(`/api/reports-search?q=${keyword}`);
       setSearchResults(data);
+      setLoading(false);
     } catch (error) {
       console.error("Hiba a keresés során:", error);
+      setLoading(false);
     }
   };
 
@@ -76,20 +77,24 @@ function Bejelentesek() {
 
   return (
     <>
+      <div className="galeriaBody" style={{ paddingTop: "20px" }}>
       <h1 className={styles.aesthetic}>Bejelentések</h1>
-      <div className="szuresKereses">
-        <Szures type="reports" onSzures={setSzuresEredmeny} />
-        <Kereses
-          onSearch={(keyword) => {
-            handleSearch(keyword);
-            setKereso(keyword);
-          }}
-        />
-      </div>
-      <div className="cicak px-4 pb-8">
-        <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
-        {!megjelenitendoLista ? (
-          <div className="loader-container">
+        <div className="nezetToggle">
+          <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
+        </div>
+        <div className="szuresKereses">
+          <Szures type="reports" onSzures={setSzuresEredmeny} />
+          <div className="kereses-wrapper">
+            <Kereses
+              onSearch={(keyword) => {
+                handleSearch(keyword);
+                setKereso(keyword);
+              }}
+            />
+          </div>
+        </div>
+        {loading ? (
+          <div className="loader-container-szures">
             <img
               src="/images/loading.gif"
               alt="Betöltés..."
@@ -97,40 +102,23 @@ function Bejelentesek() {
             />
           </div>
         ) : viewMode === "card" ? (
-          <div className="kepek">
-            {megjelenitendoLista.length > 0 ? (
-              megjelenitendoLista.map((elem, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleCardClick(elem)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <MacsCard adat={elem} index={index} />
-                </div>
-              ))
-            ) : (
-              <p className="text-center py-6">Nincsenek bejelentések.</p>
-            )}
-          </div>
+          <CardNezet data={megjelenitendoLista} onCardClick={handleCardClick} />
         ) : (
           <BejelentesListaNezet
             data={megjelenitendoLista}
-            expandedRow={expandedRow}
-            toggleRowExpansion={toggleRowExpansion}
             onRowClick={handleCardClick}
-            onEditClick={handleEditClick}
+          />
+        )}
+
+        {showModal && selectedReport && (
+          <BejelentesModositasModal
+            show={showModal}
+            onClose={handleModalClose}
+            report={selectedReport}
+            isReport={true}
           />
         )}
       </div>
-
-      {showModal && selectedReport && (
-        <BejelentesModositasModal
-          show={showModal}
-          onClose={handleModalClose}
-          report={selectedReport}
-          isReport={true}
-        />
-      )}
     </>
   );
 }

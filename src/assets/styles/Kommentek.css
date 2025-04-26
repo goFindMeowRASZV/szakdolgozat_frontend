@@ -1,0 +1,88 @@
+.widget .panel-body { padding: 0px; }
+
+.widget .list-group { margin-bottom: 0; }
+
+.widget .panel-title { display: inline; }
+
+.widget .label-info { float: right; }
+
+.widget li.list-group-item {
+  border-radius: 0;
+  border: 0;
+  border-top: 1px solid #ddd;
+}
+
+.widget li.list-group-item:hover {
+  background-color: rgba(86, 61, 124, 0.1);
+}
+
+.widget .mic-info { color: #666; font-size: 11px; }
+
+.widget .action { margin-top: 5px; }
+
+.widget .comment-text { font-size: 12px; }
+
+.widget .btn-block {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.comment img {
+  transition: transform 0.2s ease-in-out;
+}
+
+.comment img:hover {
+  transform: scale(1.05);
+}
+
+.kukaGomb {
+  width: 26px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: 1.5px solid black;
+  border-radius: 6px;
+  background-color: rgb(223, 223, 223);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.kukaGomb:hover {
+  background-color: rgba(77, 77, 77, 0.292);
+}
+
+.kukaGombKep {
+  width: 15px;
+  height: auto;
+  margin: 0;
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  cursor: pointer;
+}
+
+.modal-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.588);
+}
+
+.kommentProfil {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}

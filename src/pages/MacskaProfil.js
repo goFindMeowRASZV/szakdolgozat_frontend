@@ -7,6 +7,7 @@ import "../assets/styles/MacskaProfil.css";
 import OrokbeadasModal from "../components/OrokbeadasModal";
 import VendegFigyelmeztetoModal from "../components/VendegFigyelmeztetoModal";
 
+import ActionDropdown from "../components/ActionDropdown";
 
 function MacskaProfil() {
   const { user } = useAuthContext();
@@ -26,24 +27,32 @@ function MacskaProfil() {
   };
 
   return (
-    <div className="profilContainer">
+    <div className="profilContainer" style={{ position: "relative" }}>
+      {(user?.role === 0 || user?.role === 1) && (
+        <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+          <ActionDropdown macska={aktualisMacska} />
+        </div>
+      )}
+
       <div className="profilAdatok">
         <div className="profilKepElem">
           <img className="profilKep" src={aktualisMacska.photo} alt="macska" />
         </div>
 
         <div className="profilInfo">
-        {aktualisMacska.status !== "m" && (
-          <p>
-            <strong>Bejelentés típusa:</strong> 
-            {aktualisMacska.status === "k" ? "Keresett" :
-             aktualisMacska.status === "t" ? "Talált" :
-             aktualisMacska.status === "l" ? "Látott" :
-             aktualisMacska.status}
-          </p>
-        )}
-        
-        
+          {aktualisMacska.status !== "m" && (
+            <p>
+              <strong>Bejelentés típusa:</strong>
+              {aktualisMacska.status === "k"
+                ? "Keresett"
+                : aktualisMacska.status === "t"
+                ? "Talált"
+                : aktualisMacska.status === "l"
+                ? "Látott"
+                : aktualisMacska.status}
+            </p>
+          )}
+
           <p>
             <strong>Szín:</strong> {aktualisMacska.color}
           </p>
@@ -69,7 +78,8 @@ function MacskaProfil() {
           </p>
         </div>
       </div>
-      {aktualisMacska.status === "m" && (
+
+      {user?.role === 2 && aktualisMacska.status === "m" && (
         <>
           <button
             className="profilFormBtn"
@@ -95,6 +105,23 @@ function MacskaProfil() {
             show={showGuestModal}
             onClose={() => setShowGuestModal(false)}
           />
+
+          {user.role === 1 && aktualisMacska.status === "m" && (
+            <>
+              <button
+                onClick={() => setShowOrokbeadasModal(true)}
+                className="profilFormBtn"
+              >
+                Örökbeadás
+              </button>
+
+              <OrokbeadasModal
+                show={showOrokbeadasModal}
+                onClose={() => setShowOrokbeadasModal(false)}
+                macska={aktualisMacska}
+              />
+            </>
+          )}
         </>
       )}
       {aktualisMacska.status !== "m" && user?.role === 1 && (

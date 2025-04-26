@@ -14,12 +14,41 @@
   }
 
   .aesthetic {
-    font-family: "Quick Sand", sans-serif;
-    font-size: 60px; /* vagy 40px */
-
-  text-align: center;
-  margin: 2rem 0;
+    color: #333;
+    font-size: 40px;
+    text-align: center;
   }
+  
+  @media screen and (min-width: 480px) {
+    .aesthetic {
+      font-size: 50px;
+    }
+  }
+  
+  @media screen and (min-width: 640px) {
+    .aesthetic {
+      font-size: 60px;
+    }
+  }
+  
+  @media screen and (min-width: 768px) {
+    .aesthetic {
+      font-size: 70px;
+    }
+  }
+  
+  @media screen and (min-width: 1024px) {
+    .aesthetic {
+      font-size: 80px;
+    }
+  }
+  
+  @media screen and (min-width: 1280px) {
+    .aesthetic {
+      font-size: 90px;
+    }
+  }
+  
   
 .focim {
     font-family: "AestheticRomance", sans-serif;

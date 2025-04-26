@@ -16,7 +16,7 @@ export default function Navigacio() {
 
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 580);
+      setIsMobile(window.innerWidth <= 785);
     };
     checkIsMobile();
     setReady(true);
