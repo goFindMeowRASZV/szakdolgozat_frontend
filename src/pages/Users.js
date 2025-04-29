@@ -5,6 +5,7 @@ import useAuthContext from "../contexts/AuthContext";
 import { myAxios } from "../contexts/MyAxios";
 import UserModal from "../components/UserModal.js";
 import "../assets/styles/MenhelyListaNezet.css";
+import styles from "../Fonts.module.css";
 
 const Users = () => {
   const { user } = useAuthContext();
@@ -54,7 +55,7 @@ const Users = () => {
 
   return (
     <div className="galeriaBody" style={{ paddingTop: "60px" }}>
-  <h1 className="galeriaCim">FELHASZNÁLÓK KEZELÉSE</h1>
+  <h1 className={styles.aesthetic}>Felhasználók kezelése</h1>
 
   <div style={{ textAlign: "right", marginBottom: "20px", width: "100%" }}>
     <button

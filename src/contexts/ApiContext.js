@@ -169,7 +169,7 @@ export const ApiProvider = ({ children }) => {
         payload
       );
       toast.success("Sikeres örökbeadás!");
-      navigate("/orokbefogadottak");
+      navigate("/orokbeadottak");
       return response.data;
     } catch (error) {
       console.error("Hiba az örökbeadás során:", error);

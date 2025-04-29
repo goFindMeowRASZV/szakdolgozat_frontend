@@ -90,7 +90,7 @@ export default function Navigacio() {
           }}
         >
           <li className="navbar-item">
-            <Link className="nav-link" to="/kezdolap2" onClick={handleLinkClick}>
+            <Link className="nav-link" to="/kezdolap" onClick={handleLinkClick}>
               Kezdőlap
             </Link>
           </li>

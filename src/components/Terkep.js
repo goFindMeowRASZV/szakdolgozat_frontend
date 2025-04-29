@@ -67,13 +67,12 @@ export default function Terkep() {
 
   return (
     <div>
-      <h1 className="text-center my-4">Térkép</h1>
       <div
         className="terkep"
         style={{
           height: "40vw",
           width: "80%",
-          margin: "0 auto",
+          margin: "20px auto 0 auto", 
           borderRadius: "20px",
           overflow: "hidden",
         }}
@@ -110,8 +109,8 @@ export default function Terkep() {
                         marginBottom: "5px",
                       }}
                     />
-                    <strong>Koordináták:</strong>{" "}
-                    {macska.lat.toFixed(5)}, {macska.lon.toFixed(5)}
+                    <strong>Koordináták:</strong> {macska.lat.toFixed(5)},{" "}
+                    {macska.lon.toFixed(5)}
                     <br />
                     <strong>Cím:</strong> {macska.address}
                   </div>

@@ -7,7 +7,6 @@ import Regisztracio from "./pages/Regisztracio";
 import Bejelentkezes from "./pages/Bejelentkezes";
 import Bejelentes from "./pages/BejelentesForm";
 import Kezdolap from "./pages/Kezdolap";
-import Kezdolap2 from "./pages/Kezdolap2";
 import Bejelentesek from "./pages/Bejelentesek";
 import MacskaProfil from "./pages/MacskaProfil";
 import Profil from "./pages/Profil";
@@ -38,14 +37,14 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Kezdolap2 />} />
-          <Route path="kezdolap2" element={<Kezdolap2 />} />
+          <Route index element={<Kezdolap />} />
+          <Route path="kezdolap" element={<Kezdolap />} />
           <Route path="regisztracio" element={<Regisztracio />} />
           <Route path="bejelentkezes" element={<Bejelentkezes />} />
           <Route path="bejelentes" element={<Bejelentes />} />
           <Route path="bejelentesek" element={<Bejelentesek />} />
           <Route path="menhely" element={<Menhely />} />
-          <Route path="orokbeadott" element={<Orokbeadottak />} />
+          <Route path="orokbeadottak" element={<Orokbeadottak />} />
           <Route path="szures" element={<Szures />} />
           <Route path="terkep" element={<Terkep />} />
           <Route path="MacskaProfil" element={<MacskaProfil />} />
