@@ -22,6 +22,7 @@ function MacskaProfil() {
     const formData = {
       rescuer: user.id,
       report: aktualisMacska.report_id,
+      s_status: "a",
     };
     shelterCat(formData, "/api/staff/create-sheltered-cat");
   };
@@ -74,11 +75,12 @@ function MacskaProfil() {
             <strong>Körülmények:</strong> {aktualisMacska.circumstances || "-"}
           </p>
           <p>
-            <strong>Dátum:</strong> {aktualisMacska.disappearance_date || "-"}
+            <strong>Esemény dátuma:</strong> {aktualisMacska.event_date || "-"}
           </p>
         </div>
       </div>
 
+      {/* VENDÉG FELHASZNÁLÓ (role 2) ÖRÖKBEFOGADÁS */}
       {user?.role === 2 && aktualisMacska.status === "m" && (
         <>
           <button
@@ -93,38 +95,40 @@ function MacskaProfil() {
           >
             Örökbefogadom
           </button>
-      
+
           <OrokbefogadasModal
             show={showModal}
             onClose={() => setShowModal(false)}
             macska={aktualisMacska}
             user={user}
           />
-      
+
           <VendegFigyelmeztetoModal
             show={showGuestModal}
             onClose={() => setShowGuestModal(false)}
           />
-
-          {user.role === 1 && aktualisMacska.status === "m" && (
-            <>
-              <button
-                onClick={() => setShowOrokbeadasModal(true)}
-                className="profilFormBtn"
-              >
-                Örökbeadás
-              </button>
-
-              <OrokbeadasModal
-                show={showOrokbeadasModal}
-                onClose={() => setShowOrokbeadasModal(false)}
-                macska={aktualisMacska}
-              />
-            </>
-          )}
         </>
       )}
-      {aktualisMacska.status !== "m" && user?.role === 1 && (
+
+      {/* STAFF FELHASZNÁLÓ (role 1) ÖRÖKBEADÁS */}
+      {user?.role === 1 && aktualisMacska.status === "m" && (
+        <>
+          <button
+            className="profilFormBtn"
+            onClick={() => setShowOrokbeadasModal(true)}
+          >
+            Örökbeadás
+          </button>
+
+          <OrokbeadasModal
+            show={showOrokbeadasModal}
+            onClose={() => setShowOrokbeadasModal(false)}
+            macska={aktualisMacska}
+          />
+        </>
+      )}
+
+ {aktualisMacska.status !== "m" && user?.role === 1 && (
         <button className="profilFormBtn" onClick={handleShelter}>
           Befogás
         </button>

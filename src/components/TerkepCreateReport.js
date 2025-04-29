@@ -84,7 +84,7 @@ function TerkepCreateReport() {
                 <br />
                 <strong>Minta:</strong> {macska.pattern}
                 <br />
-                <strong>Esemény dátuma:</strong> {macska.disappearance_date}
+                <strong>Esemény dátuma:</strong> {macska.event_date}
               </Popup>
             </Marker>
           ))}

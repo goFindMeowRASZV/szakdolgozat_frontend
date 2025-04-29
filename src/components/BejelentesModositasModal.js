@@ -14,7 +14,7 @@ const BejelentesModositasModal = ({ show, onClose, report }) => {
     chip_number: "",
     circumstances: "",
     number_of_individuals: "",
-    disappearance_date: "",
+    event_date: "",
     photo: "",
     activity: 1,
   });
@@ -32,7 +32,7 @@ const BejelentesModositasModal = ({ show, onClose, report }) => {
         chip_number: report.chip_number || "",
         circumstances: report.circumstances || "",
         number_of_individuals: report.number_of_individuals || "",
-        disappearance_date: report.disappearance_date || "",
+        event_date: report.event_date || "",
         photo: "",
         activity: report.activity ?? 1,
       });
@@ -132,7 +132,7 @@ const BejelentesModositasModal = ({ show, onClose, report }) => {
 
           <Form.Group>
             <Form.Label>Esemény dátuma</Form.Label>
-            <Form.Control type="date" name="disappearance_date" value={formData.disappearance_date} onChange={handleChange} />
+            <Form.Control type="date" name="event_date" value={formData.event_date} onChange={handleChange} />
           </Form.Group>
 
           <Form.Group>

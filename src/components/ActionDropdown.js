@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import useApiContext from "../contexts/ApiContext";
 import MenhelyiMacskaModositasModal from "./MenhelyiMacskaModositasModal";
+import BejelentesModositasModal from "./BejelentesModositasModal";
 
 const ActionDropdown = ({ macska }) => {
   const [open, setOpen] = useState(false);
@@ -44,12 +45,19 @@ const ActionDropdown = ({ macska }) => {
           </div>
         )}
       </div>
-
-      <MenhelyiMacskaModositasModal
-        show={showEditModal}
-        onClose={() => setShowEditModal(false)}
-        macska={macska}
-      />
+      {macska.status?.toLowerCase() === "m" ? (
+        <MenhelyiMacskaModositasModal
+          show={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          macska={macska}
+        />
+      ) : (
+        <BejelentesModositasModal
+          show={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          macska={macska}
+        />
+      )}
     </>
   );
 };
