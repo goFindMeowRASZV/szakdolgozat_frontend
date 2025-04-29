@@ -103,8 +103,8 @@ const Users = () => {
                       Szerkesztés
                     </button>
                     <button
-                      className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition disabled:opacity-50"
-                      onClick={() => handleDelete(u.id)}
+                    className="text-black bg-white px-3 py-1 rounded hover:bg-gray-200 transition disabled:opacity-50 disabled:text-gray-500 disabled:hover:bg-white"                      
+                    onClick={() => handleDelete(u.id)}
                       disabled={u.id === user.id}
                     >
                       Törlés
