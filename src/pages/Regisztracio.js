@@ -17,7 +17,7 @@ export default function Regisztracio() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password.length < 8) {
+    if (!isPasswordStrong(password)) {
       setIsPasswordValid(false);
       return;
     }
@@ -40,9 +40,21 @@ export default function Regisztracio() {
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
-    setIsPasswordValid(value.length >= 8);
+    setIsPasswordValid(isPasswordStrong(value));
     setPasswordMatch(value === password_confirmation);
   };
+  
+
+  const isPasswordStrong = (password) => {
+    const hasUppercase = /[A-Z]/.test(password);   // van nagybetű
+    const hasLowercase = /[a-z]/.test(password);   // van kisbetű
+    const hasNumber = /[0-9]/.test(password);       // van szám
+    const hasSpecialChar = /[^A-Za-z0-9]/.test(password); // van speciális karakter
+    const isLongEnough = password.length >= 8;     // legalább 8 karakter
+  
+    return hasUppercase && hasLowercase && hasNumber && hasSpecialChar && isLongEnough;
+  };
+  
 
   const handlePasswordConfirmationChange = (e) => {
     const value = e.target.value;
@@ -98,9 +110,9 @@ export default function Regisztracio() {
                 <span style={{ color: isPasswordValid ? "lightgreen" : "red" }}>
                   {isPasswordValid ? "✅" : "❗"}
                 </span>{" "}
-                A jelszónak legalább 8 karakter hosszúnak kell lennie.
+                A jelszónak legalább 8 karakterből kell állnia, tartalmaznia kell kis- és nagybetűt, számot és speciális karaktert.
               </small>
-            )}
+            )}            
             {errors.password && <span className="text-danger">{errors.password[0]}</span>}
           </div>
 

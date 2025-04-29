@@ -32,6 +32,16 @@ function Profil() {
     setSelectedFile(e.target.files[0]);
   };
 
+  const isPasswordStrong = (password) => {
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+    const isLongEnough = password.length >= 8;
+  
+    return hasUppercase && hasLowercase && hasNumber && hasSpecialChar && isLongEnough;
+  };
+
   const handleUpload = (e) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -45,6 +55,11 @@ function Profil() {
     e.preventDefault();
     setCurrentPasswordError(null);
   
+    if (!isPasswordStrong(passwordData.new_password)) {
+      setIsPasswordValid(false);
+      return;
+    }
+    
     if (passwordData.new_password !== passwordData.new_password_confirmation) {
       setPasswordMatch(false);
       return;
@@ -75,18 +90,19 @@ function Profil() {
   const handlePasswordInputChange = (e) => {
     const { name, value } = e.target;
     const updatedData = { ...passwordData, [name]: value };
-
+  
     setPasswordData(updatedData);
-
+  
     if (name === "new_password") {
-      setIsPasswordValid(value.length >= 8);
+      setIsPasswordValid(isPasswordStrong(value));
       setPasswordMatch(updatedData.new_password_confirmation === value);
     }
-
+  
     if (name === "new_password_confirmation") {
       setPasswordMatch(updatedData.new_password === value);
     }
   };
+  
 
   if (!profilData) {
     return (
@@ -181,9 +197,9 @@ function Profil() {
               >
                 {isPasswordValid
                   ? "✅ Az új jelszó megfelelő."
-                  : "❗ Az új jelszónak legalább 8 karakter hosszúnak kell lennie."}
+                  : "❗ Az új jelszónak legalább 8 karakterből kell állnia, kis- és nagybetűt, számot és speciális karaktert is tartalmaznia kell."}
               </small>
-            )}
+            )}            
 
             <input
               type="password"
