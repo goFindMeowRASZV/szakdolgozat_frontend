@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import BejelentesActionDropdown from "./BejelentesActionDropdown";
 import "../assets/styles/MenhelyListaNezet.css";
 
@@ -9,34 +9,81 @@ export default function BejelentesListaNezet({
   onRowClick,
   onEditClick,
 }) {
+  const [sortConfig, setSortConfig] = useState({
+    key: "created_at",
+    direction: "asc",
+  });
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  const sortedData = useMemo(() => {
+    if (!sortConfig.key) return data;
+    return [...data].sort((a, b) => {
+      const valA = a[sortConfig.key]?.toString().toLowerCase() ?? "";
+      const valB = b[sortConfig.key]?.toString().toLowerCase() ?? "";
+      if (!isNaN(valA) && !isNaN(valB)) {
+        return sortConfig.direction === "asc"
+          ? Number(valA) - Number(valB)
+          : Number(valB) - Number(valA);
+      }
+      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
+      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [data, sortConfig]);
+
+  const SortIcon = ({ columnKey }) => {
+    const isActive = sortConfig.key === columnKey;
+    const arrow = isActive && sortConfig.direction === "desc" ? "▼" : "▲";
+    return <span style={{ marginLeft: 5, opacity: isActive ? 1 : 0.3 }}>{arrow}</span>;
+  };
+
+  const headers = [
+    { label: "Kép", key: null },
+    { label: "ID", key: "report_id" },
+    { label: "Bejelentő", key: "creator_id" },
+    { label: "Státusz", key: "status" },
+    { label: "Létrehozva", key: "created_at" },
+    { label: "Cím", key: "address" },
+    { label: "Koordináták", key: "lat" },
+    { label: "Szín", key: "color" },
+    { label: "Minta", key: "pattern" },
+    { label: "Egészségi állapot", key: "health_status" },
+    { label: "Chip szám", key: "chip_number" },
+    { label: "Körülmények", key: "circumstances" },
+    { label: "Egyéb ismertetőjel", key: "other_identifying_marks" },
+    { label: "Példányok száma", key: "number_of_individuals" },
+    { label: "Esemény dátuma", key: "event_date" },
+    { label: "Aktivitás", key: "activity" },
+    { label: "", key: null },
+  ];
+
   return (
     <div className="table-wrapper">
       <div className="menhely-lista-container">
         <table className="menhely-lista-table">
           <thead className="bg-gray-100 text-gray-700 text-sm font-medium">
             <tr>
-              <th>Kép</th>
-              <th>ID</th>
-              <th>Bejelentő</th>
-              <th>Státusz</th>
-              <th>Létrehozva</th>
-              <th>Cím</th>
-              <th>Koordináták</th>
-              <th>Szín</th>
-              <th>Minta</th>
-              <th>Egészségi állapot</th>
-              <th>Chip szám</th>
-              <th>Körülmények</th>
-              <th>Egyéb ismertetőjel</th>
-              <th>Példányok száma</th>
-              <th>Esemény dátuma</th>
-              <th>Aktivitás</th>
-              <th> </th>
+              {headers.map(({ label, key }, idx) => (
+                <th
+                  key={idx}
+                  onClick={() => key && handleSort(key)}
+                  style={{ cursor: key ? "pointer" : "default" }}
+                >
+                  {label}
+                  {key && <SortIcon columnKey={key} />}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className="text-sm text-gray-800">
-            {data?.length ? (
-              data.map((elem) => (
+            {sortedData?.length ? (
+              sortedData.map((elem) => (
                 <tr
                   key={elem.report_id}
                   className="hover:bg-gray-50 transition-all border-t"
@@ -60,10 +107,10 @@ export default function BejelentesListaNezet({
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-2">{elem.report_id}</td>
-                  <td className="px-4 py-2">{elem.creator_id}</td>
-                  <td className="px-4 py-2">{elem.status}</td>
-                  <td className="px-4 py-2">
+                  <td>{elem.report_id}</td>
+                  <td>{elem.creator_id}</td>
+                  <td>{elem.status}</td>
+                  <td>
                     {new Date(elem.created_at).toLocaleString("hu-HU", {
                       year: "numeric",
                       month: "2-digit",
@@ -72,31 +119,20 @@ export default function BejelentesListaNezet({
                       minute: "2-digit",
                     })}
                   </td>
-                  <td className="px-4 py-2">{elem.address}</td>
-                  <td className="px-4 py-2">
+                  <td>{elem.address}</td>
+                  <td>
                     {elem.lat}, {elem.lon}
                   </td>
-                  <td className="px-4 py-2">{elem.color}</td>
-                  <td className="px-4 py-2">{elem.pattern}</td>
-                  <td className="px-4 py-2">{elem.health_status}</td>
-                  <td className="px-4 py-2">{elem.chip_number || "—"}</td>
-                  <td className="px-4 py-2">{elem.circumstances || "—"}</td>
-                  <td className="px-4 py-2">
-                    {elem.other_identifying_marks || "—"}
-                  </td>
-                  <td className="px-4 py-2">
-                    {elem.number_of_individuals || "—"}
-                  </td>
-                  <td className="px-4 py-2">
-                    {elem.event_date || "—"}
-                  </td>
-                  <td className="px-4 py-2">
-                    {elem.activity === 1 ? "Aktív" : "Inaktív"}
-                  </td>
-                  <td
-                    className="px-4 py-2 flex items-center gap-2"
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                  <td>{elem.color}</td>
+                  <td>{elem.pattern}</td>
+                  <td>{elem.health_status}</td>
+                  <td>{elem.chip_number || "—"}</td>
+                  <td>{elem.circumstances || "—"}</td>
+                  <td>{elem.other_identifying_marks || "—"}</td>
+                  <td>{elem.number_of_individuals || "—"}</td>
+                  <td>{elem.event_date || "—"}</td>
+                  <td>{elem.activity === 1 ? "Aktív" : "Inaktív"}</td>
+                  <td onClick={(e) => e.stopPropagation()}>
                     <BejelentesActionDropdown report={elem} />
                   </td>
                 </tr>

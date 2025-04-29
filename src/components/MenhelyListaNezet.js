@@ -3,29 +3,73 @@ import "../assets/styles/MenhelyListaNezet.css";
 import ActionDropdown from "./ActionDropdown";
 
 function MenhelyListaNezet({ data, onRowClick }) {
+  const [sortConfig, setSortConfig] = React.useState({
+    key: "cat_id",
+    direction: "asc",
+  });
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => ({
+      key,
+      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  const sortedData = React.useMemo(() => {
+    if (!sortConfig.key) return data;
+    return [...data].sort((a, b) => {
+      const valA = a[sortConfig.key]?.toString().toLowerCase() ?? "";
+      const valB = b[sortConfig.key]?.toString().toLowerCase() ?? "";
+      if (!isNaN(valA) && !isNaN(valB)) {
+        return sortConfig.direction === "asc"
+          ? Number(valA) - Number(valB)
+          : Number(valB) - Number(valA);
+      }
+      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
+      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+  }, [data, sortConfig]);
+
+  const SortIcon = ({ columnKey }) => {
+    const isActive = sortConfig.key === columnKey;
+    const opacity = isActive ? 1 : 0.3;
+    const arrow = isActive && sortConfig.direction === "desc" ? "▼" : "▲";
+    return <span style={{ marginLeft: "5px", opacity }}>{arrow}</span>;
+  };
+
+  const headers = [
+    { label: "Kép", key: null },
+    { label: "Macska ID", key: "cat_id" },
+    { label: "Mentő", key: "rescuer" },
+    { label: "Bejelentés ID", key: "report" },
+    { label: "Gazdi", key: "owner" },
+    { label: "Behozatal", key: "created_at" },
+    { label: "Kikerülés", key: "adoption_date" },
+    { label: "Kennel", key: "kennel_number" },
+    { label: "Kórlap", key: "medical_record" },
+    { label: "Státusz", key: "s_status" },
+    { label: "Chip", key: "chip_number" },
+    { label: "Fajta", key: "breed" },
+    { label: "", key: null },
+  ];
+
   return (
     <div className="table-wrapper">
       <div className="menhely-lista-container">
         <table className="menhely-lista-table">
           <thead>
             <tr>
-              <th>Kép</th>
-              <th>Macska ID</th>
-              <th>Mentő</th>
-              <th>Bejelentés ID</th>
-              <th>Gazdi</th>
-              <th>Behozatal</th>
-              <th>Kikerülés</th>
-              <th>Kennel</th>
-              <th>Kórlap</th>
-              <th>Státusz</th>
-              <th>Chip</th>
-              <th>Fajta</th>
-              <th></th>
+              {headers.map(({ label, key }, i) => (
+                <th key={i} onClick={() => key && handleSort(key)} style={{ cursor: key ? "pointer" : "default" }}>
+                  {label}
+                  {key && <SortIcon columnKey={key} />}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
-            {data.map((macska, index) => (
+            {sortedData.map((macska, index) => (
               <tr key={index} onClick={() => onRowClick(macska)}>
                 <td>
                   <img

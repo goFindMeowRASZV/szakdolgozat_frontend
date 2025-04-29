@@ -8,23 +8,30 @@ import OrokbeadasModal from "../components/OrokbeadasModal";
 import VendegFigyelmeztetoModal from "../components/VendegFigyelmeztetoModal";
 
 import ActionDropdown from "../components/ActionDropdown";
+import { useNavigate } from "react-router-dom";
 
 function MacskaProfil() {
   const { user } = useAuthContext();
   const { aktualisMacska, shelterCat } = useApiContext();
-
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showOrokbeadasModal, setShowOrokbeadasModal] = useState(false);
   const [showGuestModal, setShowGuestModal] = useState(false);
 
-  const handleShelter = (e) => {
+  const handleShelter = async (e) => {
     e.preventDefault();
     const formData = {
       rescuer: user.id,
       report: aktualisMacska.report_id,
       s_status: "a",
     };
-    shelterCat(formData, "/api/staff/create-sheltered-cat");
+  
+    try {
+      await shelterCat(formData, "/api/staff/create-sheltered-cat");
+      navigate("/menhely");
+    } catch (error) {
+      console.error("Befogás sikertelen:", error);
+    }
   };
 
   return (
