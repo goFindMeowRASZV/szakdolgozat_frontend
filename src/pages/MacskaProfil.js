@@ -81,7 +81,7 @@ function MacskaProfil() {
       </div>
 
       {/* VENDÉG FELHASZNÁLÓ (role 2) ÖRÖKBEFOGADÁS */}
-      {user?.role === 2 && aktualisMacska.status === "m" && (
+      {user?.role === 2 && aktualisMacska.status === "m" &&  aktualisMacska.s_status !== "o" && (
         <>
           <button
             className="profilFormBtn"
@@ -111,7 +111,7 @@ function MacskaProfil() {
       )}
 
       {/* STAFF FELHASZNÁLÓ (role 1) ÖRÖKBEADÁS */}
-      {user?.role === 1 && aktualisMacska.status === "m" && (
+      {user?.role === 1 && aktualisMacska.status === "m" &&  aktualisMacska.s_status !== "o" &&(
         <>
           <button
             className="profilFormBtn"
