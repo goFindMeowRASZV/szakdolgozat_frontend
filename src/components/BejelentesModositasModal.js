@@ -57,7 +57,7 @@ const BejelentesModositasModal = ({ show, onClose, report }) => {
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered size="lg">
+    <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Bejelentés adatainak módosítása</Modal.Title>
       </Modal.Header>

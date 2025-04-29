@@ -55,7 +55,7 @@ const ActionDropdown = ({ macska }) => {
         <BejelentesModositasModal
           show={showEditModal}
           onClose={() => setShowEditModal(false)}
-          macska={macska}
+          report={macska}
         />
       )}
     </>
