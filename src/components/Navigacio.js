@@ -118,7 +118,7 @@ export default function Navigacio() {
               </li>
               {(user?.role === 0 || user?.role === 1) && (
                 <li className="navbar-item">
-                  <Link className="nav-link" to="/orokbeadott" onClick={handleLinkClick}>
+                  <Link className="nav-link" to="/orokbeadottak" onClick={handleLinkClick}>
                     Örökbeadott cicák
                   </Link>
                 </li>
