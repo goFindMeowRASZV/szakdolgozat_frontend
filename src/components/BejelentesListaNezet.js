@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import BejelentesActionDropdown from "./BejelentesActionDropdown";
 import "../assets/styles/MenhelyListaNezet.css";
+import useSortableTable from "./UseSortTable";
 
 export default function BejelentesListaNezet({
   data,
@@ -9,39 +10,7 @@ export default function BejelentesListaNezet({
   onRowClick,
   onEditClick,
 }) {
-  const [sortConfig, setSortConfig] = useState({
-    key: "created_at",
-    direction: "asc",
-  });
-
-  const handleSort = (key) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-    }));
-  };
-
-  const sortedData = useMemo(() => {
-    if (!sortConfig.key) return data;
-    return [...data].sort((a, b) => {
-      const valA = a[sortConfig.key]?.toString().toLowerCase() ?? "";
-      const valB = b[sortConfig.key]?.toString().toLowerCase() ?? "";
-      if (!isNaN(valA) && !isNaN(valB)) {
-        return sortConfig.direction === "asc"
-          ? Number(valA) - Number(valB)
-          : Number(valB) - Number(valA);
-      }
-      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
-      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-  }, [data, sortConfig]);
-
-  const SortIcon = ({ columnKey }) => {
-    const isActive = sortConfig.key === columnKey;
-    const arrow = isActive && sortConfig.direction === "desc" ? "▼" : "▲";
-    return <span style={{ marginLeft: 5, opacity: isActive ? 1 : 0.3 }}>{arrow}</span>;
-  };
+  const { sortedData, handleSort, getSortIcon } = useSortableTable(data, "created_at");
 
   const headers = [
     { label: "Kép", key: null },
@@ -76,7 +45,7 @@ export default function BejelentesListaNezet({
                   style={{ cursor: key ? "pointer" : "default" }}
                 >
                   {label}
-                  {key && <SortIcon columnKey={key} />}
+                  {key && getSortIcon(key)}
                 </th>
               ))}
             </tr>
@@ -120,9 +89,7 @@ export default function BejelentesListaNezet({
                     })}
                   </td>
                   <td>{elem.address}</td>
-                  <td>
-                    {elem.lat}, {elem.lon}
-                  </td>
+                  <td>{elem.lat}, {elem.lon}</td>
                   <td>{elem.color}</td>
                   <td>{elem.pattern}</td>
                   <td>{elem.health_status}</td>

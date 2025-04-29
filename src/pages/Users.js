@@ -6,6 +6,7 @@ import { myAxios } from "../contexts/MyAxios";
 import UserModal from "../components/UserModal.js";
 import "../assets/styles/MenhelyListaNezet.css";
 import styles from "../Fonts.module.css";
+import useSortableTable from "../components/UseSortTable.js";
 
 const Users = () => {
   const { user } = useAuthContext();
@@ -16,7 +17,7 @@ const Users = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
+  const { sortedData: sortedUsers, handleSort, getSortIcon } = useSortableTable(users);
 
   useEffect(() => {
     if (!user || (user.role !== 0 && user.role !== 1)) {
@@ -55,39 +56,15 @@ const Users = () => {
     }
   };
 
-  const handleSort = (key) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-    }));
-  };
-
-  const SortIcon = ({ columnKey }) => {
-    const isActive = sortConfig.key === columnKey;
-    return (
-      <span style={{ opacity: isActive ? 1 : 0.3, marginLeft: "4px" }}>
-        {isActive && sortConfig.direction === "asc" ? "▲" : "▼"}
-      </span>
-    );
-  };
-
-  const sortedUsers = React.useMemo(() => {
-    if (!sortConfig.key) return users;
-    return [...users].sort((a, b) => {
-      const valA = a[sortConfig.key]?.toString().toLowerCase() ?? "";
-      const valB = b[sortConfig.key]?.toString().toLowerCase() ?? "";
-      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
-      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-  }, [users, sortConfig]);
-
   return (
     <div className="galeriaBody" style={{ paddingTop: "60px" }}>
       <h1 className={styles.aesthetic}>Felhasználók kezelése</h1>
 
       <div style={{ textAlign: "right", marginBottom: "20px", width: "100%" }}>
-        <button onClick={() => setShowCreateModal(true)} className="btn btn-dark">
+        <button
+          onClick={() => setShowCreateModal(true)}
+          className="btn btn-dark"
+        >
           Új felhasználó
         </button>
       </div>
@@ -107,13 +84,13 @@ const Users = () => {
               <thead>
                 <tr>
                   <th onClick={() => handleSort("name")}>
-                    Név <SortIcon columnKey="name" />
+                    Név {getSortIcon("name")}
                   </th>
                   <th onClick={() => handleSort("email")}>
-                    Email <SortIcon columnKey="email" />
+                    Email {getSortIcon("email")}
                   </th>
                   <th onClick={() => handleSort("role")}>
-                    Szerepkör <SortIcon columnKey="role" />
+                    Szerepkör {getSortIcon("role")}
                   </th>
                   <th>Műveletek</th>
                 </tr>
@@ -124,7 +101,11 @@ const Users = () => {
                     <td>{u.name}</td>
                     <td>{u.email}</td>
                     <td>
-                      {u.role === 0 ? "Admin" : u.role === 1 ? "Staff" : "User"}
+                      {u.role === 0
+                        ? "Admin"
+                        : u.role === 1
+                        ? "Staff"
+                        : "User"}
                     </td>
                     <td className="px-4 py-2 flex gap-2 justify-center">
                       <button
@@ -146,7 +127,7 @@ const Users = () => {
                     </td>
                   </tr>
                 ))}
-                {users.length === 0 && (
+                {sortedUsers.length === 0 && (
                   <tr>
                     <td colSpan="4" className="text-center py-6 text-gray-500">
                       Nincs felhasználó.

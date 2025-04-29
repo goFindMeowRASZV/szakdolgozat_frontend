@@ -1,42 +1,10 @@
 import React from "react";
 import "../assets/styles/MenhelyListaNezet.css";
 import ActionDropdown from "./ActionDropdown";
+import useSortableTable from "./UseSortTable";
 
 function MenhelyListaNezet({ data, onRowClick }) {
-  const [sortConfig, setSortConfig] = React.useState({
-    key: "cat_id",
-    direction: "asc",
-  });
-
-  const handleSort = (key) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev.key === key && prev.direction === "asc" ? "desc" : "asc",
-    }));
-  };
-
-  const sortedData = React.useMemo(() => {
-    if (!sortConfig.key) return data;
-    return [...data].sort((a, b) => {
-      const valA = a[sortConfig.key]?.toString().toLowerCase() ?? "";
-      const valB = b[sortConfig.key]?.toString().toLowerCase() ?? "";
-      if (!isNaN(valA) && !isNaN(valB)) {
-        return sortConfig.direction === "asc"
-          ? Number(valA) - Number(valB)
-          : Number(valB) - Number(valA);
-      }
-      if (valA < valB) return sortConfig.direction === "asc" ? -1 : 1;
-      if (valA > valB) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
-  }, [data, sortConfig]);
-
-  const SortIcon = ({ columnKey }) => {
-    const isActive = sortConfig.key === columnKey;
-    const opacity = isActive ? 1 : 0.3;
-    const arrow = isActive && sortConfig.direction === "desc" ? "▼" : "▲";
-    return <span style={{ marginLeft: "5px", opacity }}>{arrow}</span>;
-  };
+  const { sortedData, handleSort, getSortIcon } = useSortableTable(data, "cat_id");
 
   const headers = [
     { label: "Kép", key: null },
@@ -61,9 +29,13 @@ function MenhelyListaNezet({ data, onRowClick }) {
           <thead>
             <tr>
               {headers.map(({ label, key }, i) => (
-                <th key={i} onClick={() => key && handleSort(key)} style={{ cursor: key ? "pointer" : "default" }}>
+                <th
+                  key={i}
+                  onClick={() => key && handleSort(key)}
+                  style={{ cursor: key ? "pointer" : "default" }}
+                >
                   {label}
-                  {key && <SortIcon columnKey={key} />}
+                  {key && getSortIcon(key)}
                 </th>
               ))}
             </tr>
