@@ -5,6 +5,8 @@ import Kommenteles from "../components/Kommenteles";
 import OrokbefogadasModal from "../components/OrokbefogadasModal";
 import "../assets/styles/MacskaProfil.css";
 import OrokbeadasModal from "../components/OrokbeadasModal";
+import VendegFigyelmeztetoModal from "../components/VendegFigyelmeztetoModal";
+
 import ActionDropdown from "../components/ActionDropdown";
 
 function MacskaProfil() {
@@ -13,12 +15,14 @@ function MacskaProfil() {
 
   const [showModal, setShowModal] = useState(false);
   const [showOrokbeadasModal, setShowOrokbeadasModal] = useState(false);
+  const [showGuestModal, setShowGuestModal] = useState(false);
 
   const handleShelter = (e) => {
     e.preventDefault();
     const formData = {
       rescuer: user.id,
       report: aktualisMacska.report_id,
+      s_status: "a",
     };
     shelterCat(formData, "/api/staff/create-sheltered-cat");
   };
@@ -71,16 +75,27 @@ function MacskaProfil() {
             <strong>Körülmények:</strong> {aktualisMacska.circumstances || "-"}
           </p>
           <p>
-            <strong>Dátum:</strong> {aktualisMacska.disappearance_date || "-"}
+            <strong>Esemény dátuma:</strong> {aktualisMacska.event_date || "-"}
           </p>
         </div>
       </div>
 
+      {/* VENDÉG FELHASZNÁLÓ (role 2) ÖRÖKBEFOGADÁS */}
       {user?.role === 2 && aktualisMacska.status === "m" && (
         <>
-          <button className="profilFormBtn" onClick={() => setShowModal(true)}>
+          <button
+            className="profilFormBtn"
+            onClick={() => {
+              if (user) {
+                setShowModal(true);
+              } else {
+                setShowGuestModal(true);
+              }
+            }}
+          >
             Örökbefogadom
           </button>
+
           <OrokbefogadasModal
             show={showModal}
             onClose={() => setShowModal(false)}
@@ -88,25 +103,32 @@ function MacskaProfil() {
             user={user}
           />
 
-          {user.role === 1 && aktualisMacska.status === "m" && (
-            <>
-              <button
-                onClick={() => setShowOrokbeadasModal(true)}
-                className="profilFormBtn"
-              >
-                Örökbeadás
-              </button>
-
-              <OrokbeadasModal
-                show={showOrokbeadasModal}
-                onClose={() => setShowOrokbeadasModal(false)}
-                macska={aktualisMacska}
-              />
-            </>
-          )}
+          <VendegFigyelmeztetoModal
+            show={showGuestModal}
+            onClose={() => setShowGuestModal(false)}
+          />
         </>
       )}
-      {aktualisMacska.status !== "m" && user?.role === 1 && (
+
+      {/* STAFF FELHASZNÁLÓ (role 1) ÖRÖKBEADÁS */}
+      {user?.role === 1 && aktualisMacska.status === "m" && (
+        <>
+          <button
+            className="profilFormBtn"
+            onClick={() => setShowOrokbeadasModal(true)}
+          >
+            Örökbeadás
+          </button>
+
+          <OrokbeadasModal
+            show={showOrokbeadasModal}
+            onClose={() => setShowOrokbeadasModal(false)}
+            macska={aktualisMacska}
+          />
+        </>
+      )}
+
+ {aktualisMacska.status !== "m" && user?.role === 1 && (
         <button className="profilFormBtn" onClick={handleShelter}>
           Befogás
         </button>

@@ -88,7 +88,7 @@ export default function BejelentesListaNezet({
                     {elem.number_of_individuals || "—"}
                   </td>
                   <td className="px-4 py-2">
-                    {elem.disappearance_date || "—"}
+                    {elem.event_date || "—"}
                   </td>
                   <td className="px-4 py-2">
                     {elem.activity === 1 ? "Aktív" : "Inaktív"}

@@ -54,12 +54,13 @@ export const AuthProvider = ({ children }) => {
 
   const loginReg = async ({ ...adat }, vegpont) => {
     try {
+      await myAxios.get("/sanctum/csrf-cookie");
       await myAxios.post(vegpont, adat);
       await getUser();
       navigate("/");
     } catch (error) {
-      if (error.response.status === 422) {
-        setErrors(error.response.data.errors);
+      if (error.response && error.response.status === 422) {
+        setErrors({ email: ["Hibás e-mail cím vagy jelszó."] });
       }
     }
   };
@@ -80,7 +81,11 @@ export const AuthProvider = ({ children }) => {
       }));
       toast.success("Profilkép frissítve!");
     } catch (error) {
-      toast.error("Hiba történt a feltöltés során.");
+      if (error.response && error.response.status === 422) {
+        toast.error("Kérlek, képfájlt tölts fel!");
+      } else {
+        toast.error("Hiba történt a feltöltés során.");
+      }
       console.error(error);
     }
   };

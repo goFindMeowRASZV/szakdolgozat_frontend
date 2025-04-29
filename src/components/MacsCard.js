@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/styles/MacsCard.css"; 
+import "../assets/styles/MacsCard.css";
 
 function MacsCard({ adat }) {
   const statusMapping = {
@@ -25,13 +25,14 @@ function MacsCard({ adat }) {
       <img className="card-img" src={adat.photo} alt="Cica kép" />
       <div className="cica-leiras">
         <p className="cica-p">
-          <span className={`status-badge ${status.color}`}>
-            {status.label}
-          </span>
+          <span className={`status-badge ${status.color}`}>{status.label}</span>
         </p>
-        <p className="cica-p">
-          <strong>Létrehozva:</strong> {formattedDate(adat.created_at)}
-        </p>
+
+        {adat.status?.toLowerCase() !== "k" && (
+          <p className="cica-p">
+            <strong>Létrehozva:</strong> {formattedDate(adat.created_at)}
+          </p>
+        )}
         {adat.other_identifying_marks && (
           <p className="cica-p">
             <strong>Ismertetőjegyek:</strong> {adat.other_identifying_marks}
@@ -42,10 +43,9 @@ function MacsCard({ adat }) {
             <strong>Körülmények:</strong> {adat.circumstances}
           </p>
         )}
-        {adat.status?.toLowerCase() === "k" && adat.disappearance_date && (
+        {adat.status?.toLowerCase() === "k" && adat.event_date && (
           <p className="cica-p">
-            <strong>Eltűnés dátuma:</strong>{" "}
-            {formattedDate(adat.disappearance_date)}
+            <strong>Esemény dátuma:</strong> {formattedDate(adat.event_date)}
           </p>
         )}
       </div>

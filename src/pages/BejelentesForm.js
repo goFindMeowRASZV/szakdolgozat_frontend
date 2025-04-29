@@ -26,7 +26,7 @@ const Bejelentes = () => {
     chip_number: "",
     circumstances: "",
     number_of_individuals: "",
-    disappearance_date: "",
+    event_date: "",
     activity: 1,
     lat: 1,
     lon: 1,
@@ -39,7 +39,7 @@ const Bejelentes = () => {
     "pattern",
     "photo",
     "number_of_individuals",
-    "disappearance_date",
+    "event_date",
   ];
 
   const isFormValid = requiredFields.every((field) => {
@@ -294,12 +294,12 @@ const Bejelentes = () => {
           </Col>
 
           <Col md={6}>
-            <Form.Group controlId="disappearance_date">
+            <Form.Group controlId="event_date">
               <Form.Label>{requiredLabel("Dátum")}</Form.Label>
               <Form.Control
                 type="date"
-                name="disappearance_date"
-                value={formData.disappearance_date}
+                name="event_date"
+                value={formData.event_date}
                 onChange={handleChange}
               />
             </Form.Group>
