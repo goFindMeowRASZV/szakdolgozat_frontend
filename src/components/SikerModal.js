@@ -3,7 +3,7 @@ import { Modal, Button } from "react-bootstrap";
 
 function SikerModal({ story, onClose }) {
   return (
-    <Modal show={!!story} onHide={onClose} centered size="lg">
+    <Modal show={!!story} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>{story?.title}</Modal.Title>
       </Modal.Header>
