@@ -197,6 +197,12 @@ h3 {
   margin: 0;
 }
 
+.kepek>div{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
 @media screen and (max-width: 1100px) {
   .kepek {
     grid-template-columns: repeat(3, 1fr);
@@ -231,11 +237,6 @@ h3 {
   .kepek {
     grid-template-columns: 1fr;
     align-items: center;
-  }
-  .kepek>div{
-    display: flex;
-    justify-content: center; /* vízszintesen középre */
-    align-items: center; 
   }
 }
 

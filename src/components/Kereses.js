@@ -14,6 +14,7 @@ const Kereses = ({ onSearch }) => {
     onSearch("");
   };
 
+  
   return (
     <form onSubmit={handleSubmit} className="kereses">
       <input

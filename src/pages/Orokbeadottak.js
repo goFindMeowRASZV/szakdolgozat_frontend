@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApiContext from "../contexts/ApiContext";
-import Szures from "../components/Szures";
 import styles from "../Fonts.module.css";
 import Kereses from "../components/Kereses";
 import MenhelyListaNezet from "../components/MenhelyListaNezet.js";
@@ -9,6 +8,7 @@ import MenhelyNezetToggle from "../components/MenhelyNezetToggle.js";
 import { myAxios } from "../contexts/MyAxios.js";
 import "../assets/styles/SzuresKereses.css";
 import "../assets/styles/NavBar.css";
+import CardNezet from "../components/CardNezet.js";
 
 function Orokbeadottak() {
   const {
@@ -19,8 +19,7 @@ function Orokbeadottak() {
   const [viewMode, setViewMode] = useState("card");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const [szuresEredmeny, setSzuresEredmeny] = useState(null);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
   const [kereso, setKereso] = useState("");
 
   useEffect(() => {
@@ -42,7 +41,6 @@ function Orokbeadottak() {
     try {
       setKereso(keyword);
       if (keyword.trim() === "") {
-        fetchData();
         setSearchResults(null);
         return;
       }
@@ -56,27 +54,25 @@ function Orokbeadottak() {
     }
   };
 
-  let megjelenitendoLista = [];
-
-  if (searchResults && searchResults.length > 0) {
-    megjelenitendoLista = searchResults;
-  } else if (!kereso) {
-    megjelenitendoLista = orokbeadottMenhelyLISTA || [];
-  }
+  const megjelenitendoLista =
+    searchResults !== null ? searchResults : orokbeadottMenhelyLISTA || [];
 
   return (
     <div className="galeriaBody" style={{ paddingTop: "60px" }}>
       <h1 className={styles.aesthetic}>Örökbeadott cicáink</h1>
+
+      <div className="nezetToggle">
+        <MenhelyNezetToggle viewMode={viewMode} setViewMode={setViewMode} />
+      </div>
+
       <div className="szuresKereses">
-        <Kereses
-          onSearch={(keyword) => {
-            handleSearch(keyword);
-          }}
-        />
+        <div className="kereses-wrapper">
+          <Kereses onSearch={handleSearch} />
+        </div>
       </div>
 
       {loading ? (
-        <div className="loader-container">
+        <div className="loader-container-szures">
           <img
             src="/images/loading.gif"
             alt="Betöltés..."
@@ -84,10 +80,14 @@ function Orokbeadottak() {
           />
         </div>
       ) : megjelenitendoLista.length > 0 ? (
-        <MenhelyListaNezet
-          data={megjelenitendoLista}
-          onRowClick={handleItemClick}
-        />
+        viewMode === "card" ? (
+          <CardNezet data={megjelenitendoLista} onCardClick={handleItemClick} />
+        ) : (
+          <MenhelyListaNezet
+            data={megjelenitendoLista}
+            onRowClick={handleItemClick}
+          />
+        )
       ) : (
         <p className="text-center text-gray-500 py-6">
           Jelenleg nincs örökbeadott cica.
