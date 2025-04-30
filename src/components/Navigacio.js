@@ -138,7 +138,7 @@ export default function Navigacio() {
               <li className="logOut navbar-item">
                 <Link
                   className="nav-link"
-                  to="/kezdolap2"
+                  to="/kezdolap"
                   onClick={() => {
                     logout();
                     handleLinkClick();
